@@ -27,7 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.cenafood.api.controller.constraintvalidation.Groups;
+import com.github.cenafood.core.validation.Groups;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

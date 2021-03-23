@@ -1,4 +1,4 @@
-package com.github.cenafood.api.controller.constraintvalidation;
+package com.github.cenafood.core.validation;
 
 /**
  * @author elielcena

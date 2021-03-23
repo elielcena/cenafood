@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.cenafood.api.controller.constraintvalidation.Groups;
+import com.github.cenafood.core.validation.Groups;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

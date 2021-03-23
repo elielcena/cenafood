@@ -1,4 +1,4 @@
-package com.github.cenafood.core.message;
+package com.github.cenafood.core.validation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
