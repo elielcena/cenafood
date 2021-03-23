@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
@@ -128,6 +130,26 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	}
 
 	/**
+	 * Provides handling the TypeMismatchException exception.
+	 * 
+	 * @param ex      the exception
+	 * @param headers the headers for the response
+	 * @param status  the response status
+	 * @param request the current request
+	 * @return ResponseEntity<Object>
+	 */
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+
+		if (ex instanceof MethodArgumentTypeMismatchException) {
+			return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
+		}
+
+		return super.handleTypeMismatch(ex, headers, status, request);
+	}
+
+	/**
 	 * A single place to customize the response body of all exception types.
 	 * 
 	 * @param ex      the exception
@@ -182,6 +204,26 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 		Exception message = new Exception(String.format(
 				"The property '%s' is not compatible with the expected body for the request. Remove it to proceed",
 				ex.getPropertyName()));
+
+		return handleExceptionInternal(message, null, headers, status, request);
+	}
+
+	/**
+	 * Customize the response body of the MethodArgumentTypeMismatchException
+	 * exception.
+	 * 
+	 * @param ex      the exception
+	 * @param headers the headers for the response
+	 * @param status  the response status
+	 * @param request the current request
+	 * @return ResponseEntity<Object>
+	 */
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		Exception message = new Exception(String.format(
+				"The URL parameter '%s' called the value '%s', which is an invalid type. Correct and enter a value compatible with type %s",
+				ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
 
 		return handleExceptionInternal(message, null, headers, status, request);
 	}
