@@ -1,13 +1,13 @@
 package com.github.cenafood.api.controller.exceptionhandler;
 
 import java.time.OffsetDateTime;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -134,7 +134,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
 		var fields = ex.getBindingResult().getFieldErrors().stream().map(error -> {
-			String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
+			// String message = messageSource.getMessage(error, new Locale("pt", "BR"));
+			String message = messageSource.getMessage(error, Locale.ENGLISH);
 			return new ErrorResponseDTO.Cause(error.getField(), message);
 		}).distinct().collect(Collectors.toList());
 
