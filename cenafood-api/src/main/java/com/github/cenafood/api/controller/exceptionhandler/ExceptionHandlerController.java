@@ -41,11 +41,25 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	private MessageSource messageSource;
 
 	/**
+	 * Provides handling the Exception exception.
+	 * 
+	 * @param ex      the exception
+	 * @param request the current request
+	 * @return ErrorResponseDTO
+	 */
+	@ExceptionHandler(Exception.class)
+	@ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+	public ErrorResponseDTO handleUncaught(Exception ex, WebRequest request) {
+		String message = "An unexpected internal system error has occurred. Try again and if the problem persists, contact your system administrator";
+		return createErrorResponseDTOBuilder(HttpStatus.INTERNAL_SERVER_ERROR, request, message).build();
+	}
+
+	/**
 	 * Provides handling the BusinessException exception.
 	 * 
 	 * @param ex      the exception
 	 * @param request the current request
-	 * @return ResponseEntity<Object>
+	 * @return ErrorResponseDTO
 	 */
 	@ExceptionHandler(BusinessException.class)
 	@ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -58,7 +72,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	 * 
 	 * @param ex      the exception
 	 * @param request the current request
-	 * @return ResponseEntity<Object>
+	 * @return ErrorResponseDTO
 	 */
 	@ExceptionHandler(ResourceNotFoundException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -71,13 +85,13 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	 * 
 	 * @param ex      the exception
 	 * @param request the current request
-	 * @return ResponseEntity<Object>
+	 * @return ErrorResponseDTO
 	 */
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
 	public ErrorResponseDTO handleEntityInUse(DataIntegrityViolationException ex, WebRequest request) {
-		return createErrorResponseDTOBuilder(HttpStatus.CONFLICT, request,
-				"This record cannot be removed as it is in use").build();
+		String message = "This record cannot be removed as it is in use";
+		return createErrorResponseDTOBuilder(HttpStatus.CONFLICT, request, message).build();
 	}
 
 	/**
