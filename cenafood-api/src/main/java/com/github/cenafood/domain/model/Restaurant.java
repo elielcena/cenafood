@@ -16,13 +16,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PositiveOrZero;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.cenafood.api.controller.constraintvalidation.Groups;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,6 +58,8 @@ public class Restaurant {
 	@Column(name = "DELIVERYFEE", nullable = false)
 	private BigDecimal deliveryFee;
 
+	@Valid
+	@ConvertGroup(from = Default.class, to = Groups.KithcenId.class)
 	@ManyToOne
 	@JoinColumn(name = "IDKITCHEN", nullable = false)
 	private Kitchen kitchen;

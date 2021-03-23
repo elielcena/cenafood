@@ -10,8 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.github.cenafood.api.controller.constraintvalidation.Groups;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,6 +32,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "KITCHEN")
 public class Kitchen {
 
+	@NotNull(groups = Groups.KithcenId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
