@@ -42,12 +42,12 @@ public class KitchenController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen save(@RequestBody Kitchen kitchen) {
+	public Kitchen save(@RequestBody @Valid Kitchen kitchen) {
 		return kitchenService.save(kitchen);
 	}
 
 	@PutMapping("/{id}")
-	public Kitchen update(@PathVariable Long id, @Valid @RequestBody Kitchen kitchen) {
+	public Kitchen update(@PathVariable Long id, @RequestBody @Valid Kitchen kitchen) {
 		return kitchenService.update(id, kitchen);
 	}
 

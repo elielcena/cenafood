@@ -43,12 +43,12 @@ public class RestaurantController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurant save(@RequestBody Restaurant restaurant) {
+	public Restaurant save(@RequestBody @Valid Restaurant restaurant) {
 		return restaurantService.save(restaurant);
 	}
 
 	@PutMapping("/{id}")
-	public Restaurant update(@PathVariable Long id, @Valid @RequestBody Restaurant restaurant) {
+	public Restaurant update(@PathVariable Long id, @RequestBody @Valid Restaurant restaurant) {
 		return restaurantService.update(id, restaurant);
 	}
 

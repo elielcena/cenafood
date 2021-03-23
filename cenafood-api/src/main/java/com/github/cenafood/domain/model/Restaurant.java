@@ -16,6 +16,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -44,9 +46,11 @@ public class Restaurant {
 	@Column
 	private Long id;
 
+	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
+	@PositiveOrZero
 	@Column(name = "DELIVERYFEE", nullable = false)
 	private BigDecimal deliveryFee;
 
