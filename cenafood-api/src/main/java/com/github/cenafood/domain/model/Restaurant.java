@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -46,6 +48,7 @@ public class Restaurant {
 	@Column(name = "DELIVERYFEE", nullable = false)
 	private BigDecimal deliveryFee;
 
+	@ManyToOne
 	@JoinColumn(name = "IDKITCHEN", nullable = false)
 	private Kitchen kitchen;
 
@@ -60,6 +63,7 @@ public class Restaurant {
 	@Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime updatedAt;
 
+	@ManyToMany
 	@JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
 	private List<PaymentMethod> paymentMethods;
 
