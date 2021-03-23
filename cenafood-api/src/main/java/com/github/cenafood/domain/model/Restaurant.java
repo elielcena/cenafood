@@ -20,6 +20,8 @@ import javax.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,21 +54,26 @@ public class Restaurant {
 	@JoinColumn(name = "IDKITCHEN", nullable = false)
 	private Kitchen kitchen;
 
+	@JsonIgnore
 	@Embedded
 	private Adress adress;
 
+	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime createdAt;
 
+	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
 	private LocalDateTime updatedAt;
 
+	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
 	private List<PaymentMethod> paymentMethods;
 
+	@JsonIgnore
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products;
 
