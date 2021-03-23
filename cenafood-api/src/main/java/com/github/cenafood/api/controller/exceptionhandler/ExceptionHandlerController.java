@@ -114,9 +114,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 		else if (rootCause instanceof InvalidFormatException)
 			return handleInvalidFormatException((InvalidFormatException) rootCause, headers, status, request);
 
-		Exception message = new Exception("The request body is invalid. Check the syntax error");
+		String message = "The request body is invalid. Check the syntax error";
+		Exception exception = new Exception(message);
 
-		return handleExceptionInternal(message, null, headers, status, request);
+		return handleExceptionInternal(exception, null, headers, status, request);
 	}
 
 	/**
@@ -137,8 +138,8 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 			return new ErrorResponseDTO.Cause(error.getField(), message);
 		}).distinct().collect(Collectors.toList());
 
-		var responseBody = createErrorResponseDTOBuilder(status, request, "One or more fields are invalid")
-				.causes(fields).build();
+		String message = "One or more fields are invalid";
+		var responseBody = createErrorResponseDTOBuilder(status, request, message).causes(fields).build();
 
 		return super.handleExceptionInternal(ex, responseBody, headers, status, request);
 	}
@@ -196,11 +197,11 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
 		String path = ex.getPath().stream().map(Reference::getFieldName).collect(Collectors.joining("."));
 
-		Exception message = new Exception(String.format(
-				"The property '%s' was given the value '%s', which is of an invalid type. Correct and enter a value compatible with type %s",
-				path, ex.getValue(), ex.getTargetType().getSimpleName()));
+		String message = "The property '%s' was given the value '%s', which is of an invalid type. Correct and enter a value compatible with type %s";
+		Exception exception = new Exception(
+				String.format(message, path, ex.getValue(), ex.getTargetType().getSimpleName()));
 
-		return handleExceptionInternal(message, null, headers, status, request);
+		return handleExceptionInternal(exception, null, headers, status, request);
 	}
 
 	/**
@@ -215,11 +216,10 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handlePropertyBindingException(PropertyBindingException ex, HttpHeaders headers,
 			HttpStatus status, WebRequest request) {
 
-		Exception message = new Exception(String.format(
-				"The property '%s' is not compatible with the expected body for the request. Remove it to proceed",
-				ex.getPropertyName()));
+		String message = "The property '%s' is not compatible with the expected body for the request. Remove it to proceed";
+		Exception exception = new Exception(String.format(message, ex.getPropertyName()));
 
-		return handleExceptionInternal(message, null, headers, status, request);
+		return handleExceptionInternal(exception, null, headers, status, request);
 	}
 
 	/**
@@ -235,11 +235,11 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		Exception message = new Exception(String.format(
-				"The URL parameter '%s' called the value '%s', which is an invalid type. Correct and enter a value compatible with type %s",
-				ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
+		String message = "The URL parameter '%s' called the value '%s', which is an invalid type. Correct and enter a value compatible with type %s";
+		Exception exception = new Exception(
+				String.format(message, ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
 
-		return handleExceptionInternal(message, null, headers, status, request);
+		return handleExceptionInternal(exception, null, headers, status, request);
 	}
 
 	/**
