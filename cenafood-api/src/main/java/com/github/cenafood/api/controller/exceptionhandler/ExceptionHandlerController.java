@@ -8,7 +8,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,6 +25,7 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.github.cenafood.domain.exception.BusinessException;
+import com.github.cenafood.domain.exception.EntityInUseException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 
 /**
@@ -81,15 +81,15 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	}
 
 	/**
-	 * Provides handling the DataIntegrityViolationException exception.
+	 * Provides handling the EntityInUseException exception.
 	 * 
 	 * @param ex      the exception
 	 * @param request the current request
 	 * @return ErrorResponseDTO
 	 */
-	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ExceptionHandler(EntityInUseException.class)
 	@ResponseStatus(value = HttpStatus.CONFLICT)
-	public ErrorResponseDTO handleEntityInUse(DataIntegrityViolationException ex, WebRequest request) {
+	public ErrorResponseDTO handleEntityInUse(EntityInUseException ex, WebRequest request) {
 		String message = "This record cannot be removed as it is in use";
 		return createErrorResponseDTOBuilder(HttpStatus.CONFLICT, request, message).build();
 	}

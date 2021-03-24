@@ -4,15 +4,19 @@ package com.github.cenafood.domain.exception;
  * @author elielcena
  *
  */
-public class BusinessException extends RuntimeException {
+public abstract class BusinessException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
-	public BusinessException(String message) {
+	protected BusinessException() {
+		super();
+	}
+
+	protected BusinessException(String message) {
 		super(message);
 	}
 
-	public BusinessException(String message, Throwable cause) {
+	protected BusinessException(String message, Throwable cause) {
 		super(message, cause);
 	}
 

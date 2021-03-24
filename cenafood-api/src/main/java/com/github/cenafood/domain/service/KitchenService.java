@@ -4,8 +4,10 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.github.cenafood.domain.exception.EntityInUseException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.Kitchen;
 import com.github.cenafood.domain.repository.KitchenRepository;
@@ -44,7 +46,11 @@ public class KitchenService {
 	}
 
 	public void delete(Long id) {
-		kitchenRepository.delete(findById(id));
+		try {
+			kitchenRepository.delete(findById(id));
+		} catch (DataIntegrityViolationException e) {
+			throw new EntityInUseException();
+		}
 	}
 
 }
