@@ -44,7 +44,7 @@ public class KitchenService {
 	}
 
 	public void delete(Long id) {
-		kitchenRepository.deleteById(id);
+		kitchenRepository.delete(findById(id));
 	}
 
 }
