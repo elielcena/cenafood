@@ -27,6 +27,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.github.cenafood.core.validation.Groups;
 
 import lombok.AllArgsConstructor;
@@ -61,6 +62,7 @@ public class Restaurant {
 	private BigDecimal deliveryFee;
 
 	@Valid
+	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@ConvertGroup(from = Default.class, to = Groups.KithcenId.class)
 	@ManyToOne
 	@JoinColumn(name = "IDKITCHEN", nullable = false)
