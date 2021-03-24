@@ -1,3 +1,14 @@
+delete from restaurant;
+delete from kitchen;
+delete from city;
+delete from state;
+
+ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
+ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
+
+INSERT INTO kitchen (name) VALUES ('Brasileira');
+INSERT INTO restaurant (name, deliveryfee, idkitchen, createdat, updatedat) VALUES('Delivery Eliel`s', 10.50, 1, current_timestamp, current_timestamp);
+
 -- STATES
 INSERT INTO state (id, "name", uf) VALUES(11, 'Rondônia', 'RO');
 INSERT INTO state (id, "name", uf) VALUES(12, 'Acre', 'AC');

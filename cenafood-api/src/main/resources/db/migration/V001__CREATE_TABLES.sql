@@ -20,33 +20,33 @@ create table public.kitchen (
 
 create table public.order (
 	id  bigserial not null, 
-	complement varchar(255), 
-	district varchar(255), 
-	number varchar(255), 
-	street varchar(255), 
-	zipcode varchar(255), 
-	canceledat TIMESTAMP not null, 
 	code uuid not null, 
-	confirmedat TIMESTAMP not null, 
-	createdat TIMESTAMP not null, 
-	deliveryat TIMESTAMP not null, 
-	deliveryfee numeric(19, 2), 
-	status varchar(255),
 	subtotal numeric(19, 2), 
+	deliveryfee numeric(19, 2), 
 	totalprice numeric(19, 2), 
+	status varchar(255),
+	zipcode varchar(255), 
+	street varchar(255), 
+	complement varchar(255), 
+	number varchar(255), 
+	district varchar(255), 
 	idcity int8, 
 	idpaymentmethod int8 not null, 
 	idrestaurant int8 not null, 
 	iduser int8 not null, 
+	confirmedat TIMESTAMP not null, 
+	deliveryat TIMESTAMP not null, 
+	createdat TIMESTAMP not null, 
+	canceledat TIMESTAMP not null, 
 	primary key (id)
 );
 
 create table public.orderitem (
 	id  bigserial not null, 
-	note varchar(255), 
+	unitprice numeric(19, 2), 
 	quantity int4 not null, 
 	totalprice numeric(19, 2), 
-	unitprice numeric(19, 2), 
+	note varchar(255), 
 	idorder int8 not null, 
 	idproduct int8 not null, 
 	primary key (id)
@@ -60,34 +60,34 @@ create table public.paymentmethod (
 
 create table public.permission (
 	id  bigserial not null, 
-	description varchar(255) not null, 
 	name varchar(255) not null, 
+	description varchar(255) not null, 
 	primary key (id)
 );
 
 create table public.product (
 	id  bigserial not null, 
-	active boolean not null, 
-	description varchar(255) not null, 
 	name varchar(255) not null, 
+	description varchar(255) not null, 
 	price numeric(19, 2) not null, 
+	active boolean not null, 
 	idrestaurant int8 not null, 
 	primary key (id)
 );
 
 create table public.restaurant (
 	id  bigserial not null, 
-	complement varchar(255), 
-	district varchar(255), 
-	number varchar(255), 
-	street varchar(255), 
-	zipcode varchar(255), 
-	createdat TIMESTAMP not null, 
-	deliveryfee numeric(19, 2) not null, 
 	name varchar(255) not null,
-	updatedat TIMESTAMP not null,
+	deliveryfee numeric(19, 2) not null, 
+	zipcode varchar(255), 
+	street varchar(255), 
+	complement varchar(255), 
+	number varchar(255), 
+	district varchar(255), 
 	idcity int8, 
 	idkitchen int8 not null, 
+	createdat TIMESTAMP not null, 
+	updatedat TIMESTAMP not null,
 	primary key (id)
 );
 
@@ -116,10 +116,10 @@ create table public.state (
 
 create table public.user (
 	id  bigserial not null, 
-	createdat TIMESTAMP not null, 
-	email varchar(255) not null, 
 	name varchar(255) not null, 
+	email varchar(255) not null, 
 	passoword varchar(255) not null, 
+	createdat TIMESTAMP not null, 
 	primary key (id)
 );
 
