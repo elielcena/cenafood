@@ -31,7 +31,6 @@ public class RestaurantMapper {
 	}
 
 	public Restaurant toDomainEntity(RestaurantRequestDTO restaurant) {
-		System.out.println("ENTREI 2");
 		return modelMapper.map(restaurant, Restaurant.class);
 	}
 
