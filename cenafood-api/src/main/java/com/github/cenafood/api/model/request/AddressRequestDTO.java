@@ -1,11 +1,8 @@
 package com.github.cenafood.api.model.request;
 
-import java.math.BigDecimal;
-
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,32 +17,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantRequestDTO {
+public class AddressRequestDTO {
 
 	@NotBlank
-	private String name;
+	private String zipCode;
 
-	@NotNull
-	@PositiveOrZero
-	private BigDecimal deliveryFee;
+	@NotBlank
+	private String street;
+
+	@NotBlank
+	private String number;
+
+	@NotBlank
+	private String complement;
+
+	@NotBlank
+	private String district;
 
 	@Valid
 	@NotNull
-	private KitchenRestaurantRequestDTO kitchen;
-
-	@Valid
-	@NotNull
-	private Boolean active;
-
-	@Valid
-	@NotNull
-	private AddressRequestDTO address;
+	private CityAddressRequestDTO city;
 
 	@Builder
 	@Data
 	@AllArgsConstructor
 	@NoArgsConstructor
-	public static class KitchenRestaurantRequestDTO {
+	public static class CityAddressRequestDTO {
 
 		@NotNull
 		private Long id;

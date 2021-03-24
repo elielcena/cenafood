@@ -15,7 +15,7 @@ import com.github.cenafood.domain.model.Restaurant;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-	static final String JPQL_RESTAURANT = "FROM Restaurant r JOIN FETCH r.kitchen k";
+	static final String JPQL_RESTAURANT = "FROM Restaurant r JOIN FETCH r.kitchen k JOIN FETCH r.address.city c JOIN FETCH c.state";
 
 	@Query(JPQL_RESTAURANT)
 	List<Restaurant> findAll();

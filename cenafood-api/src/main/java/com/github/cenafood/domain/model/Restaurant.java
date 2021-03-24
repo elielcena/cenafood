@@ -53,7 +53,7 @@ public class Restaurant {
 	private Kitchen kitchen;
 
 	@Embedded
-	private Adress adress;
+	private Address address;
 
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
 	private Boolean active;

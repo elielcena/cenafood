@@ -1,6 +1,6 @@
 package com.github.cenafood.api.model.response;
 
-import java.math.BigDecimal;
+import com.github.cenafood.domain.model.City;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,18 +15,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestaurantResponseDTO {
+public class AddressResponseDTO {
 
-	private Long id;
+	private String zipCode;
 
-	private String name;
+	private String street;
 
-	private BigDecimal deliveryFee;
+	private String number;
 
-	private KitchenResponseDTO kitchen;
+	private String complement;
 
-	private Boolean active;
+	private String district;
 
-	private AddressResponseDTO address;
+	private City city;
 
 }

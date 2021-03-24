@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.EntityInUseException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.Kitchen;
@@ -33,7 +34,11 @@ public class KitchenService {
 	}
 
 	public Kitchen save(Kitchen kitchen) {
-		return kitchenRepository.save(kitchen);
+		try {
+			return kitchenRepository.save(kitchen);
+		} catch (ResourceNotFoundException e) {
+			throw new BusinessException(e.getMessage());
+		}
 	}
 
 	public void delete(Long id) {

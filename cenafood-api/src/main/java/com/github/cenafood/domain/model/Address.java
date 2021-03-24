@@ -6,8 +6,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author elielcena
@@ -15,8 +17,10 @@ import lombok.Data;
  */
 @Builder
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Embeddable
-public class Adress {
+public class Address {
 
 	@Column(name = "ZIPCODE")
 	private String zipCode;

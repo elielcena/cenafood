@@ -56,7 +56,7 @@ public class Order {
 	private BigDecimal totalPrice;
 
 	@Embedded
-	private Adress adress;
+	private Address address;
 
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status;
