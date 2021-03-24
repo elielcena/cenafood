@@ -42,4 +42,12 @@ public class RestaurantService {
 		return restaurantRepository.save(restaurant);
 	}
 
+	public void activate(Long id) {
+		save(findById(id).activate());
+	}
+
+	public void inactivate(Long id) {
+		save(findById(id).inactivate());
+	}
+
 }

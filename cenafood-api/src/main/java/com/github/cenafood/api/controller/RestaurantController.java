@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,6 +58,18 @@ public class RestaurantController {
 		Restaurant restaurant = restaurantService.findById(id);
 		mapper.copyToDomainEntity(restaurantRequest, restaurant);
 		return mapper.toDTO(restaurantService.save(restaurant));
+	}
+
+	@PutMapping("/{id}/active")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void activate(@PathVariable Long id) {
+		restaurantService.activate(id);
+	}
+
+	@DeleteMapping("/{id}/active")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void inactivate(@PathVariable Long id) {
+		restaurantService.activate(id);
 	}
 
 }

@@ -84,6 +84,7 @@ create table public.restaurant (
 	complement varchar(255), 
 	number varchar(255), 
 	district varchar(255), 
+	active boolean not null default true,
 	idcity int8, 
 	idkitchen int8 not null, 
 	createdat TIMESTAMP not null, 

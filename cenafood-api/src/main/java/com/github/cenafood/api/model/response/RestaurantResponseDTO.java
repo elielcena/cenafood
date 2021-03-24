@@ -24,5 +24,7 @@ public class RestaurantResponseDTO {
 	private BigDecimal deliveryFee;
 
 	private KitchenResponseDTO kitchen;
+	
+	private Boolean active;
 
 }
