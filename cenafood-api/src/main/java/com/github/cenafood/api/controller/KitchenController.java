@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.cenafood.api.mapper.KitchenMapper;
+import com.github.cenafood.api.model.request.KitchenRequestDTO;
+import com.github.cenafood.api.model.response.KitchenResponseDTO;
 import com.github.cenafood.domain.model.Kitchen;
 import com.github.cenafood.domain.service.KitchenService;
 
@@ -30,25 +33,30 @@ public class KitchenController {
 	@Autowired
 	private KitchenService kitchenService;
 
+	@Autowired
+	private KitchenMapper mapper;
+
 	@GetMapping
-	public List<Kitchen> findAll() {
-		return kitchenService.findAll();
+	public List<KitchenResponseDTO> findAll() {
+		return mapper.toCollectionDTO(kitchenService.findAll());
 	}
 
 	@GetMapping("/{id}")
-	public Kitchen findById(@PathVariable Long id) {
-		return kitchenService.findById(id);
+	public KitchenResponseDTO findById(@PathVariable Long id) {
+		return mapper.toDTO(kitchenService.findById(id));
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Kitchen save(@RequestBody @Valid Kitchen kitchen) {
-		return kitchenService.save(kitchen);
+	public KitchenResponseDTO save(@RequestBody @Valid KitchenRequestDTO kitchen) {
+		return mapper.toDTO(kitchenService.save(mapper.toDomainEntity(kitchen)));
 	}
 
 	@PutMapping("/{id}")
-	public Kitchen update(@PathVariable Long id, @RequestBody @Valid Kitchen kitchen) {
-		return kitchenService.update(id, kitchen);
+	public KitchenResponseDTO update(@PathVariable Long id, @RequestBody @Valid KitchenRequestDTO kitchenRequest) {
+		Kitchen kitchen = kitchenService.findById(id);
+		mapper.copyToDomainEntity(kitchenRequest, kitchen);
+		return mapper.toDTO(kitchenService.save(kitchen));
 	}
 
 	@DeleteMapping("/{id}")

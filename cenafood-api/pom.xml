@@ -14,6 +14,7 @@
 
 	<properties>
 		<java.version>11</java.version>
+		<modelmapper.version>2.3.0</modelmapper.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -69,9 +70,17 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 
+		<!-- APACHE COMMONS -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
+		</dependency>
+
+		<!-- MODEL MAPPER -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>${modelmapper.version}</version>
 		</dependency>
 
 		<!-- STARTERS TEST -->

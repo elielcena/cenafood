@@ -2,7 +2,6 @@ package com.github.cenafood.domain.service;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,9 +29,9 @@ public class RestaurantService {
 		return restaurantRepository.findAll();
 	}
 
-	public Restaurant findById(Long idRestaurant) {
-		return restaurantRepository.findById(idRestaurant).orElseThrow(
-				() -> new ResourceNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, idRestaurant)));
+	public Restaurant findById(Long id) {
+		return restaurantRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESTAURANT_NOT_FOUND, id)));
 	}
 
 	public Restaurant save(Restaurant restaurant) {
@@ -41,15 +40,6 @@ public class RestaurantService {
 		restaurant.setKitchen(kitchen);
 
 		return restaurantRepository.save(restaurant);
-	}
-
-	public Restaurant update(Long id, Restaurant restaurant) {
-		Restaurant currentRestaurant = findById(id);
-
-		BeanUtils.copyProperties(restaurant, currentRestaurant, "id", "paymentMethods", "adress", "createdAt",
-				"products");
-
-		return save(currentRestaurant);
 	}
 
 }

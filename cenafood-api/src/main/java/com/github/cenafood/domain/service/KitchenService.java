@@ -2,7 +2,6 @@ package com.github.cenafood.domain.service;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -35,14 +34,6 @@ public class KitchenService {
 
 	public Kitchen save(Kitchen kitchen) {
 		return kitchenRepository.save(kitchen);
-	}
-
-	public Kitchen update(Long id, Kitchen kitchen) {
-		Kitchen currentKitchen = findById(id);
-
-		BeanUtils.copyProperties(kitchen, currentKitchen, "id");
-
-		return save(currentKitchen);
 	}
 
 	public void delete(Long id) {

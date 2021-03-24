@@ -9,11 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.cenafood.core.validation.Groups;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,17 +27,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "KITCHEN")
 public class Kitchen {
 
-	@NotNull(groups = Groups.KithcenId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
 	private Long id;
 
-	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "kitchen")
 	private List<Restaurant> restaurants;
 

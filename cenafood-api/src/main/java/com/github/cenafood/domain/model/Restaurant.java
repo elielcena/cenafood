@@ -16,19 +16,9 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.github.cenafood.core.validation.Groups;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,23 +42,16 @@ public class Restaurant {
 	@Column
 	private Long id;
 
-	@NotBlank
 	@Column(nullable = false)
 	private String name;
 
-	@NotNull
-	@PositiveOrZero
 	@Column(name = "DELIVERYFEE", nullable = false)
 	private BigDecimal deliveryFee;
 
-	@Valid
-	@JsonIgnoreProperties(value = "name", allowGetters = true)
-	@ConvertGroup(from = Default.class, to = Groups.KithcenId.class)
 	@ManyToOne
 	@JoinColumn(name = "IDKITCHEN", nullable = false)
 	private Kitchen kitchen;
 
-	@JsonIgnore
 	@Embedded
 	private Adress adress;
 
@@ -80,12 +63,10 @@ public class Restaurant {
 	@Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
 	private OffsetDateTime updatedAt;
 
-	@JsonIgnore
 	@ManyToMany
 	@JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
 	private List<PaymentMethod> paymentMethods;
 
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products;
 
