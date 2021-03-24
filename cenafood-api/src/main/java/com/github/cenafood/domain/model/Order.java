@@ -1,7 +1,7 @@
 package com.github.cenafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -63,16 +63,16 @@ public class Order {
 
 	@CreationTimestamp
 	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 
 	@Column(name = "CONFIRMEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime confirmedAt;
+	private OffsetDateTime confirmedAt;
 
 	@Column(name = "CANCELEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime canceledAt;
+	private OffsetDateTime canceledAt;
 
 	@Column(name = "DELIVERYAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime deliveredAt;
+	private OffsetDateTime deliveredAt;
 
 	@ManyToOne
 	@JoinColumn(name = "IDPAYMENTMETHOD", nullable = false)

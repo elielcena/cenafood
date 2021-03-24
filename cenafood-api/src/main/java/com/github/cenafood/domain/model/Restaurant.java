@@ -1,7 +1,7 @@
 package com.github.cenafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -72,15 +72,13 @@ public class Restaurant {
 	@Embedded
 	private Adress adress;
 
-	@JsonIgnore
 	@CreationTimestamp
 	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 
-	@JsonIgnore
 	@UpdateTimestamp
 	@Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime updatedAt;
+	private OffsetDateTime updatedAt;
 
 	@JsonIgnore
 	@ManyToMany

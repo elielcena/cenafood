@@ -1,6 +1,6 @@
 package com.github.cenafood.domain.model;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -43,6 +43,6 @@ public class User {
 
 	@CreationTimestamp
 	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 
 }
