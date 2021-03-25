@@ -19,7 +19,7 @@ import com.github.cenafood.domain.repository.KitchenRepository;
 @Service
 public class KitchenService {
 
-	private static final String MSG_KITCHEN_NOT_FOUND = "There is no kitchen register with code %d";
+	private static final String MSG_RESOURCE_NOT_FOUND = "There is no kitchen register with code %d";
 
 	@Autowired
 	private KitchenRepository kitchenRepository;
@@ -30,7 +30,7 @@ public class KitchenService {
 
 	public Kitchen findById(Long id) {
 		return kitchenRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_KITCHEN_NOT_FOUND, id)));
+				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, id)));
 	}
 
 	public Kitchen save(Kitchen kitchen) {

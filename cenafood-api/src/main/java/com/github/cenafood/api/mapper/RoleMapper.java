@@ -1,5 +1,6 @@
 package com.github.cenafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class RoleMapper {
 		return modelMapper.map(role, RoleResponseDTO.class);
 	}
 
-	public List<RoleResponseDTO> toCollectionDTO(List<Role> role) {
+	public List<RoleResponseDTO> toCollectionDTO(Collection<Role> role) {
 		return role.stream().map(rest -> toDTO(rest)).collect(Collectors.toList());
 	}
 

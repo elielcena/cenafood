@@ -1,5 +1,6 @@
 package com.github.cenafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -7,8 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.github.cenafood.api.model.request.UserWithPasswordRequestDTO;
 import com.github.cenafood.api.model.request.UserRequestDTO;
+import com.github.cenafood.api.model.request.UserWithPasswordRequestDTO;
 import com.github.cenafood.api.model.response.UserResponseDTO;
 import com.github.cenafood.domain.model.User;
 
@@ -26,7 +27,7 @@ public class UserMapper {
 		return modelMapper.map(user, UserResponseDTO.class);
 	}
 
-	public List<UserResponseDTO> toCollectionDTO(List<User> user) {
+	public List<UserResponseDTO> toCollectionDTO(Collection<User> user) {
 		return user.stream().map(rest -> toDTO(rest)).collect(Collectors.toList());
 	}
 

@@ -1,5 +1,6 @@
 package com.github.cenafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +26,7 @@ public class KitchenMapper {
 		return modelMapper.map(object, KitchenResponseDTO.class);
 	}
 
-	public List<KitchenResponseDTO> toCollectionDTO(List<Kitchen> objectList) {
+	public List<KitchenResponseDTO> toCollectionDTO(Collection<Kitchen> objectList) {
 		return objectList.stream().map(object -> toDTO(object)).collect(Collectors.toList());
 	}
 
