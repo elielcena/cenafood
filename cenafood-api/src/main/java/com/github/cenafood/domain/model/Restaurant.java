@@ -59,6 +59,9 @@ public class Restaurant {
 	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
 	private Boolean active;
 
+	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+	private Boolean open;
+
 	@CreationTimestamp
 	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
 	private OffsetDateTime createdAt;
@@ -81,6 +84,16 @@ public class Restaurant {
 
 	public Restaurant inactivate() {
 		setActive(Boolean.FALSE);
+		return this;
+	}
+
+	public Restaurant opening() {
+		setOpen(Boolean.TRUE);
+		return this;
+	}
+
+	public Restaurant closure() {
+		setOpen(Boolean.FALSE);
 		return this;
 	}
 

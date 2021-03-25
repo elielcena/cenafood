@@ -68,6 +68,14 @@ public class RestaurantService {
 		save(findById(id).inactivate());
 	}
 
+	public void opening(Long id) {
+		save(findById(id).opening());
+	}
+
+	public void closure(Long id) {
+		save(findById(id).closure());
+	}
+
 	public void addPaymentMethodToRestaurant(Long idRestaurant, Long idPaymentMethod) {
 		addOrRemovePaymentMethod(Boolean.TRUE, idRestaurant, idPaymentMethod);
 	}

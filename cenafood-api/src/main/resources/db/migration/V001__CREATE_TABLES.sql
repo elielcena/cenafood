@@ -85,6 +85,7 @@ create table public.restaurant (
 	district varchar(255), 
 	zipcode varchar(255), 
 	active boolean not null default true,
+	open boolean not null default true,
 	idcity int8, 
 	idkitchen int8 not null, 
 	createdat TIMESTAMP not null, 
