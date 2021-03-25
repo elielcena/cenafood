@@ -2,7 +2,6 @@ package com.github.cenafood.domain.model;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -73,7 +72,7 @@ public class Restaurant {
 	private Set<PaymentMethod> paymentMethods;
 
 	@OneToMany(mappedBy = "restaurant")
-	private List<Product> products;
+	private Set<Product> products;
 
 	public Restaurant activate() {
 		setActive(Boolean.TRUE);
@@ -85,13 +84,21 @@ public class Restaurant {
 		return this;
 	}
 
-	public Restaurant addPaymentMethod(PaymentMethod paymentMethod) {
-		getPaymentMethods().add(paymentMethod);
+	public Restaurant addOrRemovePaymentMethod(Boolean isAdd, PaymentMethod paymentMethod) {
+		if (Boolean.TRUE.equals(isAdd))
+			getPaymentMethods().add(paymentMethod);
+		else
+			getPaymentMethods().remove(paymentMethod);
+
 		return this;
 	}
 
-	public Restaurant removePaymentMethod(PaymentMethod paymentMethod) {
-		getPaymentMethods().remove(paymentMethod);
+	public Restaurant addOrRemoveProduct(Boolean isAdd, Product product) {
+		if (Boolean.TRUE.equals(isAdd))
+			getProducts().add(product);
+		else
+			getProducts().remove(product);
+
 		return this;
 	}
 

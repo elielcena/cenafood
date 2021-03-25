@@ -1,3 +1,4 @@
+DELETE FROM product;
 DELETE FROM restaurantpayment;
 DELETE FROM restaurant;
 DELETE FROM kitchen;
@@ -5,9 +6,10 @@ DELETE FROM paymentmethod;
 DELETE FROM city;
 DELETE FROM state;
 
+ALTER SEQUENCE product_id_seq RESTART WITH 1;
+ALTER SEQUENCE paymentmethod_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
 ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
-ALTER SEQUENCE paymentmethod_id_seq RESTART WITH 1;
 
 -- STATES
 INSERT INTO state (id, name, uf) VALUES(11, 'Rondônia', 'RO');

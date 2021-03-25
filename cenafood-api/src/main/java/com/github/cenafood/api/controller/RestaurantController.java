@@ -16,10 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.github.cenafood.api.mapper.PaymentMethodMapper;
 import com.github.cenafood.api.mapper.RestaurantMapper;
 import com.github.cenafood.api.model.request.RestaurantRequestDTO;
-import com.github.cenafood.api.model.response.PaymentMethodResponseDTO;
 import com.github.cenafood.api.model.response.RestaurantResponseDTO;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.service.RestaurantService;
@@ -37,9 +35,6 @@ public class RestaurantController {
 
 	@Autowired
 	private RestaurantMapper mapper;
-
-	@Autowired
-	private PaymentMethodMapper paymentMapper;
 
 	@GetMapping
 	public List<RestaurantResponseDTO> findAll() {
@@ -75,23 +70,6 @@ public class RestaurantController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void inactivate(@PathVariable Long id) {
 		restaurantService.activate(id);
-	}
-
-	@GetMapping("/{id}/payment-methods")
-	public List<PaymentMethodResponseDTO> update(@PathVariable Long id) {
-		return paymentMapper.toCollectionDTO(restaurantService.findById(id).getPaymentMethods());
-	}
-
-	@PutMapping("/{id}/payment-methods/{idPaymentMethod}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void addPaymentMethodToRestaurant(@PathVariable Long id, @PathVariable Long idPaymentMethod) {
-		restaurantService.addPaymentMethodToRestaurant(id, idPaymentMethod);
-	}
-
-	@DeleteMapping("/{id}/payment-methods/{idPaymentMethod}")
-	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void removePaymentMethodToRestaurant(@PathVariable Long id, @PathVariable Long idPaymentMethod) {
-		restaurantService.removePaymentMethodToRestaurant(id, idPaymentMethod);
 	}
 
 }

@@ -69,22 +69,18 @@ public class RestaurantService {
 	}
 
 	public void addPaymentMethodToRestaurant(Long idRestaurant, Long idPaymentMethod) {
-		addOrRemovePaymentMethod(true, idRestaurant, idPaymentMethod);
+		addOrRemovePaymentMethod(Boolean.TRUE, idRestaurant, idPaymentMethod);
 	}
 
 	public void removePaymentMethodToRestaurant(Long idRestaurant, Long idPaymentMethod) {
-		addOrRemovePaymentMethod(false, idRestaurant, idPaymentMethod);
+		addOrRemovePaymentMethod(Boolean.FALSE, idRestaurant, idPaymentMethod);
 	}
 
 	private void addOrRemovePaymentMethod(Boolean isAdd, Long idRestaurant, Long idPaymentMethod) {
 		Restaurant restaurant = findById(idRestaurant);
 		PaymentMethod paymentMethod = paymentMethodService.findById(idPaymentMethod);
 
-		if (Boolean.TRUE.equals(isAdd)) {
-			restaurant.addPaymentMethod(paymentMethod);
-		} else {
-			restaurant.removePaymentMethod(paymentMethod);
-		}
+		restaurant.addOrRemovePaymentMethod(isAdd, paymentMethod);
 
 		save(restaurant);
 	}
