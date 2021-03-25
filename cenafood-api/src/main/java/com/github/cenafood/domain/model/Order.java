@@ -83,7 +83,7 @@ public class Order {
 	private Restaurant restaurant;
 
 	@ManyToOne
-	@JoinColumn(name = "IDUSER", nullable = false)
+	@JoinColumn(name = "IDSYSTEMUSER", nullable = false)
 	private User user;
 
 	@OneToMany(mappedBy = "order")

@@ -1,4 +1,4 @@
-package com.github.cenafood.api.controller.exceptionhandler;
+package com.github.cenafood.api.exceptionhandler;
 
 import java.time.OffsetDateTime;
 import java.util.List;

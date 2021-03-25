@@ -33,7 +33,7 @@ create table public.order (
 	idcity int8, 
 	idpaymentmethod int8 not null, 
 	idrestaurant int8 not null, 
-	iduser int8 not null, 
+	idsystemuser int8 not null, 
 	confirmedat TIMESTAMP not null, 
 	deliveryat TIMESTAMP not null, 
 	createdat TIMESTAMP not null, 
@@ -115,11 +115,11 @@ create table public.state (
 	primary key (id)
 );
 
-create table public.user (
+create table public.systemuser (
 	id  bigserial not null, 
 	name varchar(255) not null, 
 	email varchar(255) not null, 
-	passoword varchar(255) not null, 
+	password varchar(255) not null, 
 	createdat TIMESTAMP not null, 
 	primary key (id)
 );
@@ -129,12 +129,14 @@ alter table public.order add constraint UK_CODE_ORDER unique (code);
 
 alter table public.state add constraint UK_UF_STATE unique (uf);
 
+alter table public.systemuser add constraint UK_EMAIL_USERSYSTEM unique (email);
+
 alter table public.city add constraint FK_STATE_CITY foreign key (ufstate) references public.state(uf);
 
 alter table public.order add constraint FK_CITY_ORDER foreign key (idcity) references public.city;
 alter table public.order add constraint FK_PAYMENT_ORDER foreign key (idpaymentmethod) references public.paymentmethod;
 alter table public.order add constraint FK_RESTAURANT_ORDER foreign key (idrestaurant) references public.restaurant;
-alter table public.order add constraint FK_USER_ORDER foreign key (iduser) references public.user;
+alter table public.order add constraint FK_SYSTEMUSER_ORDER foreign key (idsystemuser) references public.systemuser;
 
 alter table public.orderitem add constraint UK_ORDER_PRODUCT_ORDERITEM unique (idorder, idproduct);
 alter table public.orderitem add constraint FK_ORDER_ORDERITEM foreign key (idorder) references public.order;
