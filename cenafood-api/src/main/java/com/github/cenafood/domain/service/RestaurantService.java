@@ -9,6 +9,7 @@ import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.City;
 import com.github.cenafood.domain.model.Kitchen;
+import com.github.cenafood.domain.model.PaymentMethod;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.repository.RestaurantRepository;
 
@@ -29,6 +30,9 @@ public class RestaurantService {
 
 	@Autowired
 	private CityService cityService;
+
+	@Autowired
+	private PaymentMethodService paymentMethodService;
 
 	public List<Restaurant> findAll() {
 		return restaurantRepository.findAll();
@@ -62,6 +66,27 @@ public class RestaurantService {
 
 	public void inactivate(Long id) {
 		save(findById(id).inactivate());
+	}
+
+	public void addPaymentMethodToRestaurant(Long idRestaurant, Long idPaymentMethod) {
+		addOrRemovePaymentMethod(true, idRestaurant, idPaymentMethod);
+	}
+
+	public void removePaymentMethodToRestaurant(Long idRestaurant, Long idPaymentMethod) {
+		addOrRemovePaymentMethod(false, idRestaurant, idPaymentMethod);
+	}
+
+	private void addOrRemovePaymentMethod(Boolean isAdd, Long idRestaurant, Long idPaymentMethod) {
+		Restaurant restaurant = findById(idRestaurant);
+		PaymentMethod paymentMethod = paymentMethodService.findById(idPaymentMethod);
+
+		if (Boolean.TRUE.equals(isAdd)) {
+			restaurant.addPaymentMethod(paymentMethod);
+		} else {
+			restaurant.removePaymentMethod(paymentMethod);
+		}
+
+		save(restaurant);
 	}
 
 }

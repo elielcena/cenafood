@@ -1,7 +1,5 @@
 package com.github.cenafood.api.model.response;
 
-import javax.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,7 +17,6 @@ public class PaymentMethodResponseDTO {
 
 	private Long id;
 
-	@NotBlank
 	private String description;
 
 }

@@ -1,10 +1,13 @@
-delete from restaurant;
-delete from kitchen;
-delete from city;
-delete from state;
+DELETE FROM restaurantpayment;
+DELETE FROM restaurant;
+DELETE FROM kitchen;
+DELETE FROM paymentmethod;
+DELETE FROM city;
+DELETE FROM state;
 
-ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
+ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
+ALTER SEQUENCE paymentmethod_id_seq RESTART WITH 1;
 
 -- STATES
 INSERT INTO state (id, name, uf) VALUES(11, 'Rondônia', 'RO');
@@ -5612,11 +5615,17 @@ INSERT INTO kitchen (name) VALUES ('Brasileira');
 INSERT INTO kitchen (name) VALUES ('Japonesa');
 
 -- RESTAURANT
-INSERT INTO public.restaurant
-(name, deliveryfee, zipcode, street, complement, "number", district, active, idcity, idkitchen, createdat, updatedat)
-VALUES
-('Delivery Eliel`s', 10.50, '15828-000', 'Rua Vereador Amilcar Roveri', 'Casa', '361', 'Centro', true, 353510, 1, current_timestamp, current_timestamp);
-INSERT INTO public.restaurant
-(name, deliveryfee, zipcode, street, complement, "number", district, active, idcity, idkitchen, createdat, updatedat)
-VALUES
-('Delivery Foods', 15.50, '15828-000', 'Rua XV de Novembro', 'Casa', '10', 'Centro', true, 353510, 1, current_timestamp, current_timestamp);
+INSERT INTO restaurant (name, deliveryfee, zipcode, street, complement, "number", district, active, idcity, idkitchen, createdat, updatedat)
+VALUES ('Delivery Eliel`s', 10.50, '15828-000', 'Rua Vereador Amilcar Roveri', 'Casa', '361', 'Centro', true, 353510, 1, current_timestamp, current_timestamp);
+INSERT INTO restaurant (name, deliveryfee, zipcode, street, complement, "number", district, active, idcity, idkitchen, createdat, updatedat)
+VALUES ('Delivery Foods', 15.50, '15828-000', 'Rua XV de Novembro', 'Casa', '10', 'Centro', true, 353510, 1, current_timestamp, current_timestamp);
+
+-- PAYMENTMETHOD
+INSERT INTO paymentmethod (description) VALUES ('Dinheiro');
+INSERT INTO paymentmethod (description) VALUES ('Cartão de Crédito');
+INSERT INTO paymentmethod (description) VALUES ('Cartão de Débito');
+INSERT INTO paymentmethod (description) VALUES ('Cheque');
+INSERT INTO paymentmethod (description) VALUES ('Ticket Alimentação');
+
+-- RESTAURANTPAYMENTMETHOD
+INSERT INTO restaurantpayment (idrestaurant, idpaymentmethod) VALUES (1, 1), (1, 2), (2, 2), (2, 1);

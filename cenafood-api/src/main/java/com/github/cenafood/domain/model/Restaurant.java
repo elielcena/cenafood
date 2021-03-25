@@ -3,10 +3,12 @@ package com.github.cenafood.domain.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -48,7 +50,7 @@ public class Restaurant {
 	@Column(name = "DELIVERYFEE", nullable = false)
 	private BigDecimal deliveryFee;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "IDKITCHEN", nullable = false)
 	private Kitchen kitchen;
 
@@ -68,7 +70,7 @@ public class Restaurant {
 
 	@ManyToMany
 	@JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
-	private List<PaymentMethod> paymentMethods;
+	private Set<PaymentMethod> paymentMethods;
 
 	@OneToMany(mappedBy = "restaurant")
 	private List<Product> products;
@@ -80,6 +82,16 @@ public class Restaurant {
 
 	public Restaurant inactivate() {
 		setActive(Boolean.FALSE);
+		return this;
+	}
+
+	public Restaurant addPaymentMethod(PaymentMethod paymentMethod) {
+		getPaymentMethods().add(paymentMethod);
+		return this;
+	}
+
+	public Restaurant removePaymentMethod(PaymentMethod paymentMethod) {
+		getPaymentMethods().remove(paymentMethod);
 		return this;
 	}
 

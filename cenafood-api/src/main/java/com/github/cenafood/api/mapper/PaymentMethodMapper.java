@@ -1,5 +1,6 @@
 package com.github.cenafood.api.mapper;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,12 +26,12 @@ public class PaymentMethodMapper {
 		return modelMapper.map(paymentMethod, PaymentMethodResponseDTO.class);
 	}
 
-	public List<PaymentMethodResponseDTO> toCollectionDTO(List<PaymentMethod> paymentMethod) {
+	public List<PaymentMethodResponseDTO> toCollectionDTO(Collection<PaymentMethod> paymentMethod) {
 		return paymentMethod.stream().map(rest -> toDTO(rest)).collect(Collectors.toList());
 	}
 
-	public PaymentMethod toDomainEntity(PaymentMethodRequestDTO restaurant) {
-		return modelMapper.map(restaurant, PaymentMethod.class);
+	public PaymentMethod toDomainEntity(PaymentMethodRequestDTO paymentMethod) {
+		return modelMapper.map(paymentMethod, PaymentMethod.class);
 	}
 
 	public void copyToDomainEntity(PaymentMethodRequestDTO paymentMethodRequest, PaymentMethod paymentMethod) {
