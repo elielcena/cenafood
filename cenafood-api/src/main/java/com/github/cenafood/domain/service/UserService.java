@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.EntityInUseException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
+import com.github.cenafood.domain.model.Role;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.repository.UserRepository;
 
@@ -24,6 +25,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private RoleService roleService;
 
 	public List<User> findAll() {
 		return userRepository.findAll();
@@ -62,6 +66,14 @@ public class UserService {
 		}
 	}
 
+	public void addRoleToUser(Long idUser, Long idRole) {
+		addOrRemoveRole(Boolean.TRUE, idUser, idRole);
+	}
+
+	public void removeRoleToUser(Long idUser, Long idRole) {
+		addOrRemoveRole(Boolean.FALSE, idUser, idRole);
+	}
+
 	private void validCurrentpassword(User user, String currentPassword) {
 		if (!user.getPassword().equals(currentPassword))
 			throw new BusinessException("The current password is not valid");
@@ -70,6 +82,15 @@ public class UserService {
 	private void validNewPasswords(String newPassword, String confirmPassword) {
 		if (!newPassword.equals(confirmPassword))
 			throw new BusinessException("New passwords do not match");
+	}
+
+	private void addOrRemoveRole(Boolean isAdd, Long idUser, Long idRole) {
+		User user = findById(idUser);
+		Role role = roleService.findById(idRole);
+
+		user.addOrRemoveRole(isAdd, role);
+
+		save(user);
 	}
 
 }

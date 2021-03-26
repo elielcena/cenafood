@@ -77,6 +77,10 @@ public class Restaurant {
 	@OneToMany(mappedBy = "restaurant")
 	private Set<Product> products;
 
+	@ManyToMany
+	@JoinTable(name = "RESTAURANTSYSTEMUSER", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDSYSTEMUSER"))
+	private Set<User> users;
+
 	public Restaurant activate() {
 		setActive(Boolean.TRUE);
 		return this;
@@ -111,6 +115,15 @@ public class Restaurant {
 			getProducts().add(product);
 		else
 			getProducts().remove(product);
+
+		return this;
+	}
+
+	public Restaurant addOrRemoveUser(Boolean isAdd, User user) {
+		if (Boolean.TRUE.equals(isAdd))
+			getUsers().add(user);
+		else
+			getUsers().remove(user);
 
 		return this;
 	}

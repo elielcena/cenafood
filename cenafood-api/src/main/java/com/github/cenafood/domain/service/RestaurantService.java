@@ -11,6 +11,7 @@ import com.github.cenafood.domain.model.City;
 import com.github.cenafood.domain.model.Kitchen;
 import com.github.cenafood.domain.model.PaymentMethod;
 import com.github.cenafood.domain.model.Restaurant;
+import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.repository.RestaurantRepository;
 
 /**
@@ -33,6 +34,9 @@ public class RestaurantService {
 
 	@Autowired
 	private PaymentMethodService paymentMethodService;
+
+	@Autowired
+	private UserService userService;
 
 	public List<Restaurant> findAll() {
 		return restaurantRepository.findAll();
@@ -84,11 +88,28 @@ public class RestaurantService {
 		addOrRemovePaymentMethod(Boolean.FALSE, idRestaurant, idPaymentMethod);
 	}
 
+	public void addUserToRestaurant(Long idRestaurant, Long idUser) {
+		addOrRemoveUser(Boolean.TRUE, idRestaurant, idUser);
+	}
+
+	public void removeUserToRestaurant(Long idRestaurant, Long idUser) {
+		addOrRemoveUser(Boolean.FALSE, idRestaurant, idUser);
+	}
+
 	private void addOrRemovePaymentMethod(Boolean isAdd, Long idRestaurant, Long idPaymentMethod) {
 		Restaurant restaurant = findById(idRestaurant);
 		PaymentMethod paymentMethod = paymentMethodService.findById(idPaymentMethod);
 
 		restaurant.addOrRemovePaymentMethod(isAdd, paymentMethod);
+
+		save(restaurant);
+	}
+
+	private void addOrRemoveUser(Boolean isAdd, Long idRestaurant, Long idUser) {
+		Restaurant restaurant = findById(idRestaurant);
+		User user = userService.findById(idUser);
+
+		restaurant.addOrRemoveUser(isAdd, user);
 
 		save(restaurant);
 	}

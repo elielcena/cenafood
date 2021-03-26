@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.cenafood.domain.exception.EntityInUseException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
+import com.github.cenafood.domain.model.Permission;
 import com.github.cenafood.domain.model.Role;
 import com.github.cenafood.domain.repository.RoleRepository;
 
@@ -22,6 +23,9 @@ public class RoleService {
 
 	@Autowired
 	private RoleRepository roleRepository;
+
+	@Autowired
+	private PermissionService permissionService;
 
 	public List<Role> findAll() {
 		return roleRepository.findAll();
@@ -42,6 +46,23 @@ public class RoleService {
 		} catch (DataIntegrityViolationException e) {
 			throw new EntityInUseException();
 		}
+	}
+
+	public void addPermission(Long id, Long idPermission) {
+		addOrRemovePermission(Boolean.TRUE, id, idPermission);
+	}
+
+	public void removePermission(Long id, Long idPermission) {
+		addOrRemovePermission(Boolean.FALSE, id, idPermission);
+	}
+
+	private void addOrRemovePermission(Boolean isAdd, Long idRole, Long idPermission) {
+		Role role = findById(idRole);
+		Permission permission = permissionService.findById(idPermission);
+
+		role.addOrRemovePermission(isAdd, permission);
+
+		save(role);
 	}
 
 }

@@ -1,9 +1,10 @@
 package com.github.cenafood.domain.model;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,8 +38,17 @@ public class Role {
 	@Column(nullable = false)
 	private String name;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "ROLEPERMISSION", joinColumns = @JoinColumn(name = "IDROLE"), inverseJoinColumns = @JoinColumn(name = "IDPERMISSION"))
-	private List<Permission> permissions;
+	private Set<Permission> permissions;
+
+	public Role addOrRemovePermission(Boolean isAdss, Permission permission) {
+		if (Boolean.TRUE.equals(isAdss))
+			getPermissions().add(permission);
+		else
+			getPermissions().remove(permission);
+
+		return this;
+	}
 
 }

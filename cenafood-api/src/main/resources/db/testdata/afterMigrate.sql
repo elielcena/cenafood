@@ -1,3 +1,9 @@
+DELETE FROM restaurantsystemuser;
+DELETE FROM systemuserrole;
+DELETE FROM systemuser;
+DELETE FROM rolepermission;
+DELETE FROM role;
+DELETE FROM permission;
 DELETE FROM product;
 DELETE FROM restaurantpayment;
 DELETE FROM restaurant;
@@ -6,6 +12,9 @@ DELETE FROM paymentmethod;
 DELETE FROM city;
 DELETE FROM state;
 
+ALTER SEQUENCE systemuser_id_seq RESTART WITH 1;
+ALTER SEQUENCE role_id_seq RESTART WITH 1;
+ALTER SEQUENCE permission_id_seq RESTART WITH 1;
 ALTER SEQUENCE product_id_seq RESTART WITH 1;
 ALTER SEQUENCE paymentmethod_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
@@ -5631,3 +5640,23 @@ INSERT INTO paymentmethod (description) VALUES ('Ticket Alimentação');
 
 -- RESTAURANTPAYMENTMETHOD
 INSERT INTO restaurantpayment (idrestaurant, idpaymentmethod) VALUES (1, 1), (1, 2), (2, 2), (2, 1);
+
+-- ROLE
+INSERT INTO role (name) VALUES ('ADMIN'), ('CUSTOMER'), ('EMPLOYEE');
+
+-- PERMISSION
+INSERT INTO permission (name, description) VALUES ('CONSULT_KITCHEN', 'Allows you to consult kitchens'), ('EDIT_KITCHENS', 'Allows you to edit kitchens');
+
+-- ROLEPERMISSION
+INSERT INTO rolepermission (idrole, idpermission) VALUES (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
+
+-- SYSTEMSER
+INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Eliel Silva Cena', 'elielsc99@gmail.com', '123', current_timestamp);
+INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste', 'teste@gmail.com', '123', current_timestamp);
+
+-- SYSTEMSERROLE
+INSERT INTO systemuserrole (idsystemuser, idrole) VALUES (1, 1), (1, 2);
+
+-- RESTAURANTSYSTEMUSER
+INSERT INTO restaurantsystemuser (idrestaurant, idsystemuser) VALUES (1, 1), (2, 2);
+

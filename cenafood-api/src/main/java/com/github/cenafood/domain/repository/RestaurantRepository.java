@@ -16,7 +16,9 @@ import com.github.cenafood.domain.model.Restaurant;
 @Repository
 public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 
-	static final String JPQL_RESTAURANT = "FROM Restaurant r JOIN FETCH r.kitchen k JOIN FETCH r.address.city c JOIN FETCH c.state";
+	static final String JPQL_RESTAURANT = "FROM Restaurant r LEFT JOIN FETCH r.kitchen k LEFT JOIN FETCH r.address.city c LEFT JOIN FETCH c.state LEFT JOIN FETCH r.users u";
+
+	static final String JPQL_RESTAURANT_USERS = "FROM Restaurant r JOIN FETCH r.users u";
 
 	@Override
 	@Query(JPQL_RESTAURANT)

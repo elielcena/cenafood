@@ -95,7 +95,8 @@ create table public.restaurant (
 
 create table public.restaurantpayment (
 	idrestaurant int8 not null, 
-	idpaymentmethod int8 not null
+	idpaymentmethod int8 not null,
+	primary key (idrestaurant, idpaymentmethod)
 );
 
 create table public.role (
@@ -106,7 +107,8 @@ create table public.role (
 
 create table public.rolepermission (
 	idrole int8 not null, 
-	idpermission int8 not null
+	idpermission int8 not null,
+	primary key (idrole, idpermission)
 );
 
 create table public.state (
@@ -123,6 +125,18 @@ create table public.systemuser (
 	password varchar(255) not null, 
 	createdat TIMESTAMP not null, 
 	primary key (id)
+);
+
+create table public.systemuserrole (
+	idsystemuser int8 not null,
+	idrole int8 not null,
+	primary key (idsystemuser, idrole)
+);
+
+create table public.restaurantsystemuser (
+	idrestaurant int8 not null,
+	idsystemuser int8 not null,
+	primary key (idrestaurant, idsystemuser)
 );
 
 -- CREATE CONSTRAINTS
@@ -153,3 +167,9 @@ alter table public.restaurantpayment add constraint FK_RESTAURANT_RESTAURANTPAYM
 
 alter table public.rolepermission add constraint FK_PERMISSION_ROLEPERMISSION foreign key (idpermission) references public.permission;
 alter table public.rolepermission add constraint FKROLE_ROLEPERMISSION foreign key (idrole) references public.role;
+
+alter table public.systemuserrole add constraint FK_SYSTEMYSER_SYSTEMYSERROLE foreign key (idsystemuser) references public.systemuser;
+alter table public.systemuserrole add constraint FK_ROLE_SYSTEMYSERROLE foreign key (idrole) references public.role;
+
+alter table public.restaurantsystemuser add constraint FK_RESTAURANT_RESTAURANTSYSTEMUSER foreign key (idrestaurant) references public.restaurant;
+alter table public.restaurantsystemuser add constraint FK_SYSTEMYSER_RESTAURANTSYSTEMUSER foreign key (idsystemuser) references public.systemuser;

@@ -27,8 +27,8 @@ public class ProductService {
 				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, id)));
 	}
 
-	public List<Product> findRestaurant(Restaurant Restaurant) {
-		return productRepository.findByRestaurant(Restaurant);
+	public List<Product> findRestaurant(Restaurant restaurant) {
+		return productRepository.findByRestaurant(restaurant);
 	}
 
 	public Product save(Product product) {
