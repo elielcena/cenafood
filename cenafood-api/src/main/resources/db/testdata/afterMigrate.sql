@@ -1,3 +1,5 @@
+DELETE FROM ORDERITEM;
+DELETE FROM PUBLIC.ORDER;
 DELETE FROM restaurantsystemuser;
 DELETE FROM systemuserrole;
 DELETE FROM systemuser;
@@ -12,6 +14,8 @@ DELETE FROM paymentmethod;
 DELETE FROM city;
 DELETE FROM state;
 
+ALTER SEQUENCE orderitem_id_seq RESTART WITH 1;
+ALTER SEQUENCE order_id_seq RESTART WITH 1;
 ALTER SEQUENCE systemuser_id_seq RESTART WITH 1;
 ALTER SEQUENCE role_id_seq RESTART WITH 1;
 ALTER SEQUENCE permission_id_seq RESTART WITH 1;
@@ -5657,6 +5661,17 @@ INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste', 'test
 -- SYSTEMSERROLE
 INSERT INTO systemuserrole (idsystemuser, idrole) VALUES (1, 1), (1, 2);
 
+-- PRODUCT
+INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Colchão mole 3KG', 'Carne vermelha bovina 3Kg', 25, true, 1);
+
 -- RESTAURANTSYSTEMUSER
 INSERT INTO restaurantsystemuser (idrestaurant, idsystemuser) VALUES (1, 1), (2, 2);
+
+-- ORDER
+INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965103', 50, 10, 60, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
+
+-- ORDERITEM
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(25, 2, 50, NULL, 1, 1);
+
 

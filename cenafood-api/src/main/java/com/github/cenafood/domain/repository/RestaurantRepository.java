@@ -25,7 +25,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 	List<Restaurant> findAll();
 
 	@Override
-	@Query("FROM Restaurant r LEFT JOIN FETCH r.paymentMethods WHERE r.id = :id")
+	@Query("FROM Restaurant r LEFT JOIN FETCH r.paymentMethods JOIN FETCH r.address.city c JOIN FETCH c.state s WHERE r.id = :id")
 	Optional<Restaurant> findById(Long id);
 
 	@Query(JPQL_RESTAURANT + " WHERE name LIKE %:name% AND k.id = :id")

@@ -4,6 +4,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.github.cenafood.api.model.request.OrderRequestDTO;
+import com.github.cenafood.domain.model.OrderItem;
+
 /**
  * @author elielcena
  *
@@ -13,7 +16,12 @@ public class ModelMapperConfig {
 
 	@Bean
 	public ModelMapper modelMapper() {
-		return new ModelMapper();
+		var modelMapper = new ModelMapper();
+
+		modelMapper.createTypeMap(OrderRequestDTO.OrderItemAbstractRequestDTO.class, OrderItem.class)
+				.addMappings(mapper -> mapper.skip(OrderItem::setId));
+
+		return modelMapper;
 	}
 
 }

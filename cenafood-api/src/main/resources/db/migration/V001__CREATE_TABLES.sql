@@ -20,7 +20,7 @@ create table public.kitchen (
 
 create table public.order (
 	id  bigserial not null, 
-	code uuid not null, 
+	code uuid not null DEFAULT uuid_generate_v1(), 
 	subtotal numeric(19, 2), 
 	deliveryfee numeric(19, 2), 
 	totalprice numeric(19, 2), 
@@ -34,10 +34,10 @@ create table public.order (
 	idpaymentmethod int8 not null, 
 	idrestaurant int8 not null, 
 	idsystemuser int8 not null, 
-	confirmedat TIMESTAMP not null, 
-	deliveryat TIMESTAMP not null, 
+	confirmedat TIMESTAMP, 
+	deliveryat TIMESTAMP, 
 	createdat TIMESTAMP not null, 
-	canceledat TIMESTAMP not null, 
+	canceledat TIMESTAMP, 
 	primary key (id)
 );
 

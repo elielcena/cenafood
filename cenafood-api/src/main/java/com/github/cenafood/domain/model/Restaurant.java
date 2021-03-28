@@ -70,7 +70,7 @@ public class Restaurant {
 	@Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
 	private OffsetDateTime updatedAt;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
 	private Set<PaymentMethod> paymentMethods;
 
@@ -126,6 +126,10 @@ public class Restaurant {
 			getUsers().remove(user);
 
 		return this;
+	}
+
+	public Boolean acceptPaymentMethod(PaymentMethod paymentMethod) {
+		return getPaymentMethods().contains(paymentMethod);
 	}
 
 }

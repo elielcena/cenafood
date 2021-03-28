@@ -1,5 +1,7 @@
 package com.github.cenafood.api.model.response;
 
+import java.io.Serializable;
+
 import com.github.cenafood.domain.model.City;
 
 import lombok.AllArgsConstructor;
@@ -15,7 +17,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressResponseDTO {
+public class AddressResponseDTO implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private String zipCode;
 

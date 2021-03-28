@@ -3,8 +3,10 @@ package com.github.cenafood.domain.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -16,24 +18,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.github.cenafood.domain.exception.BusinessException;
+
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * @author elielcena
  *
  */
-@Builder
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Table(name = "ORDER")
 public class Order {
@@ -43,14 +42,14 @@ public class Order {
 	private Long id;
 
 	@Type(type = "pg-uuid")
-	@Column(name = "CODE", length = 10, updatable = false, unique = true, nullable = false)
+	@Column(name = "CODE", length = 10, updatable = false, unique = true, nullable = false, columnDefinition = "UUID DEFAULT uuid_generate_v1()")
 	private UUID code;
 
 	@Column(name = "SUBTOTAL")
 	private BigDecimal subtotal;
 
 	@Column(name = "DELIVERYFEE")
-	private BigDecimal deliveryfee;
+	private BigDecimal deliveryFee;
 
 	@Column(name = "TOTALPRICE")
 	private BigDecimal totalPrice;
@@ -84,9 +83,61 @@ public class Order {
 
 	@ManyToOne
 	@JoinColumn(name = "IDSYSTEMUSER", nullable = false)
-	private User user;
+	private User customer;
 
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderItem> orderItems;
+
+	@PrePersist
+	private void generateCodeAndStatus() {
+		setCode(UUID.randomUUID());
+
+		if (!Optional.ofNullable(status).isPresent())
+			setStatus(OrderStatus.CREATED);
+	}
+
+	public void calculateValueTotal() {
+		getOrderItems().forEach(OrderItem::calculateTotalPrice);
+
+		this.subtotal = getOrderItems().stream().map(item -> item.getTotalPrice()).reduce(BigDecimal.ZERO,
+				BigDecimal::add);
+
+		this.totalPrice = this.subtotal.add(this.deliveryFee);
+	}
+
+	public void setDelivery() {
+		setDeliveryFee(getRestaurant().getDeliveryFee());
+	}
+
+	public void assignOrderToItems() {
+		getOrderItems().forEach(item -> item.setOrder(this));
+	}
+
+	public Order confirm() {
+		setNewStatus(OrderStatus.CONFIRMED);
+		setConfirmedAt(OffsetDateTime.now());
+		return this;
+	}
+
+	public Order delivery() {
+		setNewStatus(OrderStatus.DELIVERED);
+		setDeliveredAt(OffsetDateTime.now());
+		return this;
+	}
+
+	public Order cancel() {
+		setNewStatus(OrderStatus.CANCELED);
+		setCanceledAt(OffsetDateTime.now());
+		return this;
+	}
+
+	private void setNewStatus(OrderStatus newStatus) {
+		if (getStatus().cannotChangeTo(newStatus)) {
+			throw new BusinessException(String.format("Order status %s cannot be changed from %s to %s", getCode(),
+					getStatus().getDescription(), newStatus.getDescription()));
+		}
+
+		this.status = newStatus;
+	}
 
 }

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,12 +45,27 @@ public class OrderItem {
 	@Column(name = "NOTE")
 	private String note;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "IDORDER", nullable = false)
 	private Order order;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "IDPRODUCT", nullable = false)
 	private Product product;
+
+	public void calculateTotalPrice() {
+		BigDecimal unitPriceCalculate = this.unitPrice;
+		Integer quantityCalculate = this.quantity;
+
+		if (unitPriceCalculate == null) {
+			unitPriceCalculate = BigDecimal.ZERO;
+		}
+
+		if (quantityCalculate == null) {
+			quantityCalculate = 0;
+		}
+
+		this.totalPrice = unitPriceCalculate.multiply(new BigDecimal(quantityCalculate));
+	}
 
 }
