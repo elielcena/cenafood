@@ -6,6 +6,10 @@ import java.util.UUID;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,8 +44,13 @@ public class OrderController {
 	private OrderMapper mapper;
 
 	@GetMapping
-	public List<OrderAbstractResponseDTO> findAllWithFilter(OrderFilter filter) {
-		return mapper.toAbstractCollectionDTO(orderService.findAll(filter));
+	public Page<OrderAbstractResponseDTO> findAllWithFilter(OrderFilter filter,
+			@PageableDefault(size = 10) Pageable pageable) {
+		Page<Order> orderPage = orderService.findAllWithFilterAndPage(filter, pageable);
+
+		List<OrderAbstractResponseDTO> orderAbstractDTO = mapper.toAbstractCollectionDTO(orderPage.getContent());
+
+		return new PageImpl<>(orderAbstractDTO, pageable, orderPage.getTotalElements());
 	}
 
 	@GetMapping("/{code}")
