@@ -21,6 +21,7 @@ import com.github.cenafood.api.model.request.OrderRequestDTO;
 import com.github.cenafood.api.model.response.OrderAbstractResponseDTO;
 import com.github.cenafood.api.model.response.OrderCreatedResponseDTO;
 import com.github.cenafood.api.model.response.OrderResponseDTO;
+import com.github.cenafood.domain.filter.OrderFilter;
 import com.github.cenafood.domain.model.Order;
 import com.github.cenafood.domain.service.OrderService;
 
@@ -39,8 +40,8 @@ public class OrderController {
 	private OrderMapper mapper;
 
 	@GetMapping
-	public List<OrderAbstractResponseDTO> findAll() {
-		return mapper.toAbstractCollectionDTO(orderService.findAll());
+	public List<OrderAbstractResponseDTO> findAllWithFilter(OrderFilter filter) {
+		return mapper.toAbstractCollectionDTO(orderService.findAll(filter));
 	}
 
 	@GetMapping("/{code}")

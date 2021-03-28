@@ -5663,15 +5663,37 @@ INSERT INTO systemuserrole (idsystemuser, idrole) VALUES (1, 1), (1, 2);
 
 -- PRODUCT
 INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Colchão mole 3KG', 'Carne vermelha bovina 3Kg', 25, true, 1);
+INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Picanha 1KG', 'Peça de picanha 1KG', 60, true, 1);
+INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Contra filé KG', 'Carne vermelha bovina contra filé Kg', 30, true, 1);
+INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Alcatra KG', 'Carne vermelha bovina alcatra Kg', 40, true, 1);
+INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Carne Moida KG', 'Carne suína moida Kg', 10, true, 1);
 
 -- RESTAURANTSYSTEMUSER
 INSERT INTO restaurantsystemuser (idrestaurant, idsystemuser) VALUES (1, 1), (2, 2);
 
 -- ORDER
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
-VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965103', 50, 10, 60, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965103', 40, 10, 50, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
+INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965104', 50, 10, 60, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 1, current_timestamp);
+INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965105', 60, 10, 70, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
+INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965106', 70, 10, 80, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 2, current_timestamp);
+INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965107', 80, 10, 90, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 2, current_timestamp);
+INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965108', 90, 10, 100, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 2, current_timestamp);
 
 -- ORDERITEM
-INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(25, 2, 50, NULL, 1, 1);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 1, 40, NULL, 1, 4);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(25, 2, 50, NULL, 2, 1);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 1, 40, NULL, 3, 4);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(10, 1, 10, NULL, 3, 5);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(60, 1, 60, NULL, 4, 2);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(10, 1, 10, NULL, 4, 5);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 2, 80, NULL, 5, 4);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(25, 2, 50, NULL, 6, 1);
+INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 1, 40, NULL, 6, 4);
 
 

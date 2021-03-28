@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
+import com.github.cenafood.domain.filter.OrderFilter;
 import com.github.cenafood.domain.model.City;
 import com.github.cenafood.domain.model.Order;
 import com.github.cenafood.domain.model.PaymentMethod;
@@ -15,6 +16,7 @@ import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.repository.OrderRepository;
+import com.github.cenafood.infrastructure.repository.spec.OrderSpecs;
 
 /**
  * @author elielcena
@@ -43,8 +45,8 @@ public class OrderService {
 	@Autowired
 	private PaymentMethodService paymentMethodService;
 
-	public List<Order> findAll() {
-		return orderRepository.findAll();
+	public List<Order> findAll(OrderFilter filter) {
+		return orderRepository.findAll(OrderSpecs.withFilter(filter));
 	}
 
 	public Order findByCode(UUID code) {

@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -133,16 +135,24 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 
-		var fields = ex.getBindingResult().getFieldErrors().stream().map(error -> {
-			// String message = messageSource.getMessage(error, new Locale("pt", "BR"));
-			String message = messageSource.getMessage(error, Locale.ENGLISH);
-			return new ErrorResponseDTO.Cause(error.getField(), message);
-		}).distinct().collect(Collectors.toList());
+		return handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
+	}
 
-		String message = "One or more fields are invalid";
-		var responseBody = createErrorResponseDTOBuilder(status, request, message).causes(fields).build();
+	/**
+	 * Provides handling the BindException exception.
+	 * 
+	 * @param ex      the exception
+	 * @param body    the body for the response
+	 * @param headers the headers for the response
+	 * @param status  the response status
+	 * @param request the current request
+	 * @return ResponseEntity<Object>
+	 */
+	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+			WebRequest request) {
 
-		return super.handleExceptionInternal(ex, responseBody, headers, status, request);
+		return handleValidationInternal(ex, headers, status, request, ex.getBindingResult());
 	}
 
 	/**
@@ -241,6 +251,30 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 				String.format(message, ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
 
 		return handleExceptionInternal(exception, null, headers, status, request);
+	}
+
+	/**
+	 * Customize the response body of the MethodArgumentTypeMismatchException
+	 * exception.
+	 * 
+	 * @param ex
+	 * @param headers
+	 * @param status
+	 * @param request
+	 * @return
+	 */
+	private ResponseEntity<Object> handleValidationInternal(Exception ex, HttpHeaders headers, HttpStatus status,
+			WebRequest request, BindingResult bindingResult) {
+		var fields = bindingResult.getFieldErrors().stream().map(error -> {
+			// String message = messageSource.getMessage(error, new Locale("pt", "BR"));
+			String message = messageSource.getMessage(error, Locale.ENGLISH);
+			return new ErrorResponseDTO.Cause(error.getField(), message);
+		}).distinct().collect(Collectors.toList());
+
+		String message = "One or more fields are invalid";
+		var responseBody = createErrorResponseDTOBuilder(status, request, message).causes(fields).build();
+
+		return super.handleExceptionInternal(ex, responseBody, headers, status, request);
 	}
 
 	/**
