@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.github.cenafood.core.data.PageableTranslater;
 import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.filter.OrderFilter;
@@ -18,6 +19,7 @@ import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.repository.OrderRepository;
 import com.github.cenafood.infrastructure.repository.spec.OrderSpecs;
+import com.google.common.collect.ImmutableMap;
 
 /**
  * @author elielcena
@@ -47,6 +49,7 @@ public class OrderService {
 	private PaymentMethodService paymentMethodService;
 
 	public Page<Order> findAllWithFilterAndPage(OrderFilter filter, Pageable pageable) {
+		pageable = translatePageable(pageable);
 		return orderRepository.findAll(OrderSpecs.withFilter(filter), pageable);
 	}
 
@@ -92,6 +95,11 @@ public class OrderService {
 		Order order = findByCode(code);
 
 		orderRepository.save(order.cancel());
+	}
+
+	private Pageable translatePageable(Pageable pageable) {
+		var mapper = ImmutableMap.of("customerName", "customer.name");
+		return PageableTranslater.translate(pageable, mapper);
 	}
 
 	private void validOrder(Order order) {
