@@ -31,11 +31,11 @@ public class OrderSpecs {
 			if (Optional.ofNullable(filter.getIdRestaurant()).isPresent()) {
 				predicates.add(builder.equal(root.get("restaurant"), filter.getIdRestaurant()));
 			}
-			if (Optional.ofNullable(filter.getCreationStartDate()).isPresent()) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), filter.getCreationStartDate()));
+			if (Optional.ofNullable(filter.getStartDate()).isPresent()) {
+				predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), filter.getStartDate()));
 			}
-			if (Optional.ofNullable(filter.getCreationEndDate()).isPresent()) {
-				predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), filter.getCreationEndDate()));
+			if (Optional.ofNullable(filter.getEndDate()).isPresent()) {
+				predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), filter.getEndDate()));
 			}
 
 			return builder.and(predicates.toArray(new Predicate[0]));

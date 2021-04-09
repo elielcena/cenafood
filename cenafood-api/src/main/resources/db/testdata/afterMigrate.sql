@@ -5675,15 +5675,15 @@ INSERT INTO restaurantsystemuser (idrestaurant, idsystemuser) VALUES (1, 1), (2,
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
 VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965103', 40, 10, 50, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
-VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965104', 50, 10, 60, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 1, current_timestamp);
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965104', 50, 10, 60, 'CONFIRMED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 1, current_timestamp);
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
-VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965105', 60, 10, 70, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965105', 60, 10, 70, 'CONFIRMED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 1, current_timestamp);
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
-VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965106', 70, 10, 80, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 2, current_timestamp);
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965106', 70, 10, 80, 'CONFIRMED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 2, current_timestamp);
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
-VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965107', 80, 10, 90, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 2, current_timestamp);
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965107', 80, 10, 90, 'CONFIRMED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 1, 2, current_timestamp);
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)
-VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965108', 90, 10, 100, 'CREATED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 2, current_timestamp);
+VALUES('fcffa16d-d918-4deb-a3e6-cc46e0965108', 90, 10, 100, 'CONFIRMED', '15828-000', 'Rua XV de Novembro', 'Casa', '12', 'Centro', 353510, 1, 2, 2, current_timestamp);
 
 -- ORDERITEM
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 1, 40, NULL, 1, 4);
