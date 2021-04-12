@@ -25,5 +25,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 	@Query(JPQL_PRODUCT)
 	List<Product> findByRestaurant(Restaurant restaurant);
-
+	
 }

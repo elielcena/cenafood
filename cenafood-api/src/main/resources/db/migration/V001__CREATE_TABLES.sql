@@ -1,5 +1,5 @@
 -- CREATE TABLES
---create table public.public.teste (
+--create table public.teste (
 --	id  bigserial not null, 
 --	name varchar(255) not null, 
 --	ufstate varchar(2) not null, 
@@ -139,6 +139,17 @@ create table public.restaurantsystemuser (
 	primary key (idrestaurant, idsystemuser)
 );
 
+CREATE TABLE public.productimage (
+	id bigserial NOT NULL,
+	idproduct int8 NOT NULL,
+	filename varchar(150) NOT NULL,
+	description varchar(150) NOT NULL,
+	contenttype varchar(80) NOT NULL,
+	size int8 NOT NULL,
+	PRIMARY KEY (id)
+);
+
+
 -- CREATE CONSTRAINTS
 alter table public.order add constraint UK_CODE_ORDER unique (code);
 
@@ -173,3 +184,5 @@ alter table public.systemuserrole add constraint FK_ROLE_SYSTEMYSERROLE foreign 
 
 alter table public.restaurantsystemuser add constraint FK_RESTAURANT_RESTAURANTSYSTEMUSER foreign key (idrestaurant) references public.restaurant;
 alter table public.restaurantsystemuser add constraint FK_SYSTEMYSER_RESTAURANTSYSTEMUSER foreign key (idsystemuser) references public.systemuser;
+
+alter table public.productimage add constraint FK_ID_PRODUCT foreign key (idproduct) references public.product;

@@ -1,3 +1,4 @@
+delete FROM productimage;
 DELETE FROM ORDERITEM;
 DELETE FROM PUBLIC.ORDER;
 DELETE FROM restaurantsystemuser;
@@ -14,6 +15,7 @@ DELETE FROM paymentmethod;
 DELETE FROM city;
 DELETE FROM state;
 
+ALTER SEQUENCE productimage_id_seq RESTART WITH 1;
 ALTER SEQUENCE orderitem_id_seq RESTART WITH 1;
 ALTER SEQUENCE order_id_seq RESTART WITH 1;
 ALTER SEQUENCE systemuser_id_seq RESTART WITH 1;
@@ -5695,5 +5697,3 @@ INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, id
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 2, 80, NULL, 5, 4);
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(25, 2, 50, NULL, 6, 1);
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 1, 40, NULL, 6, 4);
-
-
