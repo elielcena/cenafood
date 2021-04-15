@@ -2,6 +2,8 @@ package com.github.cenafood.domain.service;
 
 import java.util.UUID;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +20,7 @@ import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.repository.OrderRepository;
+import com.github.cenafood.domain.service.SendMailService.Message;
 import com.github.cenafood.infrastructure.repository.spec.OrderSpecs;
 import com.google.common.collect.ImmutableMap;
 
@@ -28,105 +31,119 @@ import com.google.common.collect.ImmutableMap;
 @Service
 public class OrderService {
 
-	private static final String MSG_RESOURCE_NOT_FOUND = "There is no order registration with code %d";
+    private static final String MSG_RESOURCE_NOT_FOUND = "There is no order registration with code %d";
 
-	@Autowired
-	private OrderRepository orderRepository;
+    private static final String MSG_PAYMENT_NOT_ACCEPT = "Payment method '%s' is not accepted by this restaurant.";
 
-	@Autowired
-	private RestaurantService restaurantService;
+    @Autowired
+    private OrderRepository orderRepository;
 
-	@Autowired
-	private CityService cityService;
+    @Autowired
+    private RestaurantService restaurantService;
 
-	@Autowired
-	private UserService userService;
+    @Autowired
+    private CityService cityService;
 
-	@Autowired
-	private ProductService productService;
+    @Autowired
+    private UserService userService;
 
-	@Autowired
-	private PaymentMethodService paymentMethodService;
+    @Autowired
+    private ProductService productService;
 
-	public Page<Order> findAllWithFilterAndPage(OrderFilter filter, Pageable pageable) {
-		pageable = translatePageable(pageable);
-		return orderRepository.findAll(OrderSpecs.withFilter(filter), pageable);
-	}
+    @Autowired
+    private PaymentMethodService paymentMethodService;
 
-	public Order findByCode(UUID code) {
-		return orderRepository.findByCode(code)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, code)));
-	}
+    @Autowired
+    private SendMailService sendMailService;
 
-	public Order generate(Order order) {
-		try {
-			// TODO get authenticated user
-			order.setCustomer(new User());
-			order.getCustomer().setId(1L);
+    public Page<Order> findAllWithFilterAndPage(OrderFilter filter, Pageable pageable) {
+        pageable = translatePageable(pageable);
+        return orderRepository.findAll(OrderSpecs.withFilter(filter), pageable);
+    }
 
-			validOrder(order);
-			validItems(order);
+    public Order findByCode(UUID code) {
+        return orderRepository.findByCode(code)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, code)));
+    }
 
-			order.setDeliveryFee(order.getRestaurant().getDeliveryFee());
-			order.calculateValueTotal();
+    public Order generate(Order order) {
+        try {
+            // TODO get authenticated user
+            order.setCustomer(new User());
+            order.getCustomer().setId(1L);
 
-			return orderRepository.save(order);
-		} catch (ResourceNotFoundException e) {
-			throw new BusinessException(e.getMessage(), e);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			throw new BusinessException(e.getMessage(), e);
-		}
-	}
+            validOrder(order);
+            validItems(order);
 
-	public void confirm(UUID code) {
-		Order order = findByCode(code);
+            order.setDeliveryFee(order.getRestaurant().getDeliveryFee());
+            order.calculateValueTotal();
 
-		orderRepository.save(order.confirm());
-	}
+            return orderRepository.save(order);
+        } catch (ResourceNotFoundException e) {
+            throw new BusinessException(e.getMessage(), e);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            throw new BusinessException(e.getMessage(), e);
+        }
+    }
 
-	public void delivery(UUID code) {
-		Order order = findByCode(code);
+    @Transactional
+    public void confirm(UUID code) {
+        Order order = findByCode(code);
 
-		orderRepository.save(order.delivery());
-	}
+        orderRepository.save(order.confirm());
 
-	public void cancel(UUID code) {
-		Order order = findByCode(code);
+        sendMailService.send(Message.builder()
+                .to(order.getCustomer().getEmail())
+                .subject(order.getRestaurant().getName() + " - Pedido confirmado!")
+                .body("order-confirmed.html")
+                .variable("order", order)
+                .build());
+    }
 
-		orderRepository.save(order.cancel());
-	}
+    @Transactional
+    public void delivery(UUID code) {
+        Order order = findByCode(code);
 
-	private Pageable translatePageable(Pageable pageable) {
-		var mapper = ImmutableMap.of("customerName", "customer.name");
-		return PageableTranslater.translate(pageable, mapper);
-	}
+        orderRepository.save(order.delivery());
+    }
 
-	private void validOrder(Order order) {
-		City city = cityService.findById(order.getAddress().getCity().getId());
-		User customer = userService.findById(order.getCustomer().getId());
-		Restaurant restaurant = restaurantService.findById(order.getRestaurant().getId());
-		PaymentMethod paymentMethod = paymentMethodService.findById(order.getPaymentMethod().getId());
+    @Transactional
+    public void cancel(UUID code) {
+        Order order = findByCode(code);
 
-		order.getAddress().setCity(city);
-		order.setCustomer(customer);
-		order.setRestaurant(restaurant);
-		order.setPaymentMethod(paymentMethod);
+        orderRepository.save(order.cancel());
+    }
 
-		if (Boolean.FALSE.equals(restaurant.acceptPaymentMethod(paymentMethod))) {
-			throw new BusinessException(String.format("Payment method '%s' is not accepted by this restaurant.",
-					paymentMethod.getDescription()));
-		}
-	}
+    private Pageable translatePageable(Pageable pageable) {
+        var mapper = ImmutableMap.of("customerName", "customer.name");
+        return PageableTranslater.translate(pageable, mapper);
+    }
 
-	private void validItems(Order order) {
-		order.getOrderItems().forEach(item -> {
-			Product product = productService.findById(order.getRestaurant().getId(), item.getProduct().getId());
+    private void validOrder(Order order) {
+        City city = cityService.findById(order.getAddress().getCity().getId());
+        User customer = userService.findById(order.getCustomer().getId());
+        Restaurant restaurant = restaurantService.findById(order.getRestaurant().getId());
+        PaymentMethod paymentMethod = paymentMethodService.findById(order.getPaymentMethod().getId());
 
-			item.setOrder(order);
-			item.setProduct(product);
-			item.setUnitPrice(product.getPrice());
-		});
-	}
+        order.getAddress().setCity(city);
+        order.setCustomer(customer);
+        order.setRestaurant(restaurant);
+        order.setPaymentMethod(paymentMethod);
+
+        if (Boolean.FALSE.equals(restaurant.acceptPaymentMethod(paymentMethod))) {
+            throw new BusinessException(String.format(MSG_PAYMENT_NOT_ACCEPT, paymentMethod.getDescription()));
+        }
+    }
+
+    private void validItems(Order order) {
+        order.getOrderItems().forEach(item -> {
+            Product product = productService.findById(order.getRestaurant().getId(), item.getProduct().getId());
+
+            item.setOrder(order);
+            item.setProduct(product);
+            item.setUnitPrice(product.getPrice());
+        });
+    }
 
 }

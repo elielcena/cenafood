@@ -1,4 +1,4 @@
-package com.github.cenafood.infrastructure.service.report.exception;
+package com.github.cenafood.infrastructure.service.exception;
 
 /**
  * @author elielcena

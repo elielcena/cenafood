@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.springframework.util.ResourceUtils;
 
-import com.github.cenafood.infrastructure.service.report.exception.ReportException;
+import com.github.cenafood.infrastructure.service.exception.ReportException;
 
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JasperExportManager;

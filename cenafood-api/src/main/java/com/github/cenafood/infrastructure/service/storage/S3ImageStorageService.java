@@ -13,7 +13,7 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.util.IOUtils;
 import com.github.cenafood.core.storage.StorageProperties;
 import com.github.cenafood.domain.service.ImageStorageService;
-import com.github.cenafood.infrastructure.service.storage.exception.StorageException;
+import com.github.cenafood.infrastructure.service.exception.StorageException;
 
 /**
  * @author elielcena
