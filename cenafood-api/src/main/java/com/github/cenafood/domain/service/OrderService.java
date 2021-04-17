@@ -20,7 +20,6 @@ import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.repository.OrderRepository;
-import com.github.cenafood.domain.service.SendMailService.Message;
 import com.github.cenafood.infrastructure.repository.spec.OrderSpecs;
 import com.google.common.collect.ImmutableMap;
 
@@ -52,9 +51,6 @@ public class OrderService {
 
     @Autowired
     private PaymentMethodService paymentMethodService;
-
-    @Autowired
-    private SendMailService sendMailService;
 
     public Page<Order> findAllWithFilterAndPage(OrderFilter filter, Pageable pageable) {
         pageable = translatePageable(pageable);
@@ -92,13 +88,6 @@ public class OrderService {
         Order order = findByCode(code);
 
         orderRepository.save(order.confirm());
-
-        sendMailService.send(Message.builder()
-                .to(order.getCustomer().getEmail())
-                .subject(order.getRestaurant().getName() + " - Pedido confirmado!")
-                .body("order-confirmed.html")
-                .variable("order", order)
-                .build());
     }
 
     @Transactional
