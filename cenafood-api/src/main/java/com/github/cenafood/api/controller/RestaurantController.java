@@ -8,6 +8,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.cenafood.api.mapper.RestaurantMapper;
 import com.github.cenafood.api.model.request.RestaurantRequestDTO;
 import com.github.cenafood.api.model.response.RestaurantResponseDTO;
+import com.github.cenafood.api.openapi.controller.RestaurantControllerOpenApi;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.service.RestaurantService;
 
@@ -30,8 +32,8 @@ import com.github.cenafood.domain.service.RestaurantService;
  *
  */
 @RestController
-@RequestMapping(value = "/restaurants")
-public class RestaurantController {
+@RequestMapping(value = "/restaurants", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantController implements RestaurantControllerOpenApi {
 
     @Autowired
     private RestaurantService restaurantService;

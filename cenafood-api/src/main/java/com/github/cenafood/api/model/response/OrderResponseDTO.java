@@ -3,10 +3,11 @@ package com.github.cenafood.api.model.response;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import com.github.cenafood.domain.model.OrderStatus;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,38 +17,48 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("OrderResponse")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderResponseDTO {
 
-	private UUID code;
+    @ApiModelProperty(example = "fcffa16d-d918-4deb-a3e6-cc46e096514")
+    private String code;
 
-	private BigDecimal subtotal;
+    @ApiModelProperty(example = "20.00")
+    private BigDecimal subtotal;
 
-	private BigDecimal deliveryfee;
+    @ApiModelProperty(example = "10.00")
+    private BigDecimal deliveryfee;
 
-	private BigDecimal totalPrice;
+    @ApiModelProperty(example = "30.00")
+    private BigDecimal totalPrice;
 
-	private AddressResponseDTO address;
+    private AddressResponseDTO address;
 
-	private OrderStatus status;
+    @ApiModelProperty(example = "CREATED")
+    private OrderStatus status;
 
-	private OffsetDateTime createdAt;
+    @ApiModelProperty(example = "2021-04-21T20:31:58.1029978-03:00")
+    private OffsetDateTime createdAt;
 
-	private OffsetDateTime confirmedAt;
+    @ApiModelProperty(example = "2021-04-21T20:31:58.1029978-03:00")
+    private OffsetDateTime confirmedAt;
 
-	private OffsetDateTime canceledAt;
+    @ApiModelProperty(example = "2021-04-21T20:31:58.1029978-03:00")
+    private OffsetDateTime canceledAt;
 
-	private OffsetDateTime deliveredAt;
+    @ApiModelProperty(example = "2021-04-21T20:31:58.1029978-03:00")
+    private OffsetDateTime deliveredAt;
 
-	private PaymentMethodResponseDTO paymentMethod;
+    private PaymentMethodResponseDTO paymentMethod;
 
-	private RestaurantResponseDTO restaurant;
+    private RestaurantResponseDTO restaurant;
 
-	private UserResponseDTO customer;
+    private UserResponseDTO customer;
 
-	private List<OrderItemResponseDTO> orderItems;
+    private List<OrderItemResponseDTO> orderItems;
 
 }

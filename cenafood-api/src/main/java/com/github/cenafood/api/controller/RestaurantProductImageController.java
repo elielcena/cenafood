@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.cenafood.api.mapper.ProductImageMapper;
 import com.github.cenafood.api.model.request.ProductImageRequestDTO;
 import com.github.cenafood.api.model.response.ProductImageResponseDTO;
+import com.github.cenafood.api.openapi.controller.RestaurantProductImageControllerOpenApi;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.ProductImage;
@@ -31,8 +32,8 @@ import com.github.cenafood.domain.service.ProductService;
  *
  */
 @RestController
-@RequestMapping(value = "/restaurants/{id}/products/{idProduct}/image")
-public class RestaurantProductImageController {
+@RequestMapping(value = "/restaurants/{id}/products/{idProduct}/image", produces = MediaType.APPLICATION_JSON_VALUE)
+public class RestaurantProductImageController implements RestaurantProductImageControllerOpenApi {
 
     @Autowired
     private ProductService productService;
@@ -43,7 +44,7 @@ public class RestaurantProductImageController {
     @Autowired
     private ProductImageMapper mapper;
 
-    @GetMapping(path = "/{idImage}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(path = "/{idImage}")
     public ProductImageResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {
         Product product = productService.findById(idProduct, id);
         return mapper.toDTO(productImageService.findById(idImage, product));

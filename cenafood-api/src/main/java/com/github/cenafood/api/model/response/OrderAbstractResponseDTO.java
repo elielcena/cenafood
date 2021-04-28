@@ -2,10 +2,11 @@ package com.github.cenafood.api.model.response;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.UUID;
 
 import com.github.cenafood.domain.model.OrderStatus;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,38 +16,48 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("OrderAbstractResponse")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderAbstractResponseDTO {
 
-	private UUID code;
+    @ApiModelProperty(example = "fcffa16d-d918-4deb-a3e6-cc46e0965103")
+    private String code;
 
-	private BigDecimal subtotal;
+    @ApiModelProperty(example = "105.50")
+    private BigDecimal subtotal;
 
-	private BigDecimal deliveryfee;
+    @ApiModelProperty(example = "15.50")
+    private BigDecimal deliveryfee;
 
-	private BigDecimal totalPrice;
+    @ApiModelProperty(example = "121.00")
+    private BigDecimal totalPrice;
 
-	private OrderStatus status;
+    @ApiModelProperty(example = "CREATED")
+    private OrderStatus status;
 
-	private OffsetDateTime createdAt;
+    @ApiModelProperty(example = "2021-04-21T20:31:58.1029978-03:00")
+    private OffsetDateTime createdAt;
 
-	private RestaurantAbstractResponseDTO restaurant;
+    private RestaurantAbstractResponseDTO restaurant;
 
-	private UserResponseDTO customer;
+    private UserResponseDTO customer;
 
-	@Builder
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class RestaurantAbstractResponseDTO {
+    @ApiModel("RestaurantAbstractResponse")
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RestaurantAbstractResponseDTO {
 
-		private Long id;
+        @ApiModelProperty(example = "1")
+        private Long id;
 
-		private String name;
+        @ApiModelProperty(example = "E'Cena Delivery")
+        private String name;
 
-	}
+    }
 
 }

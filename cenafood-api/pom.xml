@@ -16,7 +16,8 @@
 		<java.version>11</java.version>
 		<modelmapper.version>2.3.0</modelmapper.version>
 		<jasperreports.version>6.16.0</jasperreports.version>
-		<awss3-version>1.11.996</awss3-version>
+		<awss3.version>1.11.996</awss3.version>
+		<springfox.version>3.0.0</springfox.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -54,6 +55,12 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-boot-starter</artifactId>
+			<version>${springfox.version}</version>
 		</dependency>
 
 		<dependency>
@@ -125,7 +132,7 @@
 		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-s3</artifactId>
-			<version>${awss3-version}</version>
+			<version>${awss3.version}</version>
 		</dependency>
 
 		<!-- STARTERS TEST -->

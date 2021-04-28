@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("StateResponse")
 @Builder
 @Data
 @NoArgsConstructor
@@ -26,17 +27,15 @@ import lombok.NoArgsConstructor;
 @Table(name = "STATE")
 public class State implements Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private Long id;
+    private static final long serialVersionUID = 1L;
 
-	@Column(nullable = false)
-	private String name;
+    @ApiModelProperty(example = "SP")
+    @Id
+    @Column(nullable = false, length = 2)
+    private String uf;
 
-	@Column(nullable = false, length = 2)
-	private String uf;
+    @ApiModelProperty(example = "São Paulo")
+    @Column(nullable = false)
+    private String name;
 
 }

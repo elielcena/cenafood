@@ -7,6 +7,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,65 +18,74 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("OrderRequest")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderRequestDTO {
 
-	@Valid
-	@NotNull
-	private RestaurantAbstractRequestDTO restaurant;
+    @Valid
+    @NotNull
+    private RestaurantAbstractRequestDTO restaurant;
 
-	@Valid
-	@NotNull
-	private AddressRequestDTO address;
+    @Valid
+    @NotNull
+    private AddressRequestDTO address;
 
-	@Valid
-	@NotNull
-	private PaymentMethodAbstractRequestDTO paymentMethod;
+    @Valid
+    @NotNull
+    private PaymentMethodAbstractRequestDTO paymentMethod;
 
-	@Valid
-	@Size(min = 1)
-	@NotNull
-	private List<OrderItemAbstractRequestDTO> orderItems;
+    @Valid
+    @Size(min = 1)
+    @NotNull
+    private List<OrderItemAbstractRequestDTO> orderItems;
 
-	@Builder
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class RestaurantAbstractRequestDTO {
+    @ApiModel("RestaurantAbstractRequest")
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RestaurantAbstractRequestDTO {
 
-		@NotNull
-		private Long id;
+        @ApiModelProperty(example = "1", required = true)
+        @NotNull
+        private Long id;
 
-	}
+    }
 
-	@Builder
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class PaymentMethodAbstractRequestDTO {
+    @ApiModel("PaymentMethodAbstractRequest")
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PaymentMethodAbstractRequestDTO {
 
-		@NotNull
-		private Long id;
+        @ApiModelProperty(example = "1", required = true)
+        @NotNull
+        private Long id;
 
-	}
+    }
 
-	@Builder
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class OrderItemAbstractRequestDTO {
+    @ApiModel("OrderItemAbstractRequest")
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderItemAbstractRequestDTO {
 
-		@NotNull
-		private Long idProduct;
+        @ApiModelProperty(example = "1", required = true)
+        @NotNull
+        private Long idProduct;
 
-		@NotNull
-		@PositiveOrZero
-		private Integer quantity;
+        @ApiModelProperty(example = "10", required = true)
+        @NotNull
+        @PositiveOrZero
+        private Integer quantity;
 
-		private String note;
+        @ApiModelProperty(example = "No pepper")
+        private String note;
 
-	}
+    }
 }

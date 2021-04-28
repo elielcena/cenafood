@@ -7,6 +7,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,39 +18,45 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("RestaurantRequest")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RestaurantRequestDTO {
 
-	@NotBlank
-	private String name;
+    @ApiModelProperty(example = "E'Cena Delivery", required = true)
+    @NotBlank
+    private String name;
 
-	@NotNull
-	@PositiveOrZero
-	private BigDecimal deliveryFee;
+    @ApiModelProperty(example = "10.50", required = true)
+    @NotNull
+    @PositiveOrZero
+    private BigDecimal deliveryFee;
 
-	@Valid
-	@NotNull
-	private KitchenRestaurantRequestDTO kitchen;
+    @Valid
+    @NotNull
+    private KitchenRestaurantRequestDTO kitchen;
 
-	@Valid
-	@NotNull
-	private Boolean active;
+    @ApiModelProperty(example = "true", required = true)
+    @Valid
+    @NotNull
+    private Boolean active;
 
-	@Valid
-	@NotNull
-	private AddressRequestDTO address;
+    @Valid
+    @NotNull
+    private AddressRequestDTO address;
 
-	@Builder
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	public static class KitchenRestaurantRequestDTO {
+    @ApiModel("KitchenRestaurantRequest")
+    @Builder
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class KitchenRestaurantRequestDTO {
 
-		@NotNull
-		private Long id;
-	}
+        @ApiModelProperty(example = "1", required = true)
+        @NotNull
+        private Long id;
+    }
 
 }

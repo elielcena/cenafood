@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,12 +17,15 @@ import lombok.Setter;
 @Setter
 public class DailyOrderFilter {
 
-	private Long idRestaurant;
+    @ApiModelProperty(example = "1")
+    private Long idRestaurant;
 
-	@DateTimeFormat(iso = ISO.DATE)
-	private LocalDate startDate;
+    @ApiModelProperty(example = "2021-04-01")
+    @DateTimeFormat(iso = ISO.DATE)
+    private LocalDate startDate;
 
-	@DateTimeFormat(iso = ISO.DATE)
-	private LocalDate endDate;
+    @ApiModelProperty(example = "2021-04-30")
+    @DateTimeFormat(iso = ISO.DATE)
+    private LocalDate endDate;
 
 }

@@ -20,7 +20,7 @@ create table public.kitchen (
 
 create table public.order (
 	id  bigserial not null, 
-	code uuid not null DEFAULT uuid_generate_v1(), 
+	code varchar(255) not null, 
 	subtotal numeric(19, 2), 
 	deliveryfee numeric(19, 2), 
 	totalprice numeric(19, 2), 

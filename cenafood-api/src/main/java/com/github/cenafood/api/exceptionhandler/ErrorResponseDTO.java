@@ -6,6 +6,8 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("ErrorResponse")
 @JsonInclude(Include.NON_NULL)
 @Getter
 @AllArgsConstructor
@@ -23,27 +26,35 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ErrorResponseDTO {
 
-	private OffsetDateTime timestamp;
+    @ApiModelProperty(example = "2021-04-21T20:31:58.1029978-03:00", position = 1)
+    private OffsetDateTime timestamp;
 
-	private Integer status;
+    @ApiModelProperty(example = "400", position = 5)
+    private Integer status;
 
-	private String error;
+    @ApiModelProperty(example = "Bad Request", position = 10)
+    private String error;
 
-	private String message;
+    @ApiModelProperty(example = "One or more fields are invalid", position = 15)
+    private String message;
 
-	private List<Cause> causes;
+    @ApiModelProperty(value = "List of error causes, with name and message (Optinal)", position = 20)
+    private List<Cause> causes;
 
-	private String path;
+    @ApiModelProperty(example = "/users", position = 25)
+    private String path;
 
-	@Data
-	@AllArgsConstructor
-	@NoArgsConstructor
-	@Builder
-	public static class Cause {
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class Cause {
 
-		private String name;
+        @ApiModelProperty(example = "name")
+        private String name;
 
-		private String message;
-	}
+        @ApiModelProperty(example = "Name is required")
+        private String message;
+    }
 
 }

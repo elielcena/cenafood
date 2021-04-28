@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +23,7 @@ import lombok.NoArgsConstructor;
  * @author elielcena
  *
  */
+@ApiModel("CityResponse")
 @Builder
 @Data
 @NoArgsConstructor
@@ -29,18 +32,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "CITY")
 public class City implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private Long id;
+    @ApiModelProperty(example = "1")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-	@Column(nullable = false)
-	private String name;
+    @ApiModelProperty(example = "São Paulo")
+    @Column(nullable = false)
+    private String name;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "UFSTATE", nullable = false, referencedColumnName = "UF")
-	private State state;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "UFSTATE", nullable = false, referencedColumnName = "UF")
+    private State state;
 
 }

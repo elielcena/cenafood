@@ -23,7 +23,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Type;
 import org.springframework.data.domain.AbstractAggregateRoot;
 
 import com.github.cenafood.domain.event.OrderCanceledEvent;
@@ -47,9 +46,8 @@ public class Order extends AbstractAggregateRoot<Order> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Type(type = "pg-uuid")
-    @Column(name = "CODE", length = 10, updatable = false, unique = true, nullable = false, columnDefinition = "UUID DEFAULT uuid_generate_v1()")
-    private UUID code;
+    @Column(name = "CODE", updatable = false, unique = true, nullable = false)
+    private String code;
 
     @Column(name = "SUBTOTAL")
     private BigDecimal subtotal;
@@ -96,7 +94,7 @@ public class Order extends AbstractAggregateRoot<Order> {
 
     @PrePersist
     private void generateCodeAndStatus() {
-        setCode(UUID.randomUUID());
+        setCode(UUID.randomUUID().toString());
 
         if (!Optional.ofNullable(status).isPresent())
             setStatus(OrderStatus.CREATED);

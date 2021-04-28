@@ -1,7 +1,5 @@
 package com.github.cenafood.domain.service;
 
-import java.util.UUID;
-
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +28,7 @@ import com.google.common.collect.ImmutableMap;
 @Service
 public class OrderService {
 
-    private static final String MSG_RESOURCE_NOT_FOUND = "There is no order registration with code %d";
+    private static final String MSG_RESOURCE_NOT_FOUND = "There is no order registration with code %s";
 
     private static final String MSG_PAYMENT_NOT_ACCEPT = "Payment method '%s' is not accepted by this restaurant.";
 
@@ -57,7 +55,7 @@ public class OrderService {
         return orderRepository.findAll(OrderSpecs.withFilter(filter), pageable);
     }
 
-    public Order findByCode(UUID code) {
+    public Order findByCode(String code) {
         return orderRepository.findByCode(code)
                 .orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, code)));
     }
@@ -84,21 +82,21 @@ public class OrderService {
     }
 
     @Transactional
-    public void confirm(UUID code) {
+    public void confirm(String code) {
         Order order = findByCode(code);
 
         orderRepository.save(order.confirm());
     }
 
     @Transactional
-    public void delivery(UUID code) {
+    public void delivery(String code) {
         Order order = findByCode(code);
 
         orderRepository.save(order.delivery());
     }
 
     @Transactional
-    public void cancel(UUID code) {
+    public void cancel(String code) {
         Order order = findByCode(code);
 
         orderRepository.save(order.cancel());

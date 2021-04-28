@@ -2,6 +2,7 @@ package com.github.cenafood.api.model.request;
 
 import javax.validation.constraints.NotBlank;
 
+import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserWithPasswordRequestDTO extends UserRequestDTO {
 
-	@NotBlank
-	private String password;
+    @ApiModelProperty(example = "123", required = true)
+    @NotBlank
+    private String password;
 
 }

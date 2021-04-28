@@ -1,5 +1,8 @@
 package com.github.cenafood.infrastructure.repository.spec;
 
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -16,34 +19,44 @@ import com.github.cenafood.domain.model.Order;
  */
 public class OrderSpecs {
 
-	public static Specification<Order> withFilter(OrderFilter filter) {
-		return (root, query, builder) -> {
-			if (Order.class.equals(query.getResultType())) {
-				root.fetch("restaurant").fetch("kitchen");
-				root.fetch("customer");
-			}
+    private static final ZoneId ZONE = ZoneId.systemDefault();
 
-			var predicates = new ArrayList<Predicate>();
+    public static Specification<Order> withFilter(OrderFilter filter) {
+        return (root, query, builder) -> {
+            if (Order.class.equals(query.getResultType())) {
+                root.fetch("restaurant").fetch("kitchen");
+                root.fetch("customer");
+            }
 
-			if (Optional.ofNullable(filter.getIdCustomer()).isPresent()) {
-				predicates.add(builder.equal(root.get("customer"), filter.getIdCustomer()));
-			}
-			if (Optional.ofNullable(filter.getIdRestaurant()).isPresent()) {
-				predicates.add(builder.equal(root.get("restaurant"), filter.getIdRestaurant()));
-			}
-			if (Optional.ofNullable(filter.getStartDate()).isPresent()) {
-				predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), filter.getStartDate()));
-			}
-			if (Optional.ofNullable(filter.getEndDate()).isPresent()) {
-				predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), filter.getEndDate()));
-			}
+            var predicates = new ArrayList<Predicate>();
 
-			return builder.and(predicates.toArray(new Predicate[0]));
-		};
-	}
+            if (Optional.ofNullable(filter.getIdCustomer()).isPresent()) {
+                predicates.add(builder.equal(root.get("customer"), filter.getIdCustomer()));
+            }
+            if (Optional.ofNullable(filter.getIdRestaurant()).isPresent()) {
+                predicates.add(builder.equal(root.get("restaurant"), filter.getIdRestaurant()));
+            }
+            if (Optional.ofNullable(filter.getStartDate()).isPresent()) {
+                predicates.add(builder.greaterThanOrEqualTo(root.get("createdAt"), atStartOfDay(filter.getStartDate())));
+            }
+            if (Optional.ofNullable(filter.getEndDate()).isPresent()) {
+                predicates.add(builder.lessThanOrEqualTo(root.get("createdAt"), atEndOfDay(filter.getStartDate())));
+            }
 
-	public static Specification<Order> withNameSimilar(String name) {
-		return (root, query, builder) -> builder.like(root.get("name"), "%" + name + "%");
-	}
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+    }
+
+    public static Specification<Order> withNameSimilar(String name) {
+        return (root, query, builder) -> builder.like(root.get("name"), "%" + name + "%");
+    }
+
+    public static OffsetDateTime atStartOfDay(LocalDate localDate) {
+        return localDate.atStartOfDay(ZONE).toLocalDateTime().atZone(ZONE).toOffsetDateTime();
+    }
+
+    public static OffsetDateTime atEndOfDay(LocalDate localDate) {
+        return localDate.plusDays(1).atStartOfDay(ZONE).toLocalDateTime().atZone(ZONE).toOffsetDateTime();
+    }
 
 }
