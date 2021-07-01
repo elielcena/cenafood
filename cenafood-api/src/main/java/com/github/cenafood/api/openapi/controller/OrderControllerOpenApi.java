@@ -1,7 +1,8 @@
 package com.github.cenafood.api.openapi.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.ResponseEntity;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.OrderRequestDTO;
@@ -26,7 +27,7 @@ public interface OrderControllerOpenApi {
 
     @FieldsResponse
     @ApiOperation("Search all orders with filters and pagination")
-    Page<OrderAbstractResponseDTO> findAllWithFilter(OrderFilter filter, Pageable pageable);
+    PagedModel<OrderAbstractResponseDTO> findAllWithFilter(OrderFilter filter, Pageable pageable);
 
     @FieldsResponse
     @ApiOperation("Search orders by ID")
@@ -47,20 +48,20 @@ public interface OrderControllerOpenApi {
         @ApiResponse(code = 204, message = "Order confirmed"),
         @ApiResponse(code = 404, message = "Order not found", response = ErrorResponseDTO.class)
     })
-    void confirm(@ApiParam(value = "Order code", example = "fcffa16d-d918-4deb-a3e6-cc46e096514", required = true) String code);
+    ResponseEntity<Void> confirm(@ApiParam(value = "Order code", example = "fcffa16d-d918-4deb-a3e6-cc46e096514", required = true) String code);
 
     @ApiOperation("Change the status of the order delivered by code")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Order canceled"),
         @ApiResponse(code = 404, message = "Order not found", response = ErrorResponseDTO.class)
     })
-    void delivery(@ApiParam(value = "Order code", example = "fcffa16d-d918-4deb-a3e6-cc46e096514", required = true) String code);
+    ResponseEntity<Void> delivery(@ApiParam(value = "Order code", example = "fcffa16d-d918-4deb-a3e6-cc46e096514", required = true) String code);
 
     @ApiOperation("Change the status of the order canceled by code")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Order canceled"),
         @ApiResponse(code = 404, message = "Order not found", response = ErrorResponseDTO.class)
     })
-    void cancel(@ApiParam(value = "Order code", example = "fcffa16d-d918-4deb-a3e6-cc46e096514", required = true) String code);
+    ResponseEntity<Void> cancel(@ApiParam(value = "Order code", example = "fcffa16d-d918-4deb-a3e6-cc46e096514", required = true) String code);
 
 }

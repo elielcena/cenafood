@@ -1,6 +1,6 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.ChangePasswordRequestDTO;
@@ -22,7 +22,7 @@ import io.swagger.annotations.ApiResponses;
 public interface UserControllerOpenApi {
 
     @ApiOperation("Search all payment methods")
-    List<UserResponseDTO> findAll();
+    CollectionModel<UserResponseDTO> findAll();
 
     @ApiOperation("Search user by ID")
     @ApiResponses({

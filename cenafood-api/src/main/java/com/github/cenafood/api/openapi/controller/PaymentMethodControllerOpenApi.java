@@ -1,6 +1,6 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.PaymentMethodRequestDTO;
@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiResponses;
 public interface PaymentMethodControllerOpenApi {
 
     @ApiOperation("Search all payment methods")
-    List<PaymentMethodResponseDTO> findAll();
+    CollectionModel<PaymentMethodResponseDTO> findAll();
 
     @ApiOperation("Search Payment method by ID")
     @ApiResponses({

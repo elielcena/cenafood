@@ -4,6 +4,9 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
+
 import com.github.cenafood.domain.model.OrderStatus;
 
 import io.swagger.annotations.ApiModel;
@@ -11,18 +14,21 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
  * @author elielcena
  *
  */
+@Relation(collectionRelation = "orders")
 @ApiModel("OrderResponse")
 @Builder
 @Data
+@EqualsAndHashCode(callSuper = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderResponseDTO {
+public class OrderResponseDTO extends RepresentationModel<OrderResponseDTO> {
 
     @ApiModelProperty(example = "fcffa16d-d918-4deb-a3e6-cc46e096514")
     private String code;

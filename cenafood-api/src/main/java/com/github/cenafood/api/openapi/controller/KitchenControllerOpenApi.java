@@ -1,6 +1,6 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.KitchenRequestDTO;
@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiResponses;
 public interface KitchenControllerOpenApi {
 
     @ApiOperation("Search all kitchens")
-    List<KitchenResponseDTO> findAll();
+    CollectionModel<KitchenResponseDTO> findAll();
 
     @ApiOperation("Search kitchen by ID")
     @ApiResponses({

@@ -1,11 +1,11 @@
 package com.github.cenafood.api.controller;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -42,23 +42,23 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     private RestaurantMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<RestaurantResponseDTO>> findAll() {
+    public ResponseEntity<CollectionModel<RestaurantResponseDTO>> findAll() {
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
-                .body(mapper.toCollectionDTO(restaurantService.findAll()));
+                .body(mapper.toCollectionModel(restaurantService.findAll()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok()
                 .cacheControl(CacheControl.maxAge(1, TimeUnit.HOURS))
-                .body(mapper.toDTO(restaurantService.findById(id)));
+                .body(mapper.toModel(restaurantService.findById(id)));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantResponseDTO save(@RequestBody @Valid RestaurantRequestDTO restaurant) {
-        return mapper.toDTO(restaurantService.save(mapper.toDomainEntity(restaurant)));
+        return mapper.toModel(restaurantService.save(mapper.toDomainEntity(restaurant)));
     }
 
     @PutMapping("/{id}")
@@ -66,31 +66,35 @@ public class RestaurantController implements RestaurantControllerOpenApi {
             @RequestBody @Valid RestaurantRequestDTO restaurantRequest) {
         Restaurant restaurant = restaurantService.findById(id);
         mapper.copyToDomainEntity(restaurantRequest, restaurant);
-        return mapper.toDTO(restaurantService.save(restaurant));
+        return mapper.toModel(restaurantService.save(restaurant));
     }
 
     @PutMapping("/{id}/active")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void activate(@PathVariable Long id) {
+    public ResponseEntity<Void> activate(@PathVariable Long id) {
         restaurantService.activate(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}/active")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void inactivate(@PathVariable Long id) {
-        restaurantService.activate(id);
+    public ResponseEntity<Void> inactivate(@PathVariable Long id) {
+        restaurantService.inactivate(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/opening")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void opening(@PathVariable Long id) {
+    public ResponseEntity<Void> opening(@PathVariable Long id) {
         restaurantService.opening(id);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/{id}/closure")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void closure(@PathVariable Long id) {
+    public ResponseEntity<Void> closure(@PathVariable Long id) {
         restaurantService.closure(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }

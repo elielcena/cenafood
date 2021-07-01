@@ -1,16 +1,15 @@
 package com.github.cenafood.api.mapper;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.github.cenafood.api.CenaLinks;
+import com.github.cenafood.api.controller.OrderController;
 import com.github.cenafood.api.model.request.OrderRequestDTO;
-import com.github.cenafood.api.model.response.OrderAbstractResponseDTO;
-import com.github.cenafood.api.model.response.OrderCreatedResponseDTO;
 import com.github.cenafood.api.model.response.OrderResponseDTO;
 import com.github.cenafood.domain.model.Order;
 
@@ -19,37 +18,46 @@ import com.github.cenafood.domain.model.Order;
  *
  */
 @Component
-public class OrderMapper {
+public class OrderMapper extends RepresentationModelAssemblerSupport<Order, OrderResponseDTO> {
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	public OrderResponseDTO toDTO(Order order) {
-		return modelMapper.map(order, OrderResponseDTO.class);
-	}
+    @Autowired
+    private CenaLinks cenaLinks;
 
-	public List<OrderResponseDTO> toCollectionDTO(Collection<Order> order) {
-		return order.stream().map(rest -> toDTO(rest)).collect(Collectors.toList());
-	}
+    public OrderMapper() {
+        super(OrderController.class, OrderResponseDTO.class);
+    }
 
-	public OrderCreatedResponseDTO toCreatedDTO(Order order) {
-		return modelMapper.map(order, OrderCreatedResponseDTO.class);
-	}
+    @Override
+    public OrderResponseDTO toModel(Order order) {
+        OrderResponseDTO orderResponse = createModelWithId(order.getCode(), order);
+        modelMapper.map(order, orderResponse);
 
-	public OrderAbstractResponseDTO toAbstractDTO(Order order) {
-		return modelMapper.map(order, OrderAbstractResponseDTO.class);
-	}
+        orderResponse.add(cenaLinks.linkToOrders());
 
-	public List<OrderAbstractResponseDTO> toAbstractCollectionDTO(Collection<Order> order) {
-		return order.stream().map(rest -> toAbstractDTO(rest)).collect(Collectors.toList());
-	}
+        if (isTrue(order.canBeConfirmed()))
+            orderResponse.add(cenaLinks.linkToCorfirmOrder(order.getCode()));
 
-	public Order toDomainEntity(OrderRequestDTO order) {
-		return modelMapper.map(order, Order.class);
-	}
+        if (isTrue(order.canBeDelivered()))
+            orderResponse.add(cenaLinks.linkToDeliveryOrder(order.getCode()));
 
-	public void copyToDomainEntity(OrderRequestDTO orderRequest, Order order) {
-		modelMapper.map(orderRequest, order);
-	}
+        if (isTrue(order.canBeCanceled()))
+            orderResponse.add(cenaLinks.linkToCancelOrder(order.getCode()));
+
+        orderResponse.getRestaurant().add(cenaLinks.linkToRestaurant(orderResponse.getRestaurant().getId()));
+        orderResponse.getCustomer().add(cenaLinks.linkToUser(orderResponse.getCustomer().getId()));
+
+        return orderResponse;
+    }
+
+    public Order toDomainEntity(OrderRequestDTO order) {
+        return modelMapper.map(order, Order.class);
+    }
+
+    public void copyToDomainEntity(OrderRequestDTO orderRequest, Order order) {
+        modelMapper.map(orderRequest, order);
+    }
 
 }

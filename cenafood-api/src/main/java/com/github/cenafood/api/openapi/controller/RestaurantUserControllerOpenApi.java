@@ -1,6 +1,7 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.response.UserResponseDTO;
@@ -25,14 +26,14 @@ public interface RestaurantUserControllerOpenApi {
         @ApiResponse(code = 400, message = "Invalid restaurant ID", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    List<UserResponseDTO> find(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    CollectionModel<UserResponseDTO> find(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
     @ApiOperation("Association of restaurant with user")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Association successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant or user not found", response = ErrorResponseDTO.class)
     })
-    void addPaymentMethodToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> addUserToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
             @ApiParam(value = "User ID", example = "1", required = true) Long idUser);
 
     @ApiOperation("Disassociation of with user")
@@ -40,6 +41,6 @@ public interface RestaurantUserControllerOpenApi {
         @ApiResponse(code = 204, message = "Disassociation successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant or puser not found", response = ErrorResponseDTO.class)
     })
-    void removePaymentMethodToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> removeUserToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
             @ApiParam(value = "User ID", example = "1", required = true) Long idUser);
 }

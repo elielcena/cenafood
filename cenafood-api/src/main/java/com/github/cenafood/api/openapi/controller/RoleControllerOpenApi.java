@@ -1,6 +1,6 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.RoleRequestDTO;
@@ -20,7 +20,7 @@ import io.swagger.annotations.ApiResponses;
 public interface RoleControllerOpenApi {
 
     @ApiOperation("Search all roles")
-    List<RoleResponseDTO> findAll();
+    CollectionModel<RoleResponseDTO> findAll();
 
     @ApiOperation("Search role by id")
     @ApiResponses({

@@ -1,10 +1,9 @@
 package com.github.cenafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,26 +40,26 @@ public class UserController implements UserControllerOpenApi {
     private UserMapper mapper;
 
     @GetMapping
-    public List<UserResponseDTO> findAll() {
-        return mapper.toCollectionDTO(userService.findAll());
+    public CollectionModel<UserResponseDTO> findAll() {
+        return mapper.toCollectionModel(userService.findAll());
     }
 
     @GetMapping("/{id}")
     public UserResponseDTO findById(@PathVariable Long id) {
-        return mapper.toDTO(userService.findById(id));
+        return mapper.toModel(userService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO save(@RequestBody @Valid UserWithPasswordRequestDTO user) {
-        return mapper.toDTO(userService.save(mapper.toDomainEntity(user)));
+        return mapper.toModel(userService.save(mapper.toDomainEntity(user)));
     }
 
     @PutMapping("/{id}")
     public UserResponseDTO update(@PathVariable Long id, @RequestBody @Valid UserRequestDTO userRequest) {
         User user = userService.findById(id);
         mapper.copyToDomainEntity(userRequest, user);
-        return mapper.toDTO(userService.save(user));
+        return mapper.toModel(userService.save(user));
     }
 
     @PutMapping("/{id}/password")

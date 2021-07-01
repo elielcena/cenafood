@@ -9,25 +9,30 @@ import java.util.List;
  */
 public enum OrderStatus {
 
-	CREATED("Created"),
-	CONFIRMED("Confirmed", CREATED),
-	DELIVERED("Delivered", CONFIRMED),
-	CANCELED("Canceled", CREATED);
+    CREATED("Created"),
+    CONFIRMED("Confirmed", CREATED),
+    DELIVERED("Delivered", CONFIRMED),
+    CANCELED("Canceled", CREATED);
 
-	private String description;
-	private List<OrderStatus> previousStatus;
+    private String description;
 
-	OrderStatus(String description, OrderStatus... previousStatus) {
-		this.description = description;
-		this.previousStatus = Arrays.asList(previousStatus);
-	}
+    private List<OrderStatus> previousStatus;
 
-	public String getDescription() {
-		return this.description;
-	}
+    OrderStatus(String description, OrderStatus... previousStatus) {
+        this.description = description;
+        this.previousStatus = Arrays.asList(previousStatus);
+    }
 
-	public Boolean cannotChangeTo(OrderStatus newStatus) {
-		return !newStatus.previousStatus.contains(this);
-	}
+    public String getDescription() {
+        return this.description;
+    }
+
+    public Boolean cannotChangeTo(OrderStatus newStatus) {
+        return !newStatus.previousStatus.contains(this);
+    }
+
+    public Boolean canChangeTo(OrderStatus newStatus) {
+        return !cannotChangeTo(newStatus);
+    }
 
 }

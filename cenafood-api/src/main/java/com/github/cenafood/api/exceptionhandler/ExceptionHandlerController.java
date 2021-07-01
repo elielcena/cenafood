@@ -54,6 +54,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponseDTO handleUncaught(Exception ex, WebRequest request) {
         String message = "An unexpected internal system error has occurred. Try again and if the problem persists, contact your system administrator";
+        ex.printStackTrace();
         return createErrorResponseDTOBuilder(HttpStatus.INTERNAL_SERVER_ERROR, request, message).build();
     }
 

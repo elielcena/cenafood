@@ -1,10 +1,9 @@
 package com.github.cenafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,19 +38,19 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     private PaymentMethodMapper mapper;
 
     @GetMapping
-    public List<PaymentMethodResponseDTO> findAll() {
-        return mapper.toCollectionDTO(paymentMethodService.findAll());
+    public CollectionModel<PaymentMethodResponseDTO> findAll() {
+        return mapper.toCollectionModel(paymentMethodService.findAll());
     }
 
     @GetMapping("/{id}")
     public PaymentMethodResponseDTO findById(@PathVariable Long id) {
-        return mapper.toDTO(paymentMethodService.findById(id));
+        return mapper.toModel(paymentMethodService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentMethodResponseDTO save(@RequestBody @Valid PaymentMethodRequestDTO paymentMethod) {
-        return mapper.toDTO(paymentMethodService.save(mapper.toDomainEntity(paymentMethod)));
+        return mapper.toModel(paymentMethodService.save(mapper.toDomainEntity(paymentMethod)));
     }
 
     @PutMapping("/{id}")
@@ -59,7 +58,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
             @RequestBody @Valid PaymentMethodRequestDTO paymentMethodRequest) {
         PaymentMethod paymentMethod = paymentMethodService.findById(id);
         mapper.copyToDomainEntity(paymentMethodRequest, paymentMethod);
-        return mapper.toDTO(paymentMethodService.save(paymentMethod));
+        return mapper.toModel(paymentMethodService.save(paymentMethod));
     }
 
     @DeleteMapping("/{id}")

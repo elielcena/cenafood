@@ -1,10 +1,9 @@
 package com.github.cenafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.cenafood.api.CenaLinks;
 import com.github.cenafood.api.mapper.ProductMapper;
 import com.github.cenafood.api.model.request.ProductRequestDTO;
 import com.github.cenafood.api.model.response.ProductResponseDTO;
@@ -42,16 +42,30 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private ProductMapper productMapper;
 
+    @Autowired
+    private CenaLinks cenaLinks;
+
     @GetMapping
-    public List<ProductResponseDTO> find(@PathVariable Long id) {
-        return productMapper.toCollectionDTO(productService.findRestaurant(restaurantService.findById(id)));
+    public CollectionModel<ProductResponseDTO> find(@PathVariable Long id) {
+        CollectionModel<ProductResponseDTO> productResponseDTO =
+                productMapper.toCollectionModel(productService.findRestaurant(restaurantService.findById(id)))
+                        .add(cenaLinks.linkToProducts(id).withSelfRel());
+
+        productResponseDTO.getContent().forEach(product -> {
+            product.add(cenaLinks.linkToProduct(id, product.getId()))
+                    .add(cenaLinks.linkToProducts(id));
+        });
+
+        return productResponseDTO;
     }
 
-    @GetMapping("/{produtoId}")
+    @GetMapping("/{idProduct}")
     public ProductResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct) {
         Product product = productService.findById(idProduct, id);
 
-        return productMapper.toDTO(product);
+        return productMapper.toModel(product)
+                .add(cenaLinks.linkToProduct(id, idProduct))
+                .add(cenaLinks.linkToProducts(id));
     }
 
     @PostMapping
@@ -62,7 +76,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         Product product = productMapper.toDomainEntity(productRequest);
         product.setRestaurant(restaurant);
 
-        return productMapper.toDTO(productService.save(product));
+        return productMapper.toModel(productService.save(product));
     }
 
     @PutMapping("/{idProduct}")
@@ -72,7 +86,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
 
         productMapper.copyToDomainEntity(productRequest, product);
 
-        return productMapper.toDTO(productService.save(product));
+        return productMapper.toModel(productService.save(product));
     }
 
 }

@@ -1,12 +1,12 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
-
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.ResponseEntity;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.RestaurantRequestDTO;
 import com.github.cenafood.api.model.response.RestaurantResponseDTO;
+import com.github.cenafood.api.openapi.model.RestaurantResponseOpenApi;
 import com.github.cenafood.core.openapi.FieldsResponse;
 
 import io.swagger.annotations.Api;
@@ -23,8 +23,8 @@ import io.swagger.annotations.ApiResponses;
 public interface RestaurantControllerOpenApi {
 
     @FieldsResponse
-    @ApiOperation("Search all restaurants")
-    ResponseEntity<List<RestaurantResponseDTO>> findAll();
+    @ApiOperation(value = "Search all restaurants", response = RestaurantResponseOpenApi.class)
+    ResponseEntity<CollectionModel<RestaurantResponseDTO>> findAll();
 
     @FieldsResponse
     @ApiOperation("Search restaurant by ID")
@@ -53,27 +53,27 @@ public interface RestaurantControllerOpenApi {
         @ApiResponse(code = 204, message = "Restaurant activated"),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    void activate(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    ResponseEntity<Void> activate(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
     @ApiOperation("Disable restaurant by id")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Restaurant disabled"),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    void inactivate(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    ResponseEntity<Void> inactivate(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
     @ApiOperation("Open restaurant")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Restaurant opened"),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    void opening(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    ResponseEntity<Void> opening(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
     @ApiOperation("Close restaurant")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Restaurant closed"),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    void closure(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    ResponseEntity<Void> closure(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
 }

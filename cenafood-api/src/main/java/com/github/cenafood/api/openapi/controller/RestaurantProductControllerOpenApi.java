@@ -1,6 +1,6 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.request.ProductRequestDTO;
@@ -26,7 +26,7 @@ public interface RestaurantProductControllerOpenApi {
         @ApiResponse(code = 400, message = "Invalid restaurant ID", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    List<ProductResponseDTO> find(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    CollectionModel<ProductResponseDTO> find(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
     @FieldsResponse
     @ApiOperation("Search for a product in a restaurant")

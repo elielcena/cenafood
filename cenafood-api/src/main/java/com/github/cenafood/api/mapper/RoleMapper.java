@@ -1,13 +1,15 @@
 package com.github.cenafood.api.mapper;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 
+import com.github.cenafood.api.CenaLinks;
+import com.github.cenafood.api.controller.RoleController;
 import com.github.cenafood.api.model.request.RoleRequestDTO;
 import com.github.cenafood.api.model.response.RoleResponseDTO;
 import com.github.cenafood.domain.model.Role;
@@ -17,24 +19,39 @@ import com.github.cenafood.domain.model.Role;
  *
  */
 @Component
-public class RoleMapper {
+public class RoleMapper extends RepresentationModelAssemblerSupport<Role, RoleResponseDTO> {
 
-	@Autowired
-	private ModelMapper modelMapper;
+    @Autowired
+    private ModelMapper modelMapper;
 
-	public RoleResponseDTO toDTO(Role role) {
-		return modelMapper.map(role, RoleResponseDTO.class);
-	}
+    @Autowired
+    private CenaLinks cenaLinks;
 
-	public List<RoleResponseDTO> toCollectionDTO(Collection<Role> role) {
-		return role.stream().map(rest -> toDTO(rest)).collect(Collectors.toList());
-	}
+    public RoleMapper() {
+        super(RoleController.class, RoleResponseDTO.class);
+    }
 
-	public Role toDomainEntity(RoleRequestDTO role) {
-		return modelMapper.map(role, Role.class);
-	}
+    @Override
+    public RoleResponseDTO toModel(Role role) {
+        RoleResponseDTO roleResponseDTO = createModelWithId(role.getId(), role);
+        modelMapper.map(role, roleResponseDTO);
 
-	public void copyToDomainEntity(RoleRequestDTO roleRequest, Role role) {
-		modelMapper.map(roleRequest, role);
-	}
+        roleResponseDTO.add(cenaLinks.linkToPermission(role.getId()).withRel("permissions"));
+
+        return roleResponseDTO.add(cenaLinks.linkToRoles());
+    }
+
+    @Override
+    public CollectionModel<RoleResponseDTO> toCollectionModel(Iterable<? extends Role> entities) {
+        return super.toCollectionModel(entities)
+                .add(linkTo(RoleController.class).withSelfRel());
+    }
+
+    public Role toDomainEntity(RoleRequestDTO role) {
+        return modelMapper.map(role, Role.class);
+    }
+
+    public void copyToDomainEntity(RoleRequestDTO roleRequest, Role role) {
+        modelMapper.map(roleRequest, role);
+    }
 }

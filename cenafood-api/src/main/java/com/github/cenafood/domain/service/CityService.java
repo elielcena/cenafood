@@ -18,21 +18,21 @@ import com.github.cenafood.domain.repository.CityRepository;
 @Service
 public class CityService {
 
-	private static final String MSG_RESOURCE_NOT_FOUND = "There is no city register with code %d";
+    private static final String MSG_RESOURCE_NOT_FOUND = "There is no city register with code %d";
 
-	@Autowired
-	private CityRepository cityRepository;
+    @Autowired
+    private CityRepository cityRepository;
 
-	public List<City> findAllWithFilters(City filtro) {
-		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase()
-				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+    public List<City> findAllWithFilters(City filtro) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-		return cityRepository.findAll(Example.of(filtro, matcher));
-	}
+        return cityRepository.findAll(Example.of(filtro, matcher));
+    }
 
-	public City findById(Long id) {
-		return cityRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, id)));
-	}
+    public City findById(Long id) {
+        return cityRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, id)));
+    }
 
 }

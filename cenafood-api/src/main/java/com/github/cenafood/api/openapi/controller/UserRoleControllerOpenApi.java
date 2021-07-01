@@ -1,6 +1,7 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.response.RoleResponseDTO;
@@ -23,14 +24,14 @@ public interface UserRoleControllerOpenApi {
         @ApiResponse(code = 400, message = "Invalid user ID", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "User not found", response = ErrorResponseDTO.class)
     })
-    List<RoleResponseDTO> findRolesByUser(@ApiParam(value = "User ID", example = "1", required = true) Long id);
+    CollectionModel<RoleResponseDTO> findRolesByUser(@ApiParam(value = "User ID", example = "1", required = true) Long id);
 
     @ApiOperation("Association of role with user")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Association successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Role or user not found", response = ErrorResponseDTO.class)
     })
-    void addRoleToUser(@ApiParam(value = "User ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> addRoleToUser(@ApiParam(value = "User ID", example = "1", required = true) Long id,
             @ApiParam(value = "Role ID", example = "1", required = true) Long idRole);
 
     @ApiOperation("Disassociation of role with user")
@@ -38,6 +39,6 @@ public interface UserRoleControllerOpenApi {
         @ApiResponse(code = 204, message = "Disassociation successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Role or user not found", response = ErrorResponseDTO.class)
     })
-    void removeRoleToUser(@ApiParam(value = "User ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> removeRoleToUser(@ApiParam(value = "User ID", example = "1", required = true) Long id,
             @ApiParam(value = "Role ID", example = "1", required = true) Long idRole);
 }

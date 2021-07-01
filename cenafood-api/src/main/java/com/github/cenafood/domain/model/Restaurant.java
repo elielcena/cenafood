@@ -38,98 +38,114 @@ import lombok.NoArgsConstructor;
 @Table(name = "RESTAURANT")
 public class Restaurant {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-	@Column(nullable = false)
-	private String name;
+    @Column(nullable = false)
+    private String name;
 
-	@Column(name = "DELIVERYFEE", nullable = false)
-	private BigDecimal deliveryFee;
+    @Column(name = "DELIVERYFEE", nullable = false)
+    private BigDecimal deliveryFee;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "IDKITCHEN", nullable = false)
-	private Kitchen kitchen;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "IDKITCHEN", nullable = false)
+    private Kitchen kitchen;
 
-	@Embedded
-	private Address address;
+    @Embedded
+    private Address address;
 
-	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-	private Boolean active;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean active;
 
-	@Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
-	private Boolean open;
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean open;
 
-	@CreationTimestamp
-	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private OffsetDateTime createdAt;
+    @CreationTimestamp
+    @Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
+    private OffsetDateTime createdAt;
 
-	@UpdateTimestamp
-	@Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private OffsetDateTime updatedAt;
+    @UpdateTimestamp
+    @Column(name = "UPDATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
+    private OffsetDateTime updatedAt;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
-	private Set<PaymentMethod> paymentMethods;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "RESTAURANTPAYMENT", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDPAYMENTMETHOD"))
+    private Set<PaymentMethod> paymentMethods;
 
-	@OneToMany(mappedBy = "restaurant")
-	private Set<Product> products;
+    @OneToMany(mappedBy = "restaurant")
+    private Set<Product> products;
 
-	@ManyToMany
-	@JoinTable(name = "RESTAURANTSYSTEMUSER", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDSYSTEMUSER"))
-	private Set<User> users;
+    @ManyToMany
+    @JoinTable(name = "RESTAURANTSYSTEMUSER", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDSYSTEMUSER"))
+    private Set<User> users;
 
-	public Restaurant activate() {
-		setActive(Boolean.TRUE);
-		return this;
-	}
+    public Restaurant activate() {
+        setActive(Boolean.TRUE);
+        return this;
+    }
 
-	public Restaurant inactivate() {
-		setActive(Boolean.FALSE);
-		return this;
-	}
+    public Restaurant inactivate() {
+        setActive(Boolean.FALSE);
+        return this;
+    }
 
-	public Restaurant opening() {
-		setOpen(Boolean.TRUE);
-		return this;
-	}
+    public Boolean canActivate() {
+        return !this.active;
+    }
 
-	public Restaurant closure() {
-		setOpen(Boolean.FALSE);
-		return this;
-	}
+    public Boolean canInactivate() {
+        return this.active;
+    }
 
-	public Restaurant addOrRemovePaymentMethod(Boolean isAdd, PaymentMethod paymentMethod) {
-		if (Boolean.TRUE.equals(isAdd))
-			getPaymentMethods().add(paymentMethod);
-		else
-			getPaymentMethods().remove(paymentMethod);
+    public Restaurant opening() {
+        setOpen(Boolean.TRUE);
+        return this;
+    }
 
-		return this;
-	}
+    public Restaurant closure() {
+        setOpen(Boolean.FALSE);
+        return this;
+    }
 
-	public Restaurant addOrRemoveProduct(Boolean isAdd, Product product) {
-		if (Boolean.TRUE.equals(isAdd))
-			getProducts().add(product);
-		else
-			getProducts().remove(product);
+    public Boolean canOpen() {
+        return this.active && !this.open;
+    }
 
-		return this;
-	}
+    public Boolean canClose() {
+        return this.open;
+    }
 
-	public Restaurant addOrRemoveUser(Boolean isAdd, User user) {
-		if (Boolean.TRUE.equals(isAdd))
-			getUsers().add(user);
-		else
-			getUsers().remove(user);
+    public Restaurant addOrRemovePaymentMethod(Boolean isAdd, PaymentMethod paymentMethod) {
+        if (Boolean.TRUE.equals(isAdd))
+            getPaymentMethods().add(paymentMethod);
+        else
+            getPaymentMethods().remove(paymentMethod);
 
-		return this;
-	}
+        return this;
+    }
 
-	public Boolean acceptPaymentMethod(PaymentMethod paymentMethod) {
-		return getPaymentMethods().contains(paymentMethod);
-	}
+    public Restaurant addOrRemoveProduct(Boolean isAdd, Product product) {
+        if (Boolean.TRUE.equals(isAdd))
+            getProducts().add(product);
+        else
+            getProducts().remove(product);
+
+        return this;
+    }
+
+    public Restaurant addOrRemoveUser(Boolean isAdd, User user) {
+        if (Boolean.TRUE.equals(isAdd))
+            getUsers().add(user);
+        else
+            getUsers().remove(user);
+
+        return this;
+    }
+
+    public Boolean acceptPaymentMethod(PaymentMethod paymentMethod) {
+        return getPaymentMethods().contains(paymentMethod);
+    }
 
 }

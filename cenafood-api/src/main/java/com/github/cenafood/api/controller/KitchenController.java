@@ -1,10 +1,9 @@
 package com.github.cenafood.api.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -39,26 +38,26 @@ public class KitchenController implements KitchenControllerOpenApi {
     private KitchenMapper mapper;
 
     @GetMapping
-    public List<KitchenResponseDTO> findAll() {
-        return mapper.toCollectionDTO(kitchenService.findAll());
+    public CollectionModel<KitchenResponseDTO> findAll() {
+        return mapper.toCollectionModel(kitchenService.findAll());
     }
 
     @GetMapping("/{id}")
     public KitchenResponseDTO findById(@PathVariable Long id) {
-        return mapper.toDTO(kitchenService.findById(id));
+        return mapper.toModel(kitchenService.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenResponseDTO save(@RequestBody @Valid KitchenRequestDTO kitchen) {
-        return mapper.toDTO(kitchenService.save(mapper.toDomainEntity(kitchen)));
+        return mapper.toModel(kitchenService.save(mapper.toDomainEntity(kitchen)));
     }
 
     @PutMapping("/{id}")
     public KitchenResponseDTO update(@PathVariable Long id, @RequestBody @Valid KitchenRequestDTO kitchenRequest) {
         Kitchen kitchen = kitchenService.findById(id);
         mapper.copyToDomainEntity(kitchenRequest, kitchen);
-        return mapper.toDTO(kitchenService.save(kitchen));
+        return mapper.toModel(kitchenService.save(kitchen));
     }
 
     @DeleteMapping("/{id}")

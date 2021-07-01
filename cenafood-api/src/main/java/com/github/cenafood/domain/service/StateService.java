@@ -7,6 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.State;
 import com.github.cenafood.domain.repository.StateRepository;
 
@@ -17,14 +18,21 @@ import com.github.cenafood.domain.repository.StateRepository;
 @Service
 public class StateService {
 
-	@Autowired
-	private StateRepository stateRepository;
+    private static final String MSG_RESOURCE_NOT_FOUND = "There is no state register with code %d";
 
-	public List<State> findAllWithFilter(State filtro) {
-		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase()
-				.withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+    @Autowired
+    private StateRepository stateRepository;
 
-		return stateRepository.findAll(Example.of(filtro, matcher));
-	}
+    public State findByUf(String uf) {
+        return stateRepository.findByUf(uf)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, uf)));
+    }
+
+    public List<State> findAllWithFilter(State filtro) {
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        return stateRepository.findAll(Example.of(filtro, matcher));
+    }
 
 }

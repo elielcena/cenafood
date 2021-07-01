@@ -1,6 +1,7 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.response.PermissionResponseDTO;
@@ -23,14 +24,14 @@ public interface RolePermissionControllerOpenApi {
         @ApiResponse(code = 400, message = "Invalid role ID", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Role not found", response = ErrorResponseDTO.class)
     })
-    List<PermissionResponseDTO> listar(@ApiParam(value = "Role ID", example = "1", required = true) Long id);
+    CollectionModel<PermissionResponseDTO> findAll(@ApiParam(value = "Role ID", example = "1", required = true) Long id);
 
     @ApiOperation("Association of role with permission")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Association successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Role or permission not found", response = ErrorResponseDTO.class)
     })
-    void addPermission(@ApiParam(value = "Role ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> addPermission(@ApiParam(value = "Role ID", example = "1", required = true) Long id,
             @ApiParam(value = "Permission ID", example = "1", required = true) Long idPermission);
 
     @ApiOperation("Disassociation of role with permission")
@@ -38,6 +39,6 @@ public interface RolePermissionControllerOpenApi {
         @ApiResponse(code = 204, message = "Disassociation successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Role or permission not found", response = ErrorResponseDTO.class)
     })
-    void removePermission(@ApiParam(value = "Role ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> removePermission(@ApiParam(value = "Role ID", example = "1", required = true) Long id,
             @ApiParam(value = "Permission ID", example = "1", required = true) Long idPermission);
 }

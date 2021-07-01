@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.github.cenafood.api.CenaLinks;
 import com.github.cenafood.api.mapper.ProductImageMapper;
 import com.github.cenafood.api.model.request.ProductImageRequestDTO;
 import com.github.cenafood.api.model.response.ProductImageResponseDTO;
@@ -44,10 +45,15 @@ public class RestaurantProductImageController implements RestaurantProductImageC
     @Autowired
     private ProductImageMapper mapper;
 
+    @Autowired
+    private CenaLinks cenaLinks;
+
     @GetMapping(path = "/{idImage}")
     public ProductImageResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {
         Product product = productService.findById(idProduct, id);
-        return mapper.toDTO(productImageService.findById(idImage, product));
+        return mapper.toModel(productImageService.findById(idImage, product))
+                .add(cenaLinks.linkToProductImage(id, idProduct, idImage))
+                .add(cenaLinks.linkToProduct(id, idProduct).withRel("products"));
     }
 
     @GetMapping(path = "/{idImage}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
@@ -67,7 +73,9 @@ public class RestaurantProductImageController implements RestaurantProductImageC
         Product product = productService.findById(idProduct, id);
         ProductImage productImage = ProductImage.fromProductImageRequestDTO(productImageRequest, product);
         productImageService.save(productImage, productImageRequest.getFile().getInputStream());
-        return mapper.toDTO(productImage);
+        return mapper.toModel(productImage)
+                .add(cenaLinks.linkToProductImage(id, idProduct, productImage.getId()))
+                .add(cenaLinks.linkToProduct(id, idProduct).withRel("products"));
     }
 
     @DeleteMapping("/{idImage}")

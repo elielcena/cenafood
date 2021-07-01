@@ -1,6 +1,7 @@
 package com.github.cenafood.api.openapi.controller;
 
-import java.util.List;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.ResponseEntity;
 
 import com.github.cenafood.api.exceptionhandler.ErrorResponseDTO;
 import com.github.cenafood.api.model.response.PaymentMethodResponseDTO;
@@ -25,14 +26,14 @@ public interface RestaurantPaymentControllerOpenApi {
         @ApiResponse(code = 400, message = "Invalid restaurant ID", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant not found", response = ErrorResponseDTO.class)
     })
-    List<PaymentMethodResponseDTO> find(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
+    CollectionModel<PaymentMethodResponseDTO> find(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id);
 
     @ApiOperation("Association of restaurant with payment method")
     @ApiResponses({
         @ApiResponse(code = 204, message = "Association successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant or payment method not found", response = ErrorResponseDTO.class)
     })
-    void addPaymentMethodToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> addPaymentMethodToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
             @ApiParam(value = "Payment method ID", example = "1", required = true) Long idPaymentMethod);
 
     @ApiOperation("Disassociation of restaurant with payment method")
@@ -40,7 +41,7 @@ public interface RestaurantPaymentControllerOpenApi {
         @ApiResponse(code = 204, message = "Disassociation successfully", response = ErrorResponseDTO.class),
         @ApiResponse(code = 404, message = "Restaurant or payment method not found", response = ErrorResponseDTO.class)
     })
-    void removePaymentMethodToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
+    ResponseEntity<Void> removePaymentMethodToRestaurant(@ApiParam(value = "Restaurant ID", example = "1", required = true) Long id,
             @ApiParam(value = "Payment method ID", example = "1", required = true) Long idPaymentMethod);
 
 }
