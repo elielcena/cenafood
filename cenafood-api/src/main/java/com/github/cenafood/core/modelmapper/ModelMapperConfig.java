@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.github.cenafood.api.model.request.OrderRequestDTO;
+import com.github.cenafood.api.v1.model.request.OrderRequestDTO;
 import com.github.cenafood.domain.model.OrderItem;
 
 /**

@@ -18,7 +18,7 @@ import javax.persistence.criteria.Predicate;
 
 import org.springframework.stereotype.Repository;
 
-import com.github.cenafood.api.model.response.DailyOrderDTO;
+import com.github.cenafood.api.v1.model.response.DailyOrderDTO;
 import com.github.cenafood.domain.filter.DailyOrderFilter;
 import com.github.cenafood.domain.model.Order;
 import com.github.cenafood.domain.model.OrderStatus;

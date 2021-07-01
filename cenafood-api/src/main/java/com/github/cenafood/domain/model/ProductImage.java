@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.github.cenafood.api.model.request.ProductImageRequestDTO;
+import com.github.cenafood.api.v1.model.request.ProductImageRequestDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
