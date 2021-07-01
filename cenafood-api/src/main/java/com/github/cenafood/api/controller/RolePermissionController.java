@@ -45,9 +45,7 @@ public class RolePermissionController implements RolePermissionControllerOpenApi
                 .add(cenaLinks.linkToPermission(id).withSelfRel())
                 .add(cenaLinks.linkToAddPermission(id));
 
-        permissionResponseDTO.getContent().forEach(permission -> {
-            permission.add(cenaLinks.linkToRemovePermission(id, permission.getId()));
-        });
+        permissionResponseDTO.getContent().forEach(permission -> permission.add(cenaLinks.linkToRemovePermission(id, permission.getId())));
 
         return permissionResponseDTO;
     }

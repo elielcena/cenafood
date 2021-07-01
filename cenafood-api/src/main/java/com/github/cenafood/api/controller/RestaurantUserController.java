@@ -41,9 +41,7 @@ public class RestaurantUserController implements RestaurantUserControllerOpenApi
                 .add(cenaLinks.linkToRestaurantUser(id))
                 .add(cenaLinks.linkToRestaurantAddUser(id));
 
-        userResponseDTO.getContent().forEach(user -> {
-            user.add(cenaLinks.linkToRestauranRemovetUser(id, user.getId()));
-        });
+        userResponseDTO.getContent().forEach(user -> user.add(cenaLinks.linkToRestauranRemovetUser(id, user.getId())));
 
         return userResponseDTO;
     }

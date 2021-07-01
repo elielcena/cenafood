@@ -51,10 +51,8 @@ public class RestaurantProductController implements RestaurantProductControllerO
                 productMapper.toCollectionModel(productService.findRestaurant(restaurantService.findById(id)))
                         .add(cenaLinks.linkToProducts(id).withSelfRel());
 
-        productResponseDTO.getContent().forEach(product -> {
-            product.add(cenaLinks.linkToProduct(id, product.getId()))
-                    .add(cenaLinks.linkToProducts(id));
-        });
+        productResponseDTO.getContent().forEach(product -> product.add(cenaLinks.linkToProduct(id, product.getId()))
+                .add(cenaLinks.linkToProducts(id)));
 
         return productResponseDTO;
     }

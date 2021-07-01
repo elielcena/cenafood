@@ -44,9 +44,8 @@ public class RestaurantPaymentController implements RestaurantPaymentControllerO
                         .add(cenaLinks.linkToRestaurantPaymentMethod(id).withSelfRel())
                         .add(cenaLinks.linkToRestaurantAddPaymentMethod(id));
 
-        paymentMethodResponseDTO.getContent().forEach(paymentMethod -> {
-            paymentMethod.add(cenaLinks.linkToRestaurantRemovePaymentMethod(id, paymentMethod.getId()));
-        });
+        paymentMethodResponseDTO.getContent()
+                .forEach(paymentMethod -> paymentMethod.add(cenaLinks.linkToRestaurantRemovePaymentMethod(id, paymentMethod.getId())));
 
         return paymentMethodResponseDTO;
     }

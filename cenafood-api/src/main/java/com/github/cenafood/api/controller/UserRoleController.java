@@ -44,9 +44,7 @@ public class UserRoleController implements UserRoleControllerOpenApi {
         CollectionModel<RoleResponseDTO> roleResponseDTO = mapper.toCollectionModel(user.getRoles())
                 .add(cenaLinks.linkToAddRoleUser(id));
 
-        roleResponseDTO.getContent().forEach(role -> {
-            role.add(cenaLinks.linkToRemoveRoleUser(id, role.getId()));
-        });
+        roleResponseDTO.getContent().forEach(role -> role.add(cenaLinks.linkToRemoveRoleUser(id, role.getId())));
 
         return roleResponseDTO;
     }
