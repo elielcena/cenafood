@@ -30,7 +30,7 @@ import com.github.cenafood.domain.service.UserService;
  *
  */
 @RestController
-@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/users", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController implements UserControllerOpenApi {
 
     @Autowired

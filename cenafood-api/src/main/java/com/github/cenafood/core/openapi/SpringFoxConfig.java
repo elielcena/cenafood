@@ -48,6 +48,7 @@ import com.github.cenafood.domain.model.State;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
@@ -68,13 +69,15 @@ import springfox.documentation.spring.web.plugins.Docket;
 public class SpringFoxConfig {
 
     @Bean
-    public Docket apiDocket() {
+    public Docket apiDocketV1() {
         var typeResolver = new TypeResolver();
         return new Docket(DocumentationType.SWAGGER_2)
+                .groupName("V1")
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.github.cenafood.api"))
+                .paths(PathSelectors.ant("/v1/**"))
                 .build()
-                .apiInfo(apiInfo())
+                .apiInfo(apiInfoV1())
                 .useDefaultResponseMessages(Boolean.FALSE)
                 .globalResponses(HttpMethod.GET, responsesGet())
                 .globalResponses(HttpMethod.POST, responsesPostPut())
@@ -126,7 +129,7 @@ public class SpringFoxConfig {
                         new Tag("Statistics", "Manage the statistics"));
     }
 
-    private ApiInfo apiInfo() {
+    private ApiInfo apiInfoV1() {
         return new ApiInfoBuilder()
                 .title("CenaFood API")
                 .description("API open to customers and restaurants")

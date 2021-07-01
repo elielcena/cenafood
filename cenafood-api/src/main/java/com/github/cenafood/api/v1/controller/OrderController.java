@@ -38,7 +38,7 @@ import com.github.cenafood.domain.service.OrderService;
  *
  */
 @RestController
-@RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/orders", produces = MediaType.APPLICATION_JSON_VALUE)
 public class OrderController implements OrderControllerOpenApi {
 
     @Autowired

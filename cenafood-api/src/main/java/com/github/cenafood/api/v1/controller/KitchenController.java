@@ -28,7 +28,7 @@ import com.github.cenafood.domain.service.KitchenService;
  *
  */
 @RestController
-@RequestMapping(value = "/kitchens", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/kitchens", produces = MediaType.APPLICATION_JSON_VALUE)
 public class KitchenController implements KitchenControllerOpenApi {
 
     @Autowired

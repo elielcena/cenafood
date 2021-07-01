@@ -25,7 +25,7 @@ import com.github.cenafood.domain.service.UserService;
  *
  */
 @RestController
-@RequestMapping(value = "/users/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/users/{id}/roles", produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserRoleController implements UserRoleControllerOpenApi {
 
     @Autowired

@@ -27,7 +27,7 @@ import lombok.Builder;
  *
  */
 @RestController
-@RequestMapping(value = "/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/statistics", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StatisticController implements StatisticControllerOpenApi {
 
     @Autowired

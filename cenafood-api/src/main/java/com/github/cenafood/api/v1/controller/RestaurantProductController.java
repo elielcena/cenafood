@@ -30,7 +30,7 @@ import com.github.cenafood.domain.service.RestaurantService;
  *
  */
 @RestController
-@RequestMapping(value = "/restaurants/{id}/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/restaurants/{id}/products", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RestaurantProductController implements RestaurantProductControllerOpenApi {
 
     @Autowired

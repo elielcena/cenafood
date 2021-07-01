@@ -18,7 +18,7 @@ import com.github.cenafood.domain.service.CityService;
  *
  */
 @RestController
-@RequestMapping(path = "/cities", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/v1/cities", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CityController implements CityControllerOpenApi {
 
     @Autowired

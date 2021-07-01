@@ -18,7 +18,7 @@ import com.github.cenafood.domain.service.StateService;
  *
  */
 @RestController
-@RequestMapping(value = "/states", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/states", produces = MediaType.APPLICATION_JSON_VALUE)
 public class StateController implements StateControllerOpenApi {
 
     @Autowired

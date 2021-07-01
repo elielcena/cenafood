@@ -28,7 +28,7 @@ import com.github.cenafood.domain.service.PaymentMethodService;
  *
  */
 @RestController
-@RequestMapping(value = "/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/payment-methods", produces = MediaType.APPLICATION_JSON_VALUE)
 public class PaymentMethodController implements PaymentMethodControllerOpenApi {
 
     @Autowired

@@ -20,7 +20,7 @@ import lombok.Builder;
  */
 @Api(tags = "Root")
 @RestController
-@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RootEntryPointController {
 
     @Autowired

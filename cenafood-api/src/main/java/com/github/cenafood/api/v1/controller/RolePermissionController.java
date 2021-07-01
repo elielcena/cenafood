@@ -25,7 +25,7 @@ import com.github.cenafood.domain.service.RoleService;
  *
  */
 @RestController
-@RequestMapping(value = "/roles/{id}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/roles/{id}/permissions", produces = MediaType.APPLICATION_JSON_VALUE)
 public class RolePermissionController implements RolePermissionControllerOpenApi {
 
     @Autowired
