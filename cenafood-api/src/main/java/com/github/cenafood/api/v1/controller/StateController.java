@@ -25,7 +25,7 @@ public class StateController implements StateControllerOpenApi {
     private StateService stateService;
 
     @Autowired
-    private static CenaLinks cenaLinks;
+    private CenaLinks cenaLinks;
 
     @GetMapping("/{uf}")
     public State findByUf(@PathVariable String uf) {
@@ -39,12 +39,12 @@ public class StateController implements StateControllerOpenApi {
         CollectionModel<State> stateModel = CollectionModel.of(stateService.findAllWithFilter(filtro));
 
         stateModel.add(cenaLinks.linkToStates().withSelfRel());
-        stateModel.getContent().forEach(StateController::addLinksState);
+        stateModel.getContent().forEach(state -> addLinksState(state));
 
         return stateModel;
     }
 
-    private static State addLinksState(State state) {
+    private State addLinksState(State state) {
         return state.add(cenaLinks.linkToState(state.getUf()))
                 .add(cenaLinks.linkToStates());
     }

@@ -25,7 +25,7 @@ public class CityController implements CityControllerOpenApi {
     private CityService cityService;
 
     @Autowired
-    private static CenaLinks cenaLinks;
+    private CenaLinks cenaLinks;
 
     @GetMapping("/{id}")
     public City findById(@PathVariable Long id) {
@@ -40,12 +40,12 @@ public class CityController implements CityControllerOpenApi {
 
         citiesModel.add(cenaLinks.linkToCities().withSelfRel());
 
-        citiesModel.getContent().forEach(CityController::addLinksCity);
+        citiesModel.getContent().forEach(city -> addLinksCity(city));
 
         return citiesModel;
     }
 
-    private static City addLinksCity(City city) {
+    private City addLinksCity(City city) {
         city.add(cenaLinks.linkToCity(city.getId()));
         city.getState().add(cenaLinks.linkToState(city.getState().getUf()));
         city.add(cenaLinks.linkToCities());
