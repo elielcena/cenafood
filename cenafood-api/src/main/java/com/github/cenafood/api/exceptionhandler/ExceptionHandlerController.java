@@ -31,12 +31,15 @@ import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.EntityInUseException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Treats all possible exceptions that you may give when requesting the
  * available endpoints.
  *
  * @author elielcena
  */
+@Slf4j
 @RestControllerAdvice
 public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
 
@@ -54,7 +57,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponseDTO handleUncaught(Exception ex, WebRequest request) {
         String message = "An unexpected internal system error has occurred. Try again and if the problem persists, contact your system administrator";
-        ex.printStackTrace();
+        log.error(ex.getMessage(), ex);
         return createErrorResponseDTOBuilder(HttpStatus.INTERNAL_SERVER_ERROR, request, message).build();
     }
 
@@ -207,6 +210,7 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
             HttpStatus status, WebRequest request) {
 
         var responseBody = createErrorResponseDTOBuilder(status, request, ex.getLocalizedMessage()).build();
+        log.error(ex.getMessage(), ex);
 
         return super.handleExceptionInternal(ex, responseBody, headers, status, request);
     }
