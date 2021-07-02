@@ -1,5 +1,7 @@
 package com.github.cenafood.domain.model;
 
+import static java.util.Optional.ofNullable;
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Set;
@@ -16,6 +18,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -56,10 +59,10 @@ public class Restaurant {
     @Embedded
     private Address address;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(nullable = false)
     private Boolean active;
 
-    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    @Column(nullable = false)
     private Boolean open;
 
     @CreationTimestamp
@@ -80,6 +83,17 @@ public class Restaurant {
     @ManyToMany
     @JoinTable(name = "RESTAURANTSYSTEMUSER", joinColumns = @JoinColumn(name = "IDRESTAURANT"), inverseJoinColumns = @JoinColumn(name = "IDSYSTEMUSER"))
     private Set<User> users;
+
+    @PrePersist
+    private void prePersist() {
+
+        if (!ofNullable(this.active).isPresent())
+            this.active = Boolean.TRUE;
+
+        if (!ofNullable(this.open).isPresent())
+            this.open = Boolean.TRUE;
+
+    }
 
     public Restaurant activate() {
         setActive(Boolean.TRUE);
