@@ -47,6 +47,13 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("write", "read")
                 .redirectUris("http://client")
 
+                // http://localhost:8081/oauth/authorize?response_type=token&client_id=implicit&state=implicit&redirect_uri=http://client
+                .and()
+                .withClient("implicit")
+                .authorizedGrantTypes("implicit")
+                .scopes("write", "read")
+                .redirectUris("http://client")
+
                 .and()
                 .withClient("resource-server")
                 .secret(passwordEncoder.encode("resource-password"));
