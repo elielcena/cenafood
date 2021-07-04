@@ -37,28 +37,31 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("write", "read")
 
-                .and()
-                .withClient("client-credential")
-                .secret(passwordEncoder.encode("123"))
-                .authorizedGrantTypes("client_credentials")
-                .scopes("write", "read")
+                // CLIENT CREDENTIALS - NON USED
+                // .and()
+                // .withClient("client-credential")
+                // .secret(passwordEncoder.encode("123"))
+                // .authorizedGrantTypes("client_credentials")
+                // .scopes("write", "read")
 
+                // AUTHORIZATION CODE - NON USED
                 // without PKCE http://localhost:8081/oauth/authorize?response_type=code&client_id=authorization-code&state=code&redirect_uri=http://client
                 // with PKCE
                 // http://localhost:8081/oauth/authorize?response_type=code&client_id=authorization-code&redirect_uri=http://client&code_challenge=123&code_challenge_method=plain
-                .and()
-                .withClient("authorization-code")
-                .secret(passwordEncoder.encode("123"))
-                .authorizedGrantTypes("authorization_code")
-                .scopes("write", "read")
-                .redirectUris("http://client")
+                // .and()
+                // .withClient("authorization-code")
+                // .secret(passwordEncoder.encode("123"))
+                // .authorizedGrantTypes("authorization_code")
+                // .scopes("write", "read")
+                // .redirectUris("http://client")
 
+                // IMPLICIT - NON USED
                 // http://localhost:8081/oauth/authorize?response_type=token&client_id=implicit&state=implicit&redirect_uri=http://client
-                .and()
-                .withClient("implicit")
-                .authorizedGrantTypes("implicit")
-                .scopes("write", "read")
-                .redirectUris("http://client")
+                // .and()
+                // .withClient("implicit")
+                // .authorizedGrantTypes("implicit")
+                // .scopes("write", "read")
+                // .redirectUris("http://client")
 
                 .and()
                 .withClient("resource-server")
