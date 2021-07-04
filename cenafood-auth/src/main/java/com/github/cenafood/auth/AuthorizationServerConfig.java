@@ -30,6 +30,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .scopes("write", "read")
 
                 .and()
+                .withClient("client-credential")
+                .secret(passwordEncoder.encode("123"))
+                .authorizedGrantTypes("client_credentials")
+                .scopes("write", "read")
+
+                .and()
                 .withClient("resource-server")
                 .secret(passwordEncoder.encode("resource-password"));
     }
