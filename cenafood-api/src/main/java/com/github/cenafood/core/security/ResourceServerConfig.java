@@ -19,7 +19,7 @@ public class ResourceServerConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .and()
-                .oauth2ResourceServer().opaqueToken();
+                .oauth2ResourceServer().jwt();
     }
 
 }
