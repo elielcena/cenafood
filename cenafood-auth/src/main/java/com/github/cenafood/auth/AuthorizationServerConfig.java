@@ -3,8 +3,9 @@ package com.github.cenafood.auth;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,8 +16,8 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
-import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
 @Configuration
 @EnableAuthorizationServer
@@ -32,7 +33,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private RedisConnectionFactory redisConnectionFactory;
+    private JwtKeyStoreProperties jwtKeyStoreProperties;
+
+    @Bean
+    public JwtAccessTokenConverter jwtAccessTokenConverter() {
+        var jwtAccessTokenConverter = new JwtAccessTokenConverter();
+
+        var jksResource = new ClassPathResource(jwtKeyStoreProperties.getPath());
+        var keyStorePass = jwtKeyStoreProperties.getPassword();
+        var keyPairAlias = jwtKeyStoreProperties.getKeypairAlias();
+
+        var keyStoreKeyFactory = new KeyStoreKeyFactory(jksResource, keyStorePass.toCharArray());
+        var keyPair = keyStoreKeyFactory.getKeyPair(keyPairAlias);
+
+        jwtAccessTokenConverter.setKeyPair(keyPair);
+
+        return jwtAccessTokenConverter;
+    }
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -43,32 +60,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .authorizedGrantTypes("password", "refresh_token")
                 .scopes("write", "read")
 
-                // CLIENT CREDENTIALS - NON USED
-                // .and()
-                // .withClient("client-credential")
-                // .secret(passwordEncoder.encode("123"))
-                // .authorizedGrantTypes("client_credentials")
-                // .scopes("write", "read")
-
-                // AUTHORIZATION CODE - NON USED
-                // without PKCE http://localhost:8081/oauth/authorize?response_type=code&client_id=authorization-code&state=code&redirect_uri=http://client
-                // with PKCE
-                // http://localhost:8081/oauth/authorize?response_type=code&client_id=authorization-code&redirect_uri=http://client&code_challenge=123&code_challenge_method=plain
-                // .and()
-                // .withClient("authorization-code")
-                // .secret(passwordEncoder.encode("123"))
-                // .authorizedGrantTypes("authorization_code")
-                // .scopes("write", "read")
-                // .redirectUris("http://client")
-
-                // IMPLICIT - NON USED
-                // http://localhost:8081/oauth/authorize?response_type=token&client_id=implicit&state=implicit&redirect_uri=http://client
-                // .and()
-                // .withClient("implicit")
-                // .authorizedGrantTypes("implicit")
-                // .scopes("write", "read")
-                // .redirectUris("http://client")
-
                 .and()
                 .withClient("resource-server")
                 .secret(passwordEncoder.encode("resource-password"));
@@ -77,15 +68,16 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         // security.checkTokenAccess("isAuthenticated()");
-        security.checkTokenAccess("permitAll");
+        security.checkTokenAccess("permitAll")
+        .tokenKeyAccess("permitAll");
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
-                .tokenGranter(tokenGranter(endpoints))
-                .tokenStore(redisTokenStore());
+                .accessTokenConverter(jwtAccessTokenConverter())
+                .tokenGranter(tokenGranter(endpoints));
     }
 
     private TokenGranter tokenGranter(AuthorizationServerEndpointsConfigurer endpoints) {
@@ -97,10 +89,6 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 pkceAuthorizationCodeTokenGranter, endpoints.getTokenGranter());
 
         return new CompositeTokenGranter(granters);
-    }
-
-    private TokenStore redisTokenStore() {
-        return new RedisTokenStore(redisConnectionFactory);
     }
 
 }
