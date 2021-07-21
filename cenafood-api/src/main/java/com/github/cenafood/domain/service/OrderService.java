@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.github.cenafood.core.data.PageableTranslater;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.exception.BusinessException;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.filter.OrderFilter;
@@ -50,6 +51,9 @@ public class OrderService {
     @Autowired
     private PaymentMethodService paymentMethodService;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public Page<Order> findAllWithFilterAndPage(OrderFilter filter, Pageable pageable) {
         pageable = translatePageable(pageable);
         return orderRepository.findAll(OrderSpecs.withFilter(filter), pageable);
@@ -62,9 +66,7 @@ public class OrderService {
 
     public Order generate(Order order) {
         try {
-            // TODO get authenticated user
-            order.setCustomer(new User());
-            order.getCustomer().setId(1L);
+            order.setCustomer(User.builder().id(securityUtil.getIdUser()).build());
 
             validOrder(order);
             validItems(order);

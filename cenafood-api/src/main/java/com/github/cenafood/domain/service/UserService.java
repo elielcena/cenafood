@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.github.cenafood.domain.exception.BusinessException;
@@ -21,76 +22,83 @@ import com.github.cenafood.domain.repository.UserRepository;
 @Service
 public class UserService {
 
-	private static final String MSG_RESOURCE_NOT_FOUND = "There is no user register with code %d";
+    private static final String MSG_RESOURCE_NOT_FOUND = "There is no user register with code %d";
 
-	@Autowired
-	private UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private RoleService roleService;
+    @Autowired
+    private RoleService roleService;
 
-	public List<User> findAll() {
-		return userRepository.findAll();
-	}
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-	public User findById(Long id) {
-		return userRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, id)));
-	}
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
-	public User save(User user) {
-		Optional<User> existUser = userRepository.findByEmail(user.getEmail());
+    public User findById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException(String.format(MSG_RESOURCE_NOT_FOUND, id)));
+    }
 
-		if (existUser.isPresent() && !existUser.get().equals(user))
-			throw new BusinessException("User already exists");
+    public User save(User user) {
+        Optional<User> existUser = userRepository.findByEmail(user.getEmail());
 
-		return userRepository.save(user);
-	}
+        if (existUser.isPresent() && !existUser.get().equals(user))
+            throw new BusinessException("User already exists");
 
-	public void changePassword(Long id, String currentPassword, String newPassword, String confirmPassword) {
-		User user = findById(id);
+        if (user.isNew()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
 
-		validCurrentpassword(user, currentPassword);
-		validNewPasswords(newPassword, confirmPassword);
+        return userRepository.save(user);
+    }
 
-		user.setPassword(newPassword);
+    public void changePassword(Long id, String currentPassword, String newPassword, String confirmPassword) {
+        User user = findById(id);
 
-		save(user);
-	}
+        validCurrentpassword(user, currentPassword);
+        validNewPasswords(newPassword, confirmPassword);
 
-	public void delete(Long id) {
-		try {
-			userRepository.delete(findById(id));
-		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException();
-		}
-	}
+        user.setPassword(newPassword);
 
-	public void addRoleToUser(Long idUser, Long idRole) {
-		addOrRemoveRole(Boolean.TRUE, idUser, idRole);
-	}
+        save(user);
+    }
 
-	public void removeRoleToUser(Long idUser, Long idRole) {
-		addOrRemoveRole(Boolean.FALSE, idUser, idRole);
-	}
+    public void delete(Long id) {
+        try {
+            userRepository.delete(findById(id));
+        } catch (DataIntegrityViolationException e) {
+            throw new EntityInUseException();
+        }
+    }
 
-	private void validCurrentpassword(User user, String currentPassword) {
-		if (!user.getPassword().equals(currentPassword))
-			throw new BusinessException("The current password is not valid");
-	}
+    public void addRoleToUser(Long idUser, Long idRole) {
+        addOrRemoveRole(Boolean.TRUE, idUser, idRole);
+    }
 
-	private void validNewPasswords(String newPassword, String confirmPassword) {
-		if (!newPassword.equals(confirmPassword))
-			throw new BusinessException("New passwords do not match");
-	}
+    public void removeRoleToUser(Long idUser, Long idRole) {
+        addOrRemoveRole(Boolean.FALSE, idUser, idRole);
+    }
 
-	private void addOrRemoveRole(Boolean isAdd, Long idUser, Long idRole) {
-		User user = findById(idUser);
-		Role role = roleService.findById(idRole);
+    private void validCurrentpassword(User user, String currentPassword) {
+        if (!passwordEncoder.matches(currentPassword, user.getPassword()))
+            throw new BusinessException("The current password is not valid");
+    }
 
-		user.addOrRemoveRole(isAdd, role);
+    private void validNewPasswords(String newPassword, String confirmPassword) {
+        if (!newPassword.equals(confirmPassword))
+            throw new BusinessException("New passwords do not match");
+    }
 
-		save(user);
-	}
+    private void addOrRemoveRole(Boolean isAdd, Long idUser, Long idRole) {
+        User user = findById(idUser);
+        Role role = roleService.findById(idRole);
+
+        user.addOrRemoveRole(isAdd, role);
+
+        save(user);
+    }
 
 }

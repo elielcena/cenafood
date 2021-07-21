@@ -5657,8 +5657,8 @@ INSERT INTO permission (name, description) VALUES ('CONSULT_KITCHEN', 'Allows yo
 INSERT INTO rolepermission (idrole, idpermission) VALUES (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
 
 -- SYSTEMSER
-INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Eliel Silva Cena', 'elielsc99@gmail.com', '123', current_timestamp);
-INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste', 'teste@gmail.com', '123', current_timestamp);
+INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Eliel Silva Cena', 'elielsc99@gmail.com', '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', current_timestamp);
+INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste', 'teste@gmail.com', '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', current_timestamp);
 
 -- SYSTEMSERROLE
 INSERT INTO systemuserrole (idsystemuser, idrole) VALUES (1, 1), (1, 2);

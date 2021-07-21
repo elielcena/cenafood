@@ -1,5 +1,7 @@
 package com.github.cenafood.domain.model;
 
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 import java.time.OffsetDateTime;
 import java.util.Set;
 
@@ -33,34 +35,38 @@ import lombok.NoArgsConstructor;
 @Table(name = "SYSTEMUSER")
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@Column(nullable = false)
-	private String name;
+    @Column(nullable = false)
+    private String name;
 
-	@Column(nullable = false, unique = true)
-	private String email;
+    @Column(nullable = false, unique = true)
+    private String email;
 
-	@Column(nullable = false)
-	private String password;
+    @Column(nullable = false)
+    private String password;
 
-	@CreationTimestamp
-	@Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
-	private OffsetDateTime createdAt;
+    @CreationTimestamp
+    @Column(name = "CREATEDAT", nullable = false, columnDefinition = "TIMESTAMP")
+    private OffsetDateTime createdAt;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "SYSTEMUSERROLE", joinColumns = @JoinColumn(name = "IDSYSTEMUSER"), inverseJoinColumns = @JoinColumn(name = "IDROLE"))
-	private Set<Role> roles;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "SYSTEMUSERROLE", joinColumns = @JoinColumn(name = "IDSYSTEMUSER"), inverseJoinColumns = @JoinColumn(name = "IDROLE"))
+    private Set<Role> roles;
 
-	public User addOrRemoveRole(Boolean isAdss, Role role) {
-		if (Boolean.TRUE.equals(isAdss))
-			getRoles().add(role);
-		else
-			getRoles().remove(role);
+    public User addOrRemoveRole(Boolean isAdss, Role role) {
+        if (Boolean.TRUE.equals(isAdss))
+            getRoles().add(role);
+        else
+            getRoles().remove(role);
 
-		return this;
-	}
+        return this;
+    }
+
+    public boolean isNew() {
+        return isEmpty(getId());
+    }
 
 }

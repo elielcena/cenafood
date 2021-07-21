@@ -1,4 +1,4 @@
-package com.github.cenafood.auth;
+package com.github.cenafood;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

@@ -1,4 +1,4 @@
-package com.github.cenafood.auth;
+package com.github.cenafood.core.auth;
 
 import java.util.Arrays;
 
@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.CompositeTokenGranter;
 import org.springframework.security.oauth2.provider.TokenGranter;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
@@ -69,14 +70,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
         // security.checkTokenAccess("isAuthenticated()");
         security.checkTokenAccess("permitAll")
-        .tokenKeyAccess("permitAll");
+                .tokenKeyAccess("permitAll");
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+        var tokenEnhancer = new TokenEnhancerChain();
+        tokenEnhancer.setTokenEnhancers(Arrays.asList(new JwtCustomClaimsTokenEnhancer(), jwtAccessTokenConverter()));
+
         endpoints.authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
                 .accessTokenConverter(jwtAccessTokenConverter())
+                .tokenEnhancer(tokenEnhancer)
                 .tokenGranter(tokenGranter(endpoints));
     }
 

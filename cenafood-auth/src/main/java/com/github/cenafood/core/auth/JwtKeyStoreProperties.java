@@ -1,4 +1,4 @@
-package com.github.cenafood.auth;
+package com.github.cenafood.core.auth;
 
 import javax.validation.constraints.NotBlank;
 
