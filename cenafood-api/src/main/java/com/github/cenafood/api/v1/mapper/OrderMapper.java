@@ -11,6 +11,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.controller.OrderController;
 import com.github.cenafood.api.v1.model.request.OrderRequestDTO;
 import com.github.cenafood.api.v1.model.response.OrderResponseDTO;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.model.Order;
 
 /**
@@ -26,6 +27,9 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public OrderMapper() {
         super(OrderController.class, OrderResponseDTO.class);
     }
@@ -37,14 +41,16 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 
         orderResponse.add(cenaLinks.linkToOrders());
 
-        if (isTrue(order.canBeConfirmed()))
-            orderResponse.add(cenaLinks.linkToCorfirmOrder(order.getCode()));
+        if (securityUtil.manageOrder(order.getCode())) {
+            if (isTrue(order.canBeConfirmed()))
+                orderResponse.add(cenaLinks.linkToCorfirmOrder(order.getCode()));
 
-        if (isTrue(order.canBeDelivered()))
-            orderResponse.add(cenaLinks.linkToDeliveryOrder(order.getCode()));
+            if (isTrue(order.canBeDelivered()))
+                orderResponse.add(cenaLinks.linkToDeliveryOrder(order.getCode()));
 
-        if (isTrue(order.canBeCanceled()))
-            orderResponse.add(cenaLinks.linkToCancelOrder(order.getCode()));
+            if (isTrue(order.canBeCanceled()))
+                orderResponse.add(cenaLinks.linkToCancelOrder(order.getCode()));
+        }
 
         orderResponse.getRestaurant().add(cenaLinks.linkToRestaurant(orderResponse.getRestaurant().getId()));
         orderResponse.getCustomer().add(cenaLinks.linkToUser(orderResponse.getCustomer().getId()));

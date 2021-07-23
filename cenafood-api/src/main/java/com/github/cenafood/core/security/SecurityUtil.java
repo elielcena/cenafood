@@ -47,4 +47,14 @@ public class SecurityUtil {
         return getIdUser() != null && idUser != null && getIdUser().equals(idUser);
     }
 
+    public Boolean hasAuthority(String authorityName) {
+        return getAuthentication().getAuthorities()
+                .stream()
+                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
+    }
+
+    public Boolean manageOrder(String code) {
+        return hasAuthority("SCOPE_WRITE") && (hasAuthority("MANAGE_ORDERS") || manageRestaurantOrder(code));
+    }
+
 }
