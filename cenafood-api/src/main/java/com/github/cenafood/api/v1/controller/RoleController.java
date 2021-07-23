@@ -20,6 +20,7 @@ import com.github.cenafood.api.v1.mapper.RoleMapper;
 import com.github.cenafood.api.v1.model.request.RoleRequestDTO;
 import com.github.cenafood.api.v1.model.response.RoleResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RoleControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.Role;
 import com.github.cenafood.domain.service.RoleService;
 
@@ -37,22 +38,26 @@ public class RoleController implements RoleControllerOpenApi {
     @Autowired
     private RoleMapper mapper;
 
+    @CheckSecurity.UsersRolesPermission.Consult
     @GetMapping
     public CollectionModel<RoleResponseDTO> findAll() {
         return mapper.toCollectionModel(roleService.findAll());
     }
 
+    @CheckSecurity.UsersRolesPermission.Consult
     @GetMapping("/{id}")
     public RoleResponseDTO findById(@PathVariable Long id) {
         return mapper.toModel(roleService.findById(id));
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RoleResponseDTO save(@RequestBody @Valid RoleRequestDTO role) {
         return mapper.toModel(roleService.save(mapper.toDomainEntity(role)));
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @PutMapping("/{id}")
     public RoleResponseDTO update(@PathVariable Long id, @RequestBody @Valid RoleRequestDTO roleRequest) {
         Role role = roleService.findById(id);
@@ -60,6 +65,7 @@ public class RoleController implements RoleControllerOpenApi {
         return mapper.toModel(roleService.save(role));
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

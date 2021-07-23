@@ -27,4 +27,7 @@ public interface OrderRepository extends JpaRepository<Order, Long>, JpaSpecific
             + " JOIN FETCH o.address.city c JOIN FETCH c.state s JOIN FETCH r.kitchen JOIN FETCH r.address.city ci JOIN FETCH ci.state st JOIN FETCH o.paymentMethod p JOIN FETCH o.orderItems oi JOIN FETCH oi.product po WHERE o.code = :code")
     Optional<Order> findByCode(String code);
 
+    @Query("SELECT CASE WHEN count(1) > 0 THEN true ELSE false END FROM Order o JOIN o.restaurant r JOIN r.users u WHERE o.code = :code AND u.id = :idUser")
+    Boolean isManagedByUser(String code, Long idUser);
+
 }

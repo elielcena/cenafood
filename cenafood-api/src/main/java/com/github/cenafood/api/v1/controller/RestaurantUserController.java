@@ -15,6 +15,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.UserMapper;
 import com.github.cenafood.api.v1.model.response.UserResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantUserControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.service.RestaurantService;
 
 /**
@@ -34,6 +35,7 @@ public class RestaurantUserController implements RestaurantUserControllerOpenApi
     @Autowired
     private UserMapper paymentMapper;
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping
     public CollectionModel<UserResponseDTO> find(@PathVariable Long id) {
         CollectionModel<UserResponseDTO> userResponseDTO = paymentMapper.toCollectionModel(restaurantService.findById(id).getUsers())
@@ -46,6 +48,7 @@ public class RestaurantUserController implements RestaurantUserControllerOpenApi
         return userResponseDTO;
     }
 
+    @CheckSecurity.Restaurants.Edit
     @PutMapping("/{idUser}")
     public ResponseEntity<Void> addUserToRestaurant(@PathVariable Long id, @PathVariable Long idUser) {
         restaurantService.addUserToRestaurant(id, idUser);
@@ -53,6 +56,7 @@ public class RestaurantUserController implements RestaurantUserControllerOpenApi
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.Edit
     @DeleteMapping("/{idUser}")
     public ResponseEntity<Void> removeUserToRestaurant(@PathVariable Long id, @PathVariable Long idUser) {
         restaurantService.removeUserToRestaurant(id, idUser);

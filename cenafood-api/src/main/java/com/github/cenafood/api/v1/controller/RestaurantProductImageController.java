@@ -21,6 +21,7 @@ import com.github.cenafood.api.v1.mapper.ProductImageMapper;
 import com.github.cenafood.api.v1.model.request.ProductImageRequestDTO;
 import com.github.cenafood.api.v1.model.response.ProductImageResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantProductImageControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.ProductImage;
@@ -48,6 +49,7 @@ public class RestaurantProductImageController implements RestaurantProductImageC
     @Autowired
     private CenaLinks cenaLinks;
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping(path = "/{idImage}")
     public ProductImageResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {
         Product product = productService.findById(idProduct, id);
@@ -56,6 +58,7 @@ public class RestaurantProductImageController implements RestaurantProductImageC
                 .add(cenaLinks.linkToProduct(id, idProduct).withRel("products"));
     }
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping(path = "/{idImage}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<?> findProductImage(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {
         try {
@@ -67,6 +70,7 @@ public class RestaurantProductImageController implements RestaurantProductImageC
         }
     }
 
+    @CheckSecurity.Restaurants.Manage
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ProductImageResponseDTO updateImage(@PathVariable Long id, @PathVariable Long idProduct, @Valid ProductImageRequestDTO productImageRequest)
         throws IOException {
@@ -78,6 +82,7 @@ public class RestaurantProductImageController implements RestaurantProductImageC
                 .add(cenaLinks.linkToProduct(id, idProduct).withRel("products"));
     }
 
+    @CheckSecurity.Restaurants.Manage
     @DeleteMapping("/{idImage}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {

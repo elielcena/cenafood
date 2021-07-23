@@ -59,7 +59,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .withClient("cenafood-web")
                 .secret(passwordEncoder.encode("123"))
                 .authorizedGrantTypes("password", "refresh_token")
-                .scopes("write", "read")
+                .scopes("WRITE", "READ")
 
                 .and()
                 .withClient("resource-server")

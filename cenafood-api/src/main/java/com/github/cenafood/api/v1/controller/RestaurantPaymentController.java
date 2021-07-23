@@ -17,6 +17,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.PaymentMethodMapper;
 import com.github.cenafood.api.v1.model.response.PaymentMethodResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantPaymentControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.service.RestaurantService;
 
 /**
@@ -36,6 +37,7 @@ public class RestaurantPaymentController implements RestaurantPaymentControllerO
     @Autowired
     private CenaLinks cenaLinks;
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping
     public CollectionModel<PaymentMethodResponseDTO> find(@PathVariable Long id) {
         CollectionModel<PaymentMethodResponseDTO> paymentMethodResponseDTO =
@@ -50,6 +52,7 @@ public class RestaurantPaymentController implements RestaurantPaymentControllerO
         return paymentMethodResponseDTO;
     }
 
+    @CheckSecurity.Restaurants.Manage
     @PutMapping("/{idPaymentMethod}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> addPaymentMethodToRestaurant(@PathVariable Long id, @PathVariable Long idPaymentMethod) {
@@ -58,6 +61,7 @@ public class RestaurantPaymentController implements RestaurantPaymentControllerO
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.Manage
     @DeleteMapping("/{idPaymentMethod}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> removePaymentMethodToRestaurant(@PathVariable Long id, @PathVariable Long idPaymentMethod) {

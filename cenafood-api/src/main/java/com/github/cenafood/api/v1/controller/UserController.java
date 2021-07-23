@@ -22,6 +22,7 @@ import com.github.cenafood.api.v1.model.request.UserRequestDTO;
 import com.github.cenafood.api.v1.model.request.UserWithPasswordRequestDTO;
 import com.github.cenafood.api.v1.model.response.UserResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.UserControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.service.UserService;
 
@@ -39,22 +40,26 @@ public class UserController implements UserControllerOpenApi {
     @Autowired
     private UserMapper mapper;
 
+    @CheckSecurity.UsersRolesPermission.Consult
     @GetMapping
     public CollectionModel<UserResponseDTO> findAll() {
         return mapper.toCollectionModel(userService.findAll());
     }
 
+    @CheckSecurity.UsersRolesPermission.Consult
     @GetMapping("/{id}")
     public UserResponseDTO findById(@PathVariable Long id) {
         return mapper.toModel(userService.findById(id));
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponseDTO save(@RequestBody @Valid UserWithPasswordRequestDTO user) {
         return mapper.toModel(userService.save(mapper.toDomainEntity(user)));
     }
 
+    @CheckSecurity.UsersRolesPermission.EditUser
     @PutMapping("/{id}")
     public UserResponseDTO update(@PathVariable Long id, @RequestBody @Valid UserRequestDTO userRequest) {
         User user = userService.findById(id);
@@ -62,6 +67,7 @@ public class UserController implements UserControllerOpenApi {
         return mapper.toModel(userService.save(user));
     }
 
+    @CheckSecurity.UsersRolesPermission.ChangeOwnPassword
     @PutMapping("/{id}/password")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void changePassword(@PathVariable Long id, @RequestBody @Valid ChangePasswordRequestDTO userRequest) {
@@ -69,6 +75,7 @@ public class UserController implements UserControllerOpenApi {
                 userRequest.getConfirmPassword());
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

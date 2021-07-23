@@ -20,6 +20,7 @@ import com.github.cenafood.api.v1.mapper.KitchenMapper;
 import com.github.cenafood.api.v1.model.request.KitchenRequestDTO;
 import com.github.cenafood.api.v1.model.response.KitchenResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.KitchenControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.Kitchen;
 import com.github.cenafood.domain.service.KitchenService;
 
@@ -37,22 +38,26 @@ public class KitchenController implements KitchenControllerOpenApi {
     @Autowired
     private KitchenMapper mapper;
 
+    @CheckSecurity.Kitchens.Consult
     @GetMapping
     public CollectionModel<KitchenResponseDTO> findAll() {
         return mapper.toCollectionModel(kitchenService.findAll());
     }
 
+    @CheckSecurity.Kitchens.Consult
     @GetMapping("/{id}")
     public KitchenResponseDTO findById(@PathVariable Long id) {
         return mapper.toModel(kitchenService.findById(id));
     }
 
+    @CheckSecurity.Kitchens.Edit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public KitchenResponseDTO save(@RequestBody @Valid KitchenRequestDTO kitchen) {
         return mapper.toModel(kitchenService.save(mapper.toDomainEntity(kitchen)));
     }
 
+    @CheckSecurity.Kitchens.Edit
     @PutMapping("/{id}")
     public KitchenResponseDTO update(@PathVariable Long id, @RequestBody @Valid KitchenRequestDTO kitchenRequest) {
         Kitchen kitchen = kitchenService.findById(id);
@@ -60,6 +65,7 @@ public class KitchenController implements KitchenControllerOpenApi {
         return mapper.toModel(kitchenService.save(kitchen));
     }
 
+    @CheckSecurity.Kitchens.Edit
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

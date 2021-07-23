@@ -12,6 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
@@ -99,6 +100,20 @@ public class ExceptionHandlerController extends ResponseEntityExceptionHandler {
     public ErrorResponseDTO handleEntityInUse(EntityInUseException ex, WebRequest request) {
         String message = "This record cannot be removed as it is in use";
         return createErrorResponseDTOBuilder(HttpStatus.CONFLICT, request, message).build();
+    }
+
+    /**
+     * Provides handling the AccessDeniedException exception.
+     * 
+     * @param ex the exception
+     * @param request the current request
+     * @return ErrorResponseDTO
+     */
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorResponseDTO handleEntidadeNaoEncontrada(AccessDeniedException ex, WebRequest request) {
+        String message = "Access denied";
+        return createErrorResponseDTOBuilder(HttpStatus.FORBIDDEN, request, message).build();
     }
 
     /**

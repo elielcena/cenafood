@@ -20,6 +20,7 @@ import com.github.cenafood.api.v1.mapper.PaymentMethodMapper;
 import com.github.cenafood.api.v1.model.request.PaymentMethodRequestDTO;
 import com.github.cenafood.api.v1.model.response.PaymentMethodResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.PaymentMethodControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.PaymentMethod;
 import com.github.cenafood.domain.service.PaymentMethodService;
 
@@ -37,22 +38,26 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     @Autowired
     private PaymentMethodMapper mapper;
 
+    @CheckSecurity.PaymentMethod.Consult
     @GetMapping
     public CollectionModel<PaymentMethodResponseDTO> findAll() {
         return mapper.toCollectionModel(paymentMethodService.findAll());
     }
 
+    @CheckSecurity.PaymentMethod.Consult
     @GetMapping("/{id}")
     public PaymentMethodResponseDTO findById(@PathVariable Long id) {
         return mapper.toModel(paymentMethodService.findById(id));
     }
 
+    @CheckSecurity.PaymentMethod.Edit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public PaymentMethodResponseDTO save(@RequestBody @Valid PaymentMethodRequestDTO paymentMethod) {
         return mapper.toModel(paymentMethodService.save(mapper.toDomainEntity(paymentMethod)));
     }
 
+    @CheckSecurity.PaymentMethod.Edit
     @PutMapping("/{id}")
     public PaymentMethodResponseDTO update(@PathVariable Long id,
             @RequestBody @Valid PaymentMethodRequestDTO paymentMethodRequest) {
@@ -61,6 +66,7 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
         return mapper.toModel(paymentMethodService.save(paymentMethod));
     }
 
+    @CheckSecurity.PaymentMethod.Edit
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {

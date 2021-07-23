@@ -1,6 +1,8 @@
 package com.github.cenafood.core.auth;
 
-import java.util.Collections;
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
 
 import com.github.cenafood.domain.User;
 
@@ -17,8 +19,8 @@ public class AuthUser extends org.springframework.security.core.userdetails.User
 
     private String fullName;
 
-    public AuthUser(User user) {
-        super(user.getEmail(), user.getPassword(), Collections.emptyList());
+    public AuthUser(User user, Collection<? extends GrantedAuthority> authorities) {
+        super(user.getEmail(), user.getPassword(), authorities);
 
         this.idUser = user.getId();
         this.fullName = user.getName();

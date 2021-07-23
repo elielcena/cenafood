@@ -5648,20 +5648,45 @@ INSERT INTO paymentmethod (description) VALUES ('Ticket Alimentação');
 INSERT INTO restaurantpayment (idrestaurant, idpaymentmethod) VALUES (1, 1), (1, 2), (2, 2), (2, 1);
 
 -- ROLE
-INSERT INTO role (name) VALUES ('ADMIN'), ('CUSTOMER'), ('EMPLOYEE');
+INSERT INTO role (name) VALUES ('ADMIN'), ('SELLER'), ('EMPLOYEE'), ('REGISTRAR');
 
 -- PERMISSION
-INSERT INTO permission (name, description) VALUES ('CONSULT_KITCHEN', 'Allows you to consult kitchens'), ('EDIT_KITCHENS', 'Allows you to edit kitchens');
+INSERT INTO permission (id, name, description) VALUES 
+(1, 'CONSULT_KITCHENS', 'Allows you to consult kitchens'), 
+(2, 'EDIT_KITCHENS', 'Allows you to edit kitchens'),
+(3, 'CONSULT_PAYMENT_METHODS', 'Allows you to consult payment methods'),
+(4, 'EDIT_PAYMENT_METHODS', 'Allows you to edit payment methods'),
+(5, 'CONSULT_USERS_ROLES_PERMISSIONS', 'Allows you to consult users, roles and permissions'),
+(6, 'EDIT_USERS_ROLES_PERMISSIONS', 'Allows you to edit users, roles and permissions'),
+(7, 'CONSULT_RESTAURANTS', 'Allows you to consult restaurants'),
+(8, 'EDIT_RESTAURANTS', 'Allows you to edit restaurants'),
+(9, 'CONSULT_PRODUCTS', 'Allows you to consult products'),
+(10, 'EDIT_PRODUCTS', 'Allows you to edit producst'),
+(11, 'CONSULT_ORDERS', 'Allows you to consult orders'),
+(12, 'MANAGE_ORDERS', 'Allows you to manage orders'),
+(14, 'GENERATE_REPORTS', 'Allows you to generate reports');
 
 -- ROLEPERMISSION
-INSERT INTO rolepermission (idrole, idpermission) VALUES (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
+INSERT INTO rolepermission (idrole, idpermission) select 1, id from permission;
+INSERT INTO rolepermission (idrole, idpermission) select 2, id from permission where name like 'CONSULT_%';
+INSERT INTO rolepermission (idrole, idpermission) values (2, 10);
+INSERT INTO rolepermission (idrole, idpermission) select 3, id from permission where name like 'CONSULT_%';
+INSERT INTO rolepermission (idrole, idpermission) select 4, id from permission where name like '%_RESTAURANTS' or name like '%_PRODUCTS';
+
 
 -- SYSTEMSER
 INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Eliel Silva Cena', 'elielsc99@gmail.com', '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', current_timestamp);
 INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste', 'teste@gmail.com', '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', current_timestamp);
+INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste Employ', 'teste_employ@gmail.com', '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', current_timestamp);
+INSERT INTO systemuser (name, email, password, createdAt) VALUES ('Teste Registrar', 'teste_registrar@gmail.com', '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', current_timestamp);
 
 -- SYSTEMSERROLE
-INSERT INTO systemuserrole (idsystemuser, idrole) VALUES (1, 1), (1, 2);
+INSERT INTO systemuserrole (idsystemuser, idrole) VALUES 
+(1, 1),
+(1, 2),
+(2, 2),
+(3, 3),
+(4, 4);
 
 -- PRODUCT
 INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Colchão mole 3KG', 'Carne vermelha bovina 3Kg', 25, true, 1);
@@ -5671,7 +5696,7 @@ INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Al
 INSERT INTO product (name, description, price, active, idrestaurant) VALUES ('Carne Moida KG', 'Carne suína moida Kg', 10, true, 1);
 
 -- RESTAURANTSYSTEMUSER
-INSERT INTO restaurantsystemuser (idrestaurant, idsystemuser) VALUES (1, 1), (2, 2);
+INSERT INTO restaurantsystemuser (idrestaurant, idsystemuser) VALUES (1, 1), (2, 2), (1, 3), (2, 4);
 
 -- ORDER
 INSERT INTO public."order" (code, subtotal, deliveryfee, totalprice, status, zipcode, street, complement, "number", district, idcity, idpaymentmethod, idrestaurant, idsystemuser, createdat)

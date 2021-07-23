@@ -24,6 +24,7 @@ import com.github.cenafood.api.v1.mapper.RestaurantMapper;
 import com.github.cenafood.api.v1.model.request.RestaurantRequestDTO;
 import com.github.cenafood.api.v1.model.response.RestaurantResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.service.RestaurantService;
 
@@ -41,6 +42,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     @Autowired
     private RestaurantMapper mapper;
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping
     public ResponseEntity<CollectionModel<RestaurantResponseDTO>> findAll() {
         return ResponseEntity.ok()
@@ -48,6 +50,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
                 .body(mapper.toCollectionModel(restaurantService.findAll()));
     }
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok()
@@ -55,12 +58,14 @@ public class RestaurantController implements RestaurantControllerOpenApi {
                 .body(mapper.toModel(restaurantService.findById(id)));
     }
 
+    @CheckSecurity.Restaurants.Edit
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RestaurantResponseDTO save(@RequestBody @Valid RestaurantRequestDTO restaurant) {
         return mapper.toModel(restaurantService.save(mapper.toDomainEntity(restaurant)));
     }
 
+    @CheckSecurity.Restaurants.Edit
     @PutMapping("/{id}")
     public RestaurantResponseDTO update(@PathVariable Long id,
             @RequestBody @Valid RestaurantRequestDTO restaurantRequest) {
@@ -69,6 +74,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return mapper.toModel(restaurantService.save(restaurant));
     }
 
+    @CheckSecurity.Restaurants.Edit
     @PutMapping("/{id}/active")
     public ResponseEntity<Void> activate(@PathVariable Long id) {
         restaurantService.activate(id);
@@ -76,6 +82,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.Edit
     @DeleteMapping("/{id}/active")
     public ResponseEntity<Void> inactivate(@PathVariable Long id) {
         restaurantService.inactivate(id);
@@ -83,6 +90,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.Manage
     @PutMapping("/{id}/opening")
     public ResponseEntity<Void> opening(@PathVariable Long id) {
         restaurantService.opening(id);
@@ -90,6 +98,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Restaurants.Manage
     @PutMapping("/{id}/closure")
     public ResponseEntity<Void> closure(@PathVariable Long id) {
         restaurantService.closure(id);

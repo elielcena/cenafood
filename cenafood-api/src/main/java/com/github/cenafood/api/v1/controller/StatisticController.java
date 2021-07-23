@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.model.response.DailyOrderDTO;
 import com.github.cenafood.api.v1.openapi.controller.StatisticControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.filter.DailyOrderFilter;
 import com.github.cenafood.domain.service.DailyOrderReportService;
 import com.github.cenafood.domain.service.DailyOrderService;
@@ -39,16 +40,19 @@ public class StatisticController implements StatisticControllerOpenApi {
     @Autowired
     private CenaLinks cenaLinks;
 
+    @CheckSecurity.Statistic.Consult
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public StatisticResponseDTO statistic() {
         return StatisticResponseDTO.builder().build().add(cenaLinks.linkToStatisticDailyOrder().withRel("dailyOrder"));
     }
 
+    @CheckSecurity.Statistic.Consult
     @GetMapping(path = "/daily-order", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<DailyOrderDTO> findByDailyOrder(DailyOrderFilter filter) {
         return dailyOrderService.findByFilter(filter);
     }
 
+    @CheckSecurity.Statistic.Consult
     @GetMapping(path = "/daily-order", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> findByDailyOrderPdf(DailyOrderFilter filter) {
         byte[] bytesPdf = dailyOrderReportService.generateDailyOrder(filter);

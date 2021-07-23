@@ -20,6 +20,7 @@ import com.github.cenafood.api.v1.mapper.ProductMapper;
 import com.github.cenafood.api.v1.model.request.ProductRequestDTO;
 import com.github.cenafood.api.v1.model.response.ProductResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantProductControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.service.ProductService;
@@ -45,6 +46,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private CenaLinks cenaLinks;
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping
     public CollectionModel<ProductResponseDTO> find(@PathVariable Long id) {
         CollectionModel<ProductResponseDTO> productResponseDTO =
@@ -57,6 +59,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productResponseDTO;
     }
 
+    @CheckSecurity.Restaurants.Consult
     @GetMapping("/{idProduct}")
     public ProductResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct) {
         Product product = productService.findById(idProduct, id);
@@ -66,6 +69,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
                 .add(cenaLinks.linkToProducts(id));
     }
 
+    @CheckSecurity.Restaurants.Manage
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponseDTO save(@PathVariable Long id, @RequestBody @Valid ProductRequestDTO productRequest) {
@@ -77,6 +81,7 @@ public class RestaurantProductController implements RestaurantProductControllerO
         return productMapper.toModel(productService.save(product));
     }
 
+    @CheckSecurity.Restaurants.Manage
     @PutMapping("/{idProduct}")
     public ProductResponseDTO update(@PathVariable Long id, @PathVariable Long idProduct,
             @RequestBody @Valid ProductRequestDTO productRequest) {

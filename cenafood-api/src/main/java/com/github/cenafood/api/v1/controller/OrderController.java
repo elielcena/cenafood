@@ -29,6 +29,7 @@ import com.github.cenafood.api.v1.model.response.OrderCreatedResponseDTO;
 import com.github.cenafood.api.v1.model.response.OrderResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.OrderControllerOpenApi;
 import com.github.cenafood.core.data.PageWrapper;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.filter.OrderFilter;
 import com.github.cenafood.domain.model.Order;
 import com.github.cenafood.domain.service.OrderService;
@@ -56,6 +57,7 @@ public class OrderController implements OrderControllerOpenApi {
     @Autowired
     private PagedResourcesAssembler<Order> pagedResourcesAssembler;
 
+    @CheckSecurity.Orders.Consult
     @GetMapping
     public PagedModel<OrderAbstractResponseDTO> findAllWithFilter(OrderFilter filter,
             @PageableDefault(size = 10) Pageable pageable) {
@@ -66,11 +68,13 @@ public class OrderController implements OrderControllerOpenApi {
         return pagedResourcesAssembler.toModel(orderPage, orderAbstractMapper);
     }
 
+    @CheckSecurity.Orders.Find
     @GetMapping("/{code}")
     public OrderResponseDTO findByCode(@PathVariable String code) {
         return mapper.toModel(orderService.findByCode(code));
     }
 
+    @CheckSecurity.Orders.Save
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderCreatedResponseDTO generate(@Valid @RequestBody OrderRequestDTO orderRequest) {
@@ -79,6 +83,7 @@ public class OrderController implements OrderControllerOpenApi {
         return orderCreatedMapper.toModel(order);
     }
 
+    @CheckSecurity.Orders.Manage
     @PutMapping("/{code}/confirmation")
     public ResponseEntity<Void> confirm(@PathVariable String code) {
         orderService.confirm(code);
@@ -86,6 +91,7 @@ public class OrderController implements OrderControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Orders.Manage
     @PutMapping("/{code}/delivery")
     public ResponseEntity<Void> delivery(@PathVariable String code) {
         orderService.delivery(code);
@@ -93,6 +99,7 @@ public class OrderController implements OrderControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.Orders.Manage
     @PutMapping("/{code}/cancelation")
     public ResponseEntity<Void> cancel(@PathVariable String code) {
         orderService.cancel(code);

@@ -27,24 +27,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "SYSTEMUSER")
-public class User {
+@Table(name = "ROLE")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
     private Long id;
 
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "SYSTEMUSERROLE", joinColumns = @JoinColumn(name = "IDSYSTEMUSER"), inverseJoinColumns = @JoinColumn(name = "IDROLE"))
-    private Set<Role> roles;
+    @JoinTable(name = "ROLEPERMISSION", joinColumns = @JoinColumn(name = "IDROLE"), inverseJoinColumns = @JoinColumn(name = "IDPERMISSION"))
+    private Set<Permission> permissions;
 
 }

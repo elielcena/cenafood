@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.openapi.controller.CityControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.City;
 import com.github.cenafood.domain.service.CityService;
 
@@ -34,13 +35,14 @@ public class CityController implements CityControllerOpenApi {
         return addLinksCity(city);
     }
 
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public CollectionModel<City> findAllWithFilter(City filtro) {
         CollectionModel<City> citiesModel = CollectionModel.of(cityService.findAllWithFilters(filtro));
 
         citiesModel.add(cenaLinks.linkToCities().withSelfRel());
 
-        citiesModel.getContent().forEach(city -> addLinksCity(city));
+        citiesModel.getContent().forEach(this::addLinksCity);
 
         return citiesModel;
     }

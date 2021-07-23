@@ -17,6 +17,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.RoleMapper;
 import com.github.cenafood.api.v1.model.response.RoleResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.UserRoleControllerOpenApi;
+import com.github.cenafood.core.security.anotation.CheckSecurity;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.service.UserService;
 
@@ -37,6 +38,7 @@ public class UserRoleController implements UserRoleControllerOpenApi {
     @Autowired
     private CenaLinks cenaLinks;
 
+    @CheckSecurity.UsersRolesPermission.Consult
     @GetMapping
     public CollectionModel<RoleResponseDTO> findRolesByUser(@PathVariable Long id) {
         User user = userService.findById(id);
@@ -49,6 +51,7 @@ public class UserRoleController implements UserRoleControllerOpenApi {
         return roleResponseDTO;
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @PutMapping("/{idRole}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> addRoleToUser(@PathVariable Long id, @PathVariable Long idRole) {
@@ -57,6 +60,7 @@ public class UserRoleController implements UserRoleControllerOpenApi {
         return ResponseEntity.noContent().build();
     }
 
+    @CheckSecurity.UsersRolesPermission.Edit
     @DeleteMapping("/{idRole}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public ResponseEntity<Void> removeRoleToUser(@PathVariable Long id, @PathVariable Long idRole) {
