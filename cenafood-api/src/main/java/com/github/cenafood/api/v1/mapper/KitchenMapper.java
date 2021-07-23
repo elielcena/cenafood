@@ -1,5 +1,6 @@
 package com.github.cenafood.api.v1.mapper;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.controller.KitchenController;
 import com.github.cenafood.api.v1.model.request.KitchenRequestDTO;
 import com.github.cenafood.api.v1.model.response.KitchenResponseDTO;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.model.Kitchen;
 
 /**
@@ -27,6 +29,9 @@ public class KitchenMapper extends RepresentationModelAssemblerSupport<Kitchen, 
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public KitchenMapper() {
         super(KitchenController.class, KitchenResponseDTO.class);
     }
@@ -36,7 +41,11 @@ public class KitchenMapper extends RepresentationModelAssemblerSupport<Kitchen, 
         KitchenResponseDTO kitchenResponse = createModelWithId(object.getId(), object);
         modelMapper.map(object, kitchenResponse);
 
-        return kitchenResponse.add(cenaLinks.linkToKitchens());
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            kitchenResponse.add(cenaLinks.linkToKitchens());
+        }
+
+        return kitchenResponse;
     }
 
     @Override

@@ -39,9 +39,7 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
         OrderResponseDTO orderResponse = createModelWithId(order.getCode(), order);
         modelMapper.map(order, orderResponse);
 
-        orderResponse.add(cenaLinks.linkToOrders());
-
-        if (securityUtil.manageOrder(order.getCode())) {
+        if (isTrue(securityUtil.manageOrder(order.getCode()))) {
             if (isTrue(order.canBeConfirmed()))
                 orderResponse.add(cenaLinks.linkToCorfirmOrder(order.getCode()));
 
@@ -52,8 +50,19 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
                 orderResponse.add(cenaLinks.linkToCancelOrder(order.getCode()));
         }
 
-        orderResponse.getRestaurant().add(cenaLinks.linkToRestaurant(orderResponse.getRestaurant().getId()));
-        orderResponse.getCustomer().add(cenaLinks.linkToUser(orderResponse.getCustomer().getId()));
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            orderResponse.add(cenaLinks.linkToOrders());
+            orderResponse.getRestaurant().add(cenaLinks.linkToRestaurant(orderResponse.getRestaurant().getId()));
+            orderResponse.getPaymentMethod().add(cenaLinks.linkToPaymentMethod(order.getPaymentMethod().getId()));
+            orderResponse.getAddress().getCity().add(cenaLinks.linkToCity(orderResponse.getAddress().getCity().getId()));
+
+            orderResponse.getOrderItems().forEach(item -> {
+                item.add(cenaLinks.linkToProduct(order.getRestaurant().getId(), item.getId()).withRel("orderitems"));
+            });
+        }
+
+        if (isTrue(securityUtil.consultUsersRolesPermissions()))
+            orderResponse.getCustomer().add(cenaLinks.linkToUser(orderResponse.getCustomer().getId()));
 
         return orderResponse;
     }

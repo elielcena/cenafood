@@ -164,6 +164,10 @@ public class CenaLinks {
     public Link linkToPaymentMethods() {
         return linkTo(methodOn(PaymentMethodController.class).findAll()).withRel(IanaLinkRelations.COLLECTION);
     }
+    
+    public Link linkToPaymentMethod(Long id) {
+        return linkTo(methodOn(PaymentMethodController.class).findById(id)).withRel("paymentMethod");
+    }
 
     public Link linkToPermission(Long idRole) {
         return linkTo(methodOn(RolePermissionController.class).findAll(idRole)).withRel(IanaLinkRelations.COLLECTION);

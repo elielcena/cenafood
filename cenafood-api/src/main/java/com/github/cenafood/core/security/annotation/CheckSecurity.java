@@ -18,13 +18,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @Target(METHOD)
 public @interface CheckSecurity {
 
-    @PreAuthorize("hasAuthority('SCOPE_WRITE') and isAuthenticated()")
+    @PreAuthorize("@securityUtil.noPreAuthorizeWrite()")
     @Retention(RUNTIME)
     @Target(value = {METHOD, ANNOTATION_TYPE})
     public @interface NoPreAuthorizeWrite {
     }
 
-    @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+    @PreAuthorize("@securityUtil.noPreAuthorizeRead()")
     @Retention(RUNTIME)
     @Target(value = {METHOD, ANNOTATION_TYPE})
     public @interface NoPreAuthorizeRead {
@@ -38,63 +38,42 @@ public @interface CheckSecurity {
         public @interface Edit {
         }
 
-        @CheckSecurity.NoPreAuthorizeRead
-        @Retention(RUNTIME)
-        @Target(METHOD)
-        public @interface Consult {
-        }
-
     }
 
     public @interface Restaurants {
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDIT_RESTAURANTS')")
+        @PreAuthorize("@securityUtil.manageRestaurantRegistration()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Edit {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_RESTAURANTS') or @securityUtil.manageRestaurant(#id))")
+        @PreAuthorize("@securityUtil.manageRestaurantOperation(#id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Manage {
-        }
-
-        @CheckSecurity.NoPreAuthorizeRead
-        @Retention(RUNTIME)
-        @Target(METHOD)
-        public @interface Consult {
         }
 
     }
 
     public @interface Orders {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
+        @CheckSecurity.NoPreAuthorizeRead
         @PostAuthorize("hasAuthority('CONSULT_ORDERS') "
-                + "or @securityUtil.userIsAuthenticated(returnObject.customer.id) "
+                + "or @securityUtil.userSameAsAuthenticated(returnObject.customer.id) "
                 + "or @securityUtil.manageRestaurant(returnObject.restaurant.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Find {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULT_ORDERS') "
-                + "or @securityUtil.userIsAuthenticated(#filter.idCustomer) "
-                + "or @securityUtil.manageRestaurant(#filter.idRestaurant))")
+        @PreAuthorize("@securityUtil.consultOrders(#filter.idCustomer, #filter.idRestaurant)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Consult {
         }
 
-        @CheckSecurity.NoPreAuthorizeWrite
-        @Retention(RUNTIME)
-        @Target(METHOD)
-        public @interface Save {
-        }
-
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('MANAGE_ORDERS') "
-                + "or @securityUtil.manageRestaurantOrder(#code))")
+        @PreAuthorize("@securityUtil.manageOrder(#code)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Manage {
@@ -103,12 +82,6 @@ public @interface CheckSecurity {
     }
 
     public @interface PaymentMethod {
-
-        @CheckSecurity.NoPreAuthorizeRead
-        @Retention(RUNTIME)
-        @Target(METHOD)
-        public @interface Consult {
-        }
 
         @PreAuthorize("hasAuthority('SCOPE_WRITE') and hasAuthority('EDIT_PAYMENT_METHODS')")
         @Retention(RUNTIME)
@@ -132,13 +105,13 @@ public @interface CheckSecurity {
         public @interface Edit {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and @securityUtil.userIsAuthenticated(#id)")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and @securityUtil.userSameAsAuthenticated(#id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface ChangeOwnPassword {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_USERS_ROLES_PERMISSIONS') or @securityUtil.userIsAuthenticated(#id))")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_USERS_ROLES_PERMISSIONS') or @securityUtil.userSameAsAuthenticated(#id))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface EditUser {
@@ -148,7 +121,7 @@ public @interface CheckSecurity {
 
     public @interface Statistic {
 
-        @PreAuthorize("hasAuthority('SCOPE_READ') and hasAuthority('GENERATE_REPORTS')")
+        @PreAuthorize("@securityUti.consultStatistic()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Consult {

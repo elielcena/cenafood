@@ -15,6 +15,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.controller.RestaurantController;
 import com.github.cenafood.api.v1.model.request.RestaurantRequestDTO;
 import com.github.cenafood.api.v1.model.response.RestaurantResponseDTO;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.model.City;
 import com.github.cenafood.domain.model.Kitchen;
 import com.github.cenafood.domain.model.Restaurant;
@@ -32,6 +33,9 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public RestaurantMapper() {
         super(RestaurantController.class, RestaurantResponseDTO.class);
     }
@@ -40,33 +44,46 @@ public class RestaurantMapper extends RepresentationModelAssemblerSupport<Restau
         RestaurantResponseDTO restaurantDTO = createModelWithId(restaurant.getId(), restaurant);
         modelMapper.map(restaurant, restaurantDTO);
 
-        restaurantDTO.add(cenaLinks.linkToRestaurantPaymentMethod(restaurant.getId()));
-        restaurantDTO.add(cenaLinks.linkToRestaurantUser(restaurant.getId()));
-        restaurantDTO.add(cenaLinks.linkToProducts(restaurant.getId()).withRel("products"));
+        if (isTrue(securityUtil.manageRestaurantRegistration())) {
+            restaurantDTO.add(cenaLinks.linkToRestaurantUser(restaurant.getId()));
 
-        if (isTrue(restaurant.canActivate()))
-            restaurantDTO.add(cenaLinks.linkToActivateRestaurant(restaurant.getId()));
+            if (isTrue(restaurant.canActivate()))
+                restaurantDTO.add(cenaLinks.linkToActivateRestaurant(restaurant.getId()));
 
-        if (isTrue(restaurant.canInactivate()))
-            restaurantDTO.add(cenaLinks.linkToInactivateRestaurant(restaurant.getId()));
+            if (isTrue(restaurant.canInactivate()))
+                restaurantDTO.add(cenaLinks.linkToInactivateRestaurant(restaurant.getId()));
+        }
 
-        if (isTrue(restaurant.canOpen()))
-            restaurantDTO.add(cenaLinks.linkToOpeningRestaurant(restaurant.getId()));
+        if (isTrue(securityUtil.manageRestaurantOperation(restaurant.getId()))) {
+            if (isTrue(restaurant.canOpen()))
+                restaurantDTO.add(cenaLinks.linkToOpeningRestaurant(restaurant.getId()));
 
-        if (isTrue(restaurant.canClose()))
-            restaurantDTO.add(cenaLinks.linkToClosureRestaurant(restaurant.getId()));
+            if (isTrue(restaurant.canClose()))
+                restaurantDTO.add(cenaLinks.linkToClosureRestaurant(restaurant.getId()));
+        }
 
-        restaurantDTO.getKitchen().add(cenaLinks.linkToKitchen(restaurant.getKitchen().getId()));
-        restaurantDTO.getAddress().getCity().removeLinks().add(cenaLinks.linkToCity(restaurantDTO.getAddress().getCity().getId()));
-        restaurantDTO.getAddress().getCity().getState().removeLinks().add(cenaLinks.linkToState(restaurantDTO.getAddress().getCity().getState().getUf()));
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            restaurantDTO.add(cenaLinks.linkToRestaurantPaymentMethod(restaurant.getId()));
+            restaurantDTO.add(cenaLinks.linkToProducts(restaurant.getId()).withRel("products"));
+            restaurantDTO.getKitchen().add(cenaLinks.linkToKitchen(restaurant.getKitchen().getId()));
+            restaurantDTO.getAddress().getCity().removeLinks().add(cenaLinks.linkToCity(restaurantDTO.getAddress().getCity().getId()));
+            restaurantDTO.getAddress().getCity().getState().removeLinks()
+                    .add(cenaLinks.linkToState(restaurantDTO.getAddress().getCity().getState().getUf()));
+            restaurantDTO.add(cenaLinks.linkToRestaurants());
+        }
 
-        return restaurantDTO.add(cenaLinks.linkToRestaurants());
+        return restaurantDTO;
     }
 
     @Override
     public CollectionModel<RestaurantResponseDTO> toCollectionModel(Iterable<? extends Restaurant> entities) {
-        return super.toCollectionModel(entities)
-                .add(linkTo(RestaurantController.class).withSelfRel());
+        var collectionModel = super.toCollectionModel(entities);
+
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            collectionModel.add(linkTo(RestaurantController.class).withSelfRel());
+        }
+
+        return collectionModel;
     }
 
     public Restaurant toDomainEntity(RestaurantRequestDTO restaurant) {

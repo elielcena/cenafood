@@ -38,13 +38,13 @@ public class KitchenController implements KitchenControllerOpenApi {
     @Autowired
     private KitchenMapper mapper;
 
-    @CheckSecurity.Kitchens.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public CollectionModel<KitchenResponseDTO> findAll() {
         return mapper.toCollectionModel(kitchenService.findAll());
     }
 
-    @CheckSecurity.Kitchens.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{id}")
     public KitchenResponseDTO findById(@PathVariable Long id) {
         return mapper.toModel(kitchenService.findById(id));

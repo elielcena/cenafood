@@ -42,7 +42,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
     @Autowired
     private RestaurantMapper mapper;
 
-    @CheckSecurity.Restaurants.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public ResponseEntity<CollectionModel<RestaurantResponseDTO>> findAll() {
         return ResponseEntity.ok()
@@ -50,7 +50,7 @@ public class RestaurantController implements RestaurantControllerOpenApi {
                 .body(mapper.toCollectionModel(restaurantService.findAll()));
     }
 
-    @CheckSecurity.Restaurants.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{id}")
     public ResponseEntity<RestaurantResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok()

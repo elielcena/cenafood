@@ -74,7 +74,7 @@ public class OrderController implements OrderControllerOpenApi {
         return mapper.toModel(orderService.findByCode(code));
     }
 
-    @CheckSecurity.Orders.Save
+    @CheckSecurity.NoPreAuthorizeWrite
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public OrderCreatedResponseDTO generate(@Valid @RequestBody OrderRequestDTO orderRequest) {

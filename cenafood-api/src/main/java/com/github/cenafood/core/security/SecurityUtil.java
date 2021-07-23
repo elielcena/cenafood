@@ -31,6 +31,32 @@ public class SecurityUtil {
         return jwt.getClaim("idUser");
     }
 
+    public boolean isAuthenticated() {
+        return getAuthentication().isAuthenticated();
+    }
+
+    public Boolean hasAuthority(String authorityName) {
+        return getAuthentication().getAuthorities()
+                .stream()
+                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
+    }
+
+    public Boolean scopeWrite() {
+        return hasAuthority("SCOPE_WRITE");
+    }
+
+    public Boolean scopeRead() {
+        return hasAuthority("SCOPE_READ");
+    }
+
+    public Boolean noPreAuthorizeWrite() {
+        return scopeWrite() && isAuthenticated();
+    }
+
+    public Boolean noPreAuthorizeRead() {
+        return scopeRead() && isAuthenticated();
+    }
+
     public Boolean manageRestaurant(Long idRestaurant) {
         if (idRestaurant == null) {
             return false;
@@ -43,18 +69,40 @@ public class SecurityUtil {
         return orderRepository.isManagedByUser(code, getIdUser());
     }
 
-    public Boolean userIsAuthenticated(Long idUser) {
+    public Boolean userSameAsAuthenticated(Long idUser) {
         return getIdUser() != null && idUser != null && getIdUser().equals(idUser);
-    }
-
-    public Boolean hasAuthority(String authorityName) {
-        return getAuthentication().getAuthorities()
-                .stream()
-                .anyMatch(authority -> authority.getAuthority().equals(authorityName));
     }
 
     public Boolean manageOrder(String code) {
         return hasAuthority("SCOPE_WRITE") && (hasAuthority("MANAGE_ORDERS") || manageRestaurantOrder(code));
+    }
+
+    public Boolean consultRestaurant() {
+        return scopeRead() && isAuthenticated();
+    }
+
+    public Boolean manageRestaurantRegistration() {
+        return scopeWrite() && hasAuthority("EDIT_RESTAURANTS");
+    }
+
+    public Boolean manageRestaurantOperation(Long idRestaurant) {
+        return scopeWrite() && (hasAuthority("EDIT_RESTAURANTS") || manageRestaurant(idRestaurant));
+    }
+
+    public Boolean consultUsersRolesPermissions() {
+        return scopeRead() && hasAuthority("CONSULT_USERS_ROLES_PERMISSIONS");
+    }
+
+    public Boolean editUsersRolesPermissions() {
+        return scopeWrite() && hasAuthority("EDIT_USERS_ROLES_PERMISSIONS");
+    }
+
+    public Boolean consultOrders(Long idUser, Long idRestaurant) {
+        return scopeRead() && (hasAuthority("CONSULT_ORDERS") || userSameAsAuthenticated(idUser) || manageRestaurant(idRestaurant));
+    }
+
+    public Boolean consultStatistic() {
+        return scopeRead() && hasAuthority("GENERATE_REPORTS");
     }
 
 }

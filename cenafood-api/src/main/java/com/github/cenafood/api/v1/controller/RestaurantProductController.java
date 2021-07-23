@@ -1,5 +1,7 @@
 package com.github.cenafood.api.v1.controller;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import com.github.cenafood.api.v1.mapper.ProductMapper;
 import com.github.cenafood.api.v1.model.request.ProductRequestDTO;
 import com.github.cenafood.api.v1.model.response.ProductResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantProductControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.Restaurant;
@@ -46,20 +49,25 @@ public class RestaurantProductController implements RestaurantProductControllerO
     @Autowired
     private CenaLinks cenaLinks;
 
-    @CheckSecurity.Restaurants.Consult
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public CollectionModel<ProductResponseDTO> find(@PathVariable Long id) {
         CollectionModel<ProductResponseDTO> productResponseDTO =
                 productMapper.toCollectionModel(productService.findRestaurant(restaurantService.findById(id)))
                         .add(cenaLinks.linkToProducts(id).withSelfRel());
 
-        productResponseDTO.getContent().forEach(product -> product.add(cenaLinks.linkToProduct(id, product.getId()))
-                .add(cenaLinks.linkToProducts(id)));
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            productResponseDTO.getContent().forEach(product -> product.add(cenaLinks.linkToProduct(id, product.getId()))
+                    .add(cenaLinks.linkToProducts(id)));
+        }
 
         return productResponseDTO;
     }
 
-    @CheckSecurity.Restaurants.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{idProduct}")
     public ProductResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct) {
         Product product = productService.findById(idProduct, id);

@@ -1,5 +1,6 @@
 package com.github.cenafood.api.v1.mapper;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.modelmapper.ModelMapper;
@@ -12,6 +13,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.controller.RoleController;
 import com.github.cenafood.api.v1.model.request.RoleRequestDTO;
 import com.github.cenafood.api.v1.model.response.RoleResponseDTO;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.model.Role;
 
 /**
@@ -27,6 +29,9 @@ public class RoleMapper extends RepresentationModelAssemblerSupport<Role, RoleRe
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public RoleMapper() {
         super(RoleController.class, RoleResponseDTO.class);
     }
@@ -36,15 +41,23 @@ public class RoleMapper extends RepresentationModelAssemblerSupport<Role, RoleRe
         RoleResponseDTO roleResponseDTO = createModelWithId(role.getId(), role);
         modelMapper.map(role, roleResponseDTO);
 
-        roleResponseDTO.add(cenaLinks.linkToPermission(role.getId()).withRel("permissions"));
+        if (isTrue(securityUtil.consultUsersRolesPermissions())) {
+            roleResponseDTO.add(cenaLinks.linkToPermission(role.getId()).withRel("permissions"));
 
-        return roleResponseDTO.add(cenaLinks.linkToRoles());
+            roleResponseDTO.add(cenaLinks.linkToRoles());
+        }
+
+        return roleResponseDTO;
     }
 
     @Override
     public CollectionModel<RoleResponseDTO> toCollectionModel(Iterable<? extends Role> entities) {
-        return super.toCollectionModel(entities)
-                .add(linkTo(RoleController.class).withSelfRel());
+        var collectionModel = super.toCollectionModel(entities);
+
+        if (isTrue(securityUtil.consultUsersRolesPermissions()))
+            collectionModel.add(linkTo(RoleController.class).withSelfRel());
+
+        return collectionModel;
     }
 
     public Role toDomainEntity(RoleRequestDTO role) {

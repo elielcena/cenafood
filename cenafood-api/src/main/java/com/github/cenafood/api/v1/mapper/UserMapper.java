@@ -1,5 +1,6 @@
 package com.github.cenafood.api.v1.mapper;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,7 @@ import com.github.cenafood.api.v1.controller.UserController;
 import com.github.cenafood.api.v1.model.request.UserRequestDTO;
 import com.github.cenafood.api.v1.model.request.UserWithPasswordRequestDTO;
 import com.github.cenafood.api.v1.model.response.UserResponseDTO;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.model.User;
 
 /**
@@ -28,6 +30,9 @@ public class UserMapper extends RepresentationModelAssemblerSupport<User, UserRe
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public UserMapper() {
         super(UserController.class, UserResponseDTO.class);
     }
@@ -37,8 +42,12 @@ public class UserMapper extends RepresentationModelAssemblerSupport<User, UserRe
         UserResponseDTO userDTO = createModelWithId(user.getId(), user);
         modelMapper.map(user, userDTO);
 
-        return userDTO.add(cenaLinks.linkToUsers())
-                .add(cenaLinks.linkToRolesUser(userDTO.getId()));
+        if (isTrue(securityUtil.consultUsersRolesPermissions())) {
+            userDTO.add(cenaLinks.linkToUsers())
+                    .add(cenaLinks.linkToRolesUser(userDTO.getId()));
+        }
+
+        return userDTO;
     }
 
     @Override

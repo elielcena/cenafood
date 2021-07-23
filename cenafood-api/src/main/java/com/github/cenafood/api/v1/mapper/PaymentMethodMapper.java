@@ -2,6 +2,7 @@ package com.github.cenafood.api.v1.mapper;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
@@ -12,6 +13,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.controller.PaymentMethodController;
 import com.github.cenafood.api.v1.model.request.PaymentMethodRequestDTO;
 import com.github.cenafood.api.v1.model.response.PaymentMethodResponseDTO;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.domain.model.PaymentMethod;
 
 /**
@@ -27,6 +29,9 @@ public class PaymentMethodMapper extends RepresentationModelAssemblerSupport<Pay
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     public PaymentMethodMapper() {
         super(PaymentMethodController.class, PaymentMethodResponseDTO.class);
     }
@@ -37,13 +42,20 @@ public class PaymentMethodMapper extends RepresentationModelAssemblerSupport<Pay
 
         modelMapper.map(paymentMethod, paymentMethodResponse);
 
-        return paymentMethodResponse.add(cenaLinks.linkToPaymentMethods());
+        if (BooleanUtils.isTrue(securityUtil.noPreAuthorizeRead()))
+            paymentMethodResponse.add(cenaLinks.linkToPaymentMethods());
+
+        return paymentMethodResponse;
     }
 
     @Override
     public CollectionModel<PaymentMethodResponseDTO> toCollectionModel(Iterable<? extends PaymentMethod> entities) {
-        return super.toCollectionModel(entities)
-                .add(linkTo(PaymentMethodController.class).withSelfRel());
+        var collection = super.toCollectionModel(entities);
+
+        if (BooleanUtils.isTrue(securityUtil.noPreAuthorizeRead()))
+            collection.add(linkTo(PaymentMethodController.class).withSelfRel());
+
+        return collection;
     }
 
     public PaymentMethod toDomainEntity(PaymentMethodRequestDTO paymentMethod) {

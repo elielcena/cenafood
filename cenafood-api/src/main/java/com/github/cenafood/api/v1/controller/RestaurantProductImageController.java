@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import com.github.cenafood.api.v1.mapper.ProductImageMapper;
 import com.github.cenafood.api.v1.model.request.ProductImageRequestDTO;
 import com.github.cenafood.api.v1.model.response.ProductImageResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantProductImageControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.exception.ResourceNotFoundException;
 import com.github.cenafood.domain.model.Product;
@@ -49,16 +51,24 @@ public class RestaurantProductImageController implements RestaurantProductImageC
     @Autowired
     private CenaLinks cenaLinks;
 
-    @CheckSecurity.Restaurants.Consult
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping(path = "/{idImage}")
     public ProductImageResponseDTO findById(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {
         Product product = productService.findById(idProduct, id);
-        return mapper.toModel(productImageService.findById(idImage, product))
-                .add(cenaLinks.linkToProductImage(id, idProduct, idImage))
-                .add(cenaLinks.linkToProduct(id, idProduct).withRel("products"));
+        var response = mapper.toModel(productImageService.findById(idImage, product));
+
+        if (BooleanUtils.isTrue(securityUtil.noPreAuthorizeRead())) {
+            response.add(cenaLinks.linkToProductImage(id, idProduct, idImage))
+                    .add(cenaLinks.linkToProduct(id, idProduct).withRel("products"));
+        }
+
+        return response;
     }
 
-    @CheckSecurity.Restaurants.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping(path = "/{idImage}", produces = {MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE})
     public ResponseEntity<?> findProductImage(@PathVariable Long id, @PathVariable Long idProduct, @PathVariable Long idImage) {
         try {

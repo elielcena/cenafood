@@ -1,5 +1,7 @@
 package com.github.cenafood.api.v1.controller;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.openapi.controller.CityControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.City;
 import com.github.cenafood.domain.service.CityService;
@@ -28,6 +31,9 @@ public class CityController implements CityControllerOpenApi {
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{id}")
     public City findById(@PathVariable Long id) {
@@ -41,17 +47,22 @@ public class CityController implements CityControllerOpenApi {
     public CollectionModel<City> findAllWithFilter(City filtro) {
         CollectionModel<City> citiesModel = CollectionModel.of(cityService.findAllWithFilters(filtro));
 
-        citiesModel.add(cenaLinks.linkToCities().withSelfRel());
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            citiesModel.add(cenaLinks.linkToCities().withSelfRel());
 
-        citiesModel.getContent().forEach(this::addLinksCity);
+            citiesModel.getContent().forEach(this::addLinksCity);
+        }
 
         return citiesModel;
     }
 
     private City addLinksCity(City city) {
-        city.add(cenaLinks.linkToCity(city.getId()));
-        city.getState().add(cenaLinks.linkToState(city.getState().getUf()));
-        city.add(cenaLinks.linkToCities());
+
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            city.add(cenaLinks.linkToCity(city.getId()));
+            city.getState().add(cenaLinks.linkToState(city.getState().getUf()));
+            city.add(cenaLinks.linkToCities());
+        }
 
         return city;
     }

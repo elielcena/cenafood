@@ -1,5 +1,6 @@
 package com.github.cenafood.api.v1.controller;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.PaymentMethodMapper;
 import com.github.cenafood.api.v1.model.response.PaymentMethodResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantPaymentControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.service.RestaurantService;
 
@@ -37,17 +39,22 @@ public class RestaurantPaymentController implements RestaurantPaymentControllerO
     @Autowired
     private CenaLinks cenaLinks;
 
-    @CheckSecurity.Restaurants.Consult
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public CollectionModel<PaymentMethodResponseDTO> find(@PathVariable Long id) {
         CollectionModel<PaymentMethodResponseDTO> paymentMethodResponseDTO =
                 paymentMapper.toCollectionModel(restaurantService.findById(id).getPaymentMethods())
                         .removeLinks()
-                        .add(cenaLinks.linkToRestaurantPaymentMethod(id).withSelfRel())
-                        .add(cenaLinks.linkToRestaurantAddPaymentMethod(id));
+                        .add(cenaLinks.linkToRestaurantPaymentMethod(id).withSelfRel());
 
-        paymentMethodResponseDTO.getContent()
-                .forEach(paymentMethod -> paymentMethod.add(cenaLinks.linkToRestaurantRemovePaymentMethod(id, paymentMethod.getId())));
+        if (BooleanUtils.isTrue(securityUtil.manageRestaurantOperation(id))) {
+            paymentMethodResponseDTO.add(cenaLinks.linkToRestaurantAddPaymentMethod(id));
+            paymentMethodResponseDTO.getContent()
+                    .forEach(paymentMethod -> paymentMethod.add(cenaLinks.linkToRestaurantRemovePaymentMethod(id, paymentMethod.getId())));
+        }
 
         return paymentMethodResponseDTO;
     }

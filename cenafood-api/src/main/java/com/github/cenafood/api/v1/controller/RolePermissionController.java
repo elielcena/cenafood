@@ -1,5 +1,7 @@
 package com.github.cenafood.api.v1.controller;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.PermissionMapper;
 import com.github.cenafood.api.v1.model.response.PermissionResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RolePermissionControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.Role;
 import com.github.cenafood.domain.service.RoleService;
@@ -38,16 +41,22 @@ public class RolePermissionController implements RolePermissionControllerOpenApi
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @CheckSecurity.UsersRolesPermission.Consult
     @GetMapping
     public CollectionModel<PermissionResponseDTO> findAll(@PathVariable Long id) {
         Role role = roleService.findById(id);
 
         CollectionModel<PermissionResponseDTO> permissionResponseDTO = mapper.toCollectionModel(role.getPermissions())
-                .add(cenaLinks.linkToPermission(id).withSelfRel())
-                .add(cenaLinks.linkToAddPermission(id));
+                .removeLinks()
+                .add(cenaLinks.linkToPermission(id).withSelfRel());
 
-        permissionResponseDTO.getContent().forEach(permission -> permission.add(cenaLinks.linkToRemovePermission(id, permission.getId())));
+        if (isTrue(securityUtil.editUsersRolesPermissions())) {
+            permissionResponseDTO.add(cenaLinks.linkToAddPermission(id));
+            permissionResponseDTO.getContent().forEach(permission -> permission.add(cenaLinks.linkToRemovePermission(id, permission.getId())));
+        }
 
         return permissionResponseDTO;
     }

@@ -38,13 +38,13 @@ public class PaymentMethodController implements PaymentMethodControllerOpenApi {
     @Autowired
     private PaymentMethodMapper mapper;
 
-    @CheckSecurity.PaymentMethod.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public CollectionModel<PaymentMethodResponseDTO> findAll() {
         return mapper.toCollectionModel(paymentMethodService.findAll());
     }
 
-    @CheckSecurity.PaymentMethod.Consult
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{id}")
     public PaymentMethodResponseDTO findById(@PathVariable Long id) {
         return mapper.toModel(paymentMethodService.findById(id));

@@ -1,5 +1,7 @@
 package com.github.cenafood.api.v1.controller;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
@@ -15,6 +17,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.UserMapper;
 import com.github.cenafood.api.v1.model.response.UserResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantUserControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.service.RestaurantService;
 
@@ -35,15 +38,19 @@ public class RestaurantUserController implements RestaurantUserControllerOpenApi
     @Autowired
     private UserMapper paymentMapper;
 
-    @CheckSecurity.Restaurants.Consult
+    @Autowired
+    private SecurityUtil securityUtil;
+
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping
     public CollectionModel<UserResponseDTO> find(@PathVariable Long id) {
         CollectionModel<UserResponseDTO> userResponseDTO = paymentMapper.toCollectionModel(restaurantService.findById(id).getUsers())
-                .removeLinks()
-                .add(cenaLinks.linkToRestaurantUser(id))
-                .add(cenaLinks.linkToRestaurantAddUser(id));
+                .removeLinks().add(cenaLinks.linkToRestaurantUser(id));
 
-        userResponseDTO.getContent().forEach(user -> user.add(cenaLinks.linkToRestauranRemovetUser(id, user.getId())));
+        if (isTrue(securityUtil.editUsersRolesPermissions())) {
+            userResponseDTO.add(cenaLinks.linkToRestaurantAddUser(id));
+            userResponseDTO.getContent().forEach(user -> user.add(cenaLinks.linkToRestauranRemovetUser(id, user.getId())));
+        }
 
         return userResponseDTO;
     }

@@ -1,5 +1,7 @@
 package com.github.cenafood.api.v1.controller;
 
+import static org.apache.commons.lang3.BooleanUtils.isTrue;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.http.MediaType;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.openapi.controller.StateControllerOpenApi;
+import com.github.cenafood.core.security.SecurityUtil;
 import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.State;
 import com.github.cenafood.domain.service.StateService;
@@ -28,6 +31,9 @@ public class StateController implements StateControllerOpenApi {
     @Autowired
     private CenaLinks cenaLinks;
 
+    @Autowired
+    private SecurityUtil securityUtil;
+
     @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{uf}")
     public State findByUf(@PathVariable String uf) {
@@ -41,14 +47,20 @@ public class StateController implements StateControllerOpenApi {
     public CollectionModel<State> findAllWithFilter(State filtro) {
         CollectionModel<State> stateModel = CollectionModel.of(stateService.findAllWithFilter(filtro));
 
-        stateModel.add(cenaLinks.linkToStates().withSelfRel());
-        stateModel.getContent().forEach(this::addLinksState);
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            stateModel.add(cenaLinks.linkToStates().withSelfRel());
+            stateModel.getContent().forEach(this::addLinksState);
+        }
 
         return stateModel;
     }
 
     private State addLinksState(State state) {
-        return state.add(cenaLinks.linkToState(state.getUf()))
-                .add(cenaLinks.linkToStates());
+        if (isTrue(securityUtil.noPreAuthorizeRead())) {
+            state.add(cenaLinks.linkToState(state.getUf()))
+                    .add(cenaLinks.linkToStates());
+        }
+
+        return state;
     }
 }
