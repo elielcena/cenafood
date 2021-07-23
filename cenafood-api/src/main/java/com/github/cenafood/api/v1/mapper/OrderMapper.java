@@ -52,9 +52,12 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
 
         if (isTrue(securityUtil.noPreAuthorizeRead())) {
             orderResponse.add(cenaLinks.linkToOrders());
-            orderResponse.getRestaurant().add(cenaLinks.linkToRestaurant(orderResponse.getRestaurant().getId()));
+            orderResponse.getRestaurant().add(cenaLinks.linkToRestaurant(orderResponse.getRestaurant().getId()).withRel("restaurant"));
+            orderResponse.getRestaurant().getKitchen().add(cenaLinks.linkToKitchen(orderResponse.getRestaurant().getKitchen().getId()).withRel("kitchen"));
             orderResponse.getPaymentMethod().add(cenaLinks.linkToPaymentMethod(order.getPaymentMethod().getId()));
-            orderResponse.getAddress().getCity().add(cenaLinks.linkToCity(orderResponse.getAddress().getCity().getId()));
+            orderResponse.getAddress().getCity().add(cenaLinks.linkToCity(orderResponse.getAddress().getCity().getId()).withRel("city"));
+            orderResponse.getAddress().getCity().getState()
+                    .add(cenaLinks.linkToState(orderResponse.getAddress().getCity().getState().getUf()).withRel("state"));
 
             orderResponse.getOrderItems().forEach(item -> {
                 item.add(cenaLinks.linkToProduct(order.getRestaurant().getId(), item.getId()).withRel("orderitems"));
@@ -62,7 +65,7 @@ public class OrderMapper extends RepresentationModelAssemblerSupport<Order, Orde
         }
 
         if (isTrue(securityUtil.consultUsersRolesPermissions()))
-            orderResponse.getCustomer().add(cenaLinks.linkToUser(orderResponse.getCustomer().getId()));
+            orderResponse.getCustomer().add(cenaLinks.linkToUser(orderResponse.getCustomer().getId()).withRel("customer"));
 
         return orderResponse;
     }
