@@ -20,7 +20,7 @@ import com.github.cenafood.api.v1.mapper.ProductMapper;
 import com.github.cenafood.api.v1.model.request.ProductRequestDTO;
 import com.github.cenafood.api.v1.model.response.ProductResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RestaurantProductControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.Product;
 import com.github.cenafood.domain.model.Restaurant;
 import com.github.cenafood.domain.service.ProductService;

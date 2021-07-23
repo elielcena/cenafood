@@ -17,7 +17,7 @@ import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.mapper.PermissionMapper;
 import com.github.cenafood.api.v1.model.response.PermissionResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RolePermissionControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.Role;
 import com.github.cenafood.domain.service.RoleService;
 

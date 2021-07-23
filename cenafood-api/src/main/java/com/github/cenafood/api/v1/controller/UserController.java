@@ -22,7 +22,7 @@ import com.github.cenafood.api.v1.model.request.UserRequestDTO;
 import com.github.cenafood.api.v1.model.request.UserWithPasswordRequestDTO;
 import com.github.cenafood.api.v1.model.response.UserResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.UserControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.User;
 import com.github.cenafood.domain.service.UserService;
 

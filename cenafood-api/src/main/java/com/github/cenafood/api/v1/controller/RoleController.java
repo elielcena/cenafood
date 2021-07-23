@@ -20,7 +20,7 @@ import com.github.cenafood.api.v1.mapper.RoleMapper;
 import com.github.cenafood.api.v1.model.request.RoleRequestDTO;
 import com.github.cenafood.api.v1.model.response.RoleResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.RoleControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.Role;
 import com.github.cenafood.domain.service.RoleService;
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.github.cenafood.api.v1.CenaLinks;
 import com.github.cenafood.api.v1.openapi.controller.StateControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.State;
 import com.github.cenafood.domain.service.StateService;
 

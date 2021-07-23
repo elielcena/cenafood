@@ -1,4 +1,4 @@
-package com.github.cenafood.core.security.anotation;
+package com.github.cenafood.core.security.annotation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.METHOD;

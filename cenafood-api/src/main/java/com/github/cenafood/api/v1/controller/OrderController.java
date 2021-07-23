@@ -29,7 +29,7 @@ import com.github.cenafood.api.v1.model.response.OrderCreatedResponseDTO;
 import com.github.cenafood.api.v1.model.response.OrderResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.OrderControllerOpenApi;
 import com.github.cenafood.core.data.PageWrapper;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.filter.OrderFilter;
 import com.github.cenafood.domain.model.Order;
 import com.github.cenafood.domain.service.OrderService;

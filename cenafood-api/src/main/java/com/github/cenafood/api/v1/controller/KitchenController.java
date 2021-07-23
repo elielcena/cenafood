@@ -20,7 +20,7 @@ import com.github.cenafood.api.v1.mapper.KitchenMapper;
 import com.github.cenafood.api.v1.model.request.KitchenRequestDTO;
 import com.github.cenafood.api.v1.model.response.KitchenResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.KitchenControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.Kitchen;
 import com.github.cenafood.domain.service.KitchenService;
 

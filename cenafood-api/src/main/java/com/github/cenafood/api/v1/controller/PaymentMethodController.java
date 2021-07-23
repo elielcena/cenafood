@@ -20,7 +20,7 @@ import com.github.cenafood.api.v1.mapper.PaymentMethodMapper;
 import com.github.cenafood.api.v1.model.request.PaymentMethodRequestDTO;
 import com.github.cenafood.api.v1.model.response.PaymentMethodResponseDTO;
 import com.github.cenafood.api.v1.openapi.controller.PaymentMethodControllerOpenApi;
-import com.github.cenafood.core.security.anotation.CheckSecurity;
+import com.github.cenafood.core.security.annotation.CheckSecurity;
 import com.github.cenafood.domain.model.PaymentMethod;
 import com.github.cenafood.domain.service.PaymentMethodService;
 
