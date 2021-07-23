@@ -14,6 +14,7 @@ DELETE FROM kitchen;
 DELETE FROM paymentmethod;
 DELETE FROM city;
 DELETE FROM state;
+DELETE FROM INTO public.oauth_client_details
 
 ALTER SEQUENCE productimage_id_seq RESTART WITH 1;
 ALTER SEQUENCE orderitem_id_seq RESTART WITH 1;
@@ -25,6 +26,7 @@ ALTER SEQUENCE product_id_seq RESTART WITH 1;
 ALTER SEQUENCE paymentmethod_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
 ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
+ALTER SEQUENCE oauth_client_details_id_seq RESTART WITH 1;
 
 -- STATES
 INSERT INTO state (id, name, uf) VALUES(11, 'Rondônia', 'RO');
@@ -5722,3 +5724,12 @@ INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, id
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 2, 80, NULL, 5, 4);
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(25, 2, 50, NULL, 6, 1);
 INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, idproduct) VALUES(40, 1, 40, NULL, 6, 4);
+
+-- OAUTHCLIENTS
+INSERT INTO public.oauth_client_details
+(client_id, resource_ids, client_secret, "scope", authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
+VALUES('cenafood-web', NULL, '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', 'READ,WRITE', 'password', NULL, NULL, 86400, 60 * 24 * 60 * 60, NULL, NULL);
+
+INSERT INTO public.oauth_client_details
+(client_id, resource_ids, client_secret, "scope", authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
+VALUES('resource-server', NULL, '$2y$12$EdByTKyy4xYUG2h9IWS5ZOiPNPMCXO7dF6CVvpSTMlCd3F.pAMjCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
