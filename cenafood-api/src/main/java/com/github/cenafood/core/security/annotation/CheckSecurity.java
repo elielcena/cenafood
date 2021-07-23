@@ -72,7 +72,7 @@ public @interface CheckSecurity {
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and isAuthenticated()")
         @PostAuthorize("hasAuthority('CONSULT_ORDERS') "
-                + "or @securityUtil.getIdUser() == returnObject.customer.id "
+                + "or @securityUtil.userIsAuthenticated(returnObject.customer.id) "
                 + "or @securityUtil.manageRestaurant(returnObject.restaurant.id)")
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -80,7 +80,7 @@ public @interface CheckSecurity {
         }
 
         @PreAuthorize("hasAuthority('SCOPE_READ') and (hasAuthority('CONSULT_ORDERS') "
-                + "or @securityUtil.getIdUser() == #filter.idCustomer "
+                + "or @securityUtil.userIsAuthenticated(#filter.idCustomer) "
                 + "or @securityUtil.manageRestaurant(#filter.idRestaurant))")
         @Retention(RUNTIME)
         @Target(METHOD)
@@ -132,13 +132,13 @@ public @interface CheckSecurity {
         public @interface Edit {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and @securityUtil.getIdUser() == #id")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and @securityUtil.userIsAuthenticated(#id)")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface ChangeOwnPassword {
         }
 
-        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_USERS_ROLES_PERMISSIONS') or @securityUtil.getIdUser() == #id)")
+        @PreAuthorize("hasAuthority('SCOPE_WRITE') and (hasAuthority('EDIT_USERS_ROLES_PERMISSIONS') or @securityUtil.userIsAuthenticated(#id))")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface EditUser {

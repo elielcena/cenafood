@@ -43,4 +43,8 @@ public class SecurityUtil {
         return orderRepository.isManagedByUser(code, getIdUser());
     }
 
+    public Boolean userIsAuthenticated(Long idUser) {
+        return getIdUser() != null && idUser != null && getIdUser().equals(idUser);
+    }
+
 }

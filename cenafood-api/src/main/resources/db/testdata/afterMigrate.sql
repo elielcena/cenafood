@@ -14,7 +14,7 @@ DELETE FROM kitchen;
 DELETE FROM paymentmethod;
 DELETE FROM city;
 DELETE FROM state;
-DELETE FROM INTO public.oauth_client_details
+DELETE FROM public.oauth_client_details;
 
 ALTER SEQUENCE productimage_id_seq RESTART WITH 1;
 ALTER SEQUENCE orderitem_id_seq RESTART WITH 1;
@@ -26,7 +26,6 @@ ALTER SEQUENCE product_id_seq RESTART WITH 1;
 ALTER SEQUENCE paymentmethod_id_seq RESTART WITH 1;
 ALTER SEQUENCE restaurant_id_seq RESTART WITH 1;
 ALTER SEQUENCE kitchen_id_seq RESTART WITH 1;
-ALTER SEQUENCE oauth_client_details_id_seq RESTART WITH 1;
 
 -- STATES
 INSERT INTO state (id, name, uf) VALUES(11, 'Rondônia', 'RO');

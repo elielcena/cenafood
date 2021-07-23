@@ -28,6 +28,7 @@ public class CityController implements CityControllerOpenApi {
     @Autowired
     private CenaLinks cenaLinks;
 
+    @CheckSecurity.NoPreAuthorizeRead
     @GetMapping("/{id}")
     public City findById(@PathVariable Long id) {
         City city = cityService.findById(id);
