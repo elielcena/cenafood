@@ -7,7 +7,7 @@
 
 	<groupId>com.github</groupId>
 	<artifactId>cenafood-api</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0</version>
 
 	<name>cenafood-api</name>
 	<description>Api Cena Food</description>
@@ -194,6 +194,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
