@@ -19,6 +19,8 @@
 		<awss3.version>1.11.996</awss3.version>
 		<springfox.version>3.0.0</springfox.version>
 		<logbak-ext-loggly.version>0.1.2</logbak-ext-loggly.version>
+		<spring-security-oauth2.version>2.3.8.RELEASE</spring-security-oauth2.version>
+		<spring-security-jwt.version>1.1.1.RELEASE</spring-security-jwt.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -83,6 +85,19 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<!-- SECURITY -->
+		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+			<version>${spring-security-oauth2.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-jwt</artifactId>
+			<version>${spring-security-jwt.version}</version>
 		</dependency>
 
 		<!-- DEVTOOLS -->

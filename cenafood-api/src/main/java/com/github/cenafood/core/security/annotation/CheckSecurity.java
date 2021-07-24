@@ -121,7 +121,7 @@ public @interface CheckSecurity {
 
     public @interface Statistic {
 
-        @PreAuthorize("@securityUti.consultStatistic()")
+        @PreAuthorize("@securityUtil.consultStatistic()")
         @Retention(RUNTIME)
         @Target(METHOD)
         public @interface Consult {

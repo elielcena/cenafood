@@ -5727,7 +5727,7 @@ INSERT INTO public.orderitem (unitprice, quantity, totalprice, note, idorder, id
 -- OAUTHCLIENTS
 INSERT INTO public.oauth_client_details
 (client_id, resource_ids, client_secret, "scope", authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
-VALUES('cenafood-web', NULL, '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', 'READ,WRITE', 'password', NULL, NULL, 86400, 60 * 24 * 60 * 60, NULL, NULL);
+VALUES('cenafood-web', NULL, '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILFic/VfGhvqK', 'READ,WRITE', 'password,refresh_token', NULL, NULL, 86400, 60 * 24 * 60 * 60, NULL, NULL);
 
 INSERT INTO public.oauth_client_details
 (client_id, resource_ids, client_secret, "scope", authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
