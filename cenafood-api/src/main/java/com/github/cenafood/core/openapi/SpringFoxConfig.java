@@ -48,16 +48,23 @@ import com.github.cenafood.domain.model.State;
 
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.OAuthBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.schema.AlternateTypeRules;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.AuthorizationScope;
 import springfox.documentation.service.Contact;
+import springfox.documentation.service.GrantType;
+import springfox.documentation.service.ResourceOwnerPasswordCredentialsGrant;
 import springfox.documentation.service.Response;
+import springfox.documentation.service.SecurityReference;
+import springfox.documentation.service.SecurityScheme;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 /**
@@ -78,6 +85,8 @@ public class SpringFoxConfig {
                 .paths(PathSelectors.ant("/v1/**"))
                 .build()
                 .apiInfo(apiInfoV1())
+                .securitySchemes(Arrays.asList(securityScheme()))
+                .securityContexts(Arrays.asList(securityContext()))
                 .useDefaultResponseMessages(Boolean.FALSE)
                 .globalResponses(HttpMethod.GET, responsesGet())
                 .globalResponses(HttpMethod.POST, responsesPostPut())
@@ -127,6 +136,33 @@ public class SpringFoxConfig {
                         new Tag("Products", "Manage the products"),
                         new Tag("Users", "Manage the users"),
                         new Tag("Statistics", "Manage the statistics"));
+    }
+
+    private SecurityScheme securityScheme() {
+        return new OAuthBuilder()
+                .name("OAuth")
+                .grantTypes(grantTypes())
+                .scopes(scopes())
+                .build();
+    }
+
+    private SecurityContext securityContext() {
+        var securityReference = SecurityReference.builder()
+                .reference("OAuth")
+                .scopes(scopes().toArray(new AuthorizationScope[0]))
+                .build();
+        return SecurityContext.builder()
+                .securityReferences(Arrays.asList(securityReference))
+                .operationSelector(operationContext -> true)
+                .build();
+    }
+
+    private List<GrantType> grantTypes() {
+        return Arrays.asList(new ResourceOwnerPasswordCredentialsGrant("/oauth/token"));
+    }
+
+    private List<AuthorizationScope> scopes() {
+        return Arrays.asList(new AuthorizationScope("READ", "Read access"), new AuthorizationScope("WRITE", "Write access"));
     }
 
     private ApiInfo apiInfoV1() {
