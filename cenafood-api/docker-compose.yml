@@ -1,0 +1,44 @@
+version: "3.9"
+
+networks: 
+  cenafood-network:
+    driver: bridge
+    
+services:
+  cenafood-pg:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: "cenafood"
+      POSTGRES_USER: "cenafood"
+    ports:
+      - "5432:5432"
+    networks:
+      - cenafood-network
+
+  cenafood-api:
+    image: cenafood-api
+    command: ["/wait-for-it.sh", "cenafood-pg:5432", "-t", "30", "--", "java", "-jar", "api.jar"]
+    environment: 
+      DB_HOST: cenafood-pg
+      SPRING_SESSION_STORE_TYPE: redis
+      SPRING_REDIS_HOST: cenafood-redis
+    networks:
+      - cenafood-network
+    depends_on:
+      - cenafood-pg
+      - cenafood-redis
+      
+  cenafood-redis:
+    image: redis:6.2.5-alpine
+    networks:
+      - cenafood-network    
+  
+  cenafood-proxy:
+    build: ./nginx
+    image: cenafood-proxy
+    ports:
+      - "80:80"
+    networks:
+      - cenafood-network
+    depends_on:
+      - cenafood-api

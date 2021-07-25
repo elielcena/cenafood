@@ -1,3 +1,22 @@
+begin;
+LOCK TABLE city IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.kitchen IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.oauth_client_details IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.order IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.orderitem IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.paymentmethod IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.permission IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.product IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.productimage IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.restaurant IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.restaurantpayment IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.restaurantsystemuser IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.role IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.rolepermission IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.state IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.systemuser IN ACCESS EXCLUSIVE mode;
+LOCK TABLE public.systemuserrole IN ACCESS EXCLUSIVE mode;
+
 delete FROM productimage;
 DELETE FROM ORDERITEM;
 DELETE FROM PUBLIC.ORDER;
@@ -5732,3 +5751,4 @@ VALUES('cenafood-web', NULL, '$2y$12$mYVfISmqJYdpu7Kj/FvkyeVlEsbzIa575gN6q.2cILF
 INSERT INTO public.oauth_client_details
 (client_id, resource_ids, client_secret, "scope", authorized_grant_types, web_server_redirect_uri, authorities, access_token_validity, refresh_token_validity, additional_information, autoapprove)
 VALUES('resource-server', NULL, '$2y$12$EdByTKyy4xYUG2h9IWS5ZOiPNPMCXO7dF6CVvpSTMlCd3F.pAMjCu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+commit;
