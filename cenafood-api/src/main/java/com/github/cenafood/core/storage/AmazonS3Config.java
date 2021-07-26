@@ -1,6 +1,7 @@
 package com.github.cenafood.core.storage;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -21,6 +22,7 @@ public class AmazonS3Config {
     private StorageProperties storageProperties;
 
     @Bean
+    @ConditionalOnProperty(name = "cenafood.storage.storage-type", havingValue = "s3")
     public AmazonS3 amazonS3() {
         var credentials = new BasicAWSCredentials(storageProperties.getS3().getAwsAccessKeyId(), storageProperties.getS3().getAwsSecretAccessKey());
 

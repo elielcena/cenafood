@@ -4,7 +4,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
 import com.github.cenafood.core.storage.StorageProperties;
@@ -15,7 +14,6 @@ import com.github.cenafood.infrastructure.service.exception.StorageException;
  * @author elielcena
  *
  */
-@Service
 public class LocalImageStorageService implements ImageStorageService {
 
     private static final String ERROR_SAVE_IMAGE_STORAGE = "Unable to store file";

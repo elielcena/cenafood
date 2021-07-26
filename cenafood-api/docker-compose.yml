@@ -11,14 +11,15 @@ services:
       POSTGRES_PASSWORD: "cenafood"
       POSTGRES_USER: "cenafood"
     ports:
-      - "5432:5432"
+      - "54321:5432"
     networks:
       - cenafood-network
 
   cenafood-api:
-    image: cenafood-api
+    image: cenafood-api:latest
     command: ["/wait-for-it.sh", "cenafood-pg:5432", "-t", "30", "--", "java", "-jar", "api.jar"]
-    environment: 
+    environment:
+      SPRING_PROFILES_ACTIVE: development
       DB_HOST: cenafood-pg
       SPRING_SESSION_STORE_TYPE: redis
       SPRING_REDIS_HOST: cenafood-redis

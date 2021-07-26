@@ -3,7 +3,6 @@ package com.github.cenafood.infrastructure.service.storage;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -19,7 +18,6 @@ import com.github.cenafood.infrastructure.service.exception.StorageException;
  * @author elielcena
  *
  */
-@Service
 public class S3ImageStorageService implements ImageStorageService {
 
     private static final String ERROR_SAVE_IMAGE_STORAGE = "Unable to store file";

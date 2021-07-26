@@ -9,7 +9,6 @@ import com.github.cenafood.domain.filter.DailyOrderFilter;
 import com.github.cenafood.domain.service.DailyOrderReportService;
 import com.github.cenafood.domain.service.DailyOrderService;
 import com.github.cenafood.infrastructure.service.exception.ReportException;
-import com.github.cenafood.infrastructure.util.ExportPdf;
 
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
@@ -23,6 +22,9 @@ public class DailyOrderReportServiceImpl implements DailyOrderReportService {
     private static final String ERROR_GENERATE_REPORT_DAILY_ORDER = "Unable to generate daily order report";
 
     @Autowired
+    private ExportPdf exportPdf;
+
+    @Autowired
     private DailyOrderService dailyOrderService;
 
     @Override
@@ -31,7 +33,7 @@ public class DailyOrderReportServiceImpl implements DailyOrderReportService {
             var dailyOrder = dailyOrderService.findByFilter(filter);
             var dataSource = new JRBeanCollectionDataSource(dailyOrder);
 
-            return ExportPdf.generate("reports/daily-order.jasper", new HashMap<>(), dataSource);
+            return exportPdf.generate("/reports/daily-order.jasper", new HashMap<>(), dataSource);
         } catch (Exception e) {
             throw new ReportException(ERROR_GENERATE_REPORT_DAILY_ORDER, e);
         }
