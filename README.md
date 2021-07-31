@@ -22,7 +22,7 @@ This project was built through the ESR course taught by [AlgaWorks](https://www.
 
 <div id="tech" />
 
-## :rocket: Tecnologias
+## :rocket: Technologies
 - :heavy_check_mark: Language **[Java 11](https://www.oracle.com/br/java/technologies/javase-jdk11-downloads.html)**;
 - :heavy_check_mark: Frameworks **[Spring Boot](https://spring.io/projects/spring-boot)**, **[Spring Data JPA](https://spring.io/projects/spring-data-jpa)** and **[Spring Security OAuth](https://spring.io/projects/spring-security-oauth)**;
 - :heavy_check_mark: Reports **[Jaspersoft® Studio](https://community.jaspersoft.com/project/jaspersoft-studio)**;
