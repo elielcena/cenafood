@@ -49,7 +49,7 @@ Before starting, you will need to have the tools [Git](https://git-scm.com/downl
 
 ```bash
  # Access the cenafood folder on the terminal
- $ cd cenafood
+ $ cd cenafood/cenafood-api
 
  # Build the project
  $ ./mvnw clean install -Pdocker
