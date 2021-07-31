@@ -7,8 +7,6 @@
   <img align="center" src="https://img.shields.io/github/languages/top/elielcena/cenafood" />
 </p>
 
-<div id="tabela-de-conteudo" />
-
 ## :point_right: Summary
 - [💬 About](#about)
 - [:rocket: Technologies](#tech)
