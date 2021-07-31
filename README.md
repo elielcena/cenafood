@@ -35,7 +35,7 @@ This project was built through the ESR course taught by [AlgaWorks](https://www.
 <div id="req" />
 
 ## 📦️ Prerequisites
-Before starting, you will need to have the tools [Git] (https://git-scm.com/downloads), [JDK 11] (https://www.oracle.com/us/java/technologies/javase-jdk11-downloads.html), [Docker](https://www.docker.com/),
+Before starting, you will need to have the tools [Git] (https://git-scm.com/downloads), [JDK 11](https://www.oracle.com/us/java/technologies/javase-jdk11-downloads.html), [Docker](https://www.docker.com/),
 [PostgreSQL](https://www.postgresql.org/) installed on your machine.
 
 
